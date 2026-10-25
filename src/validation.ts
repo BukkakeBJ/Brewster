@@ -1,0 +1,3 @@
+import {z} from 'zod';
+const n=(min:number,max:number)=>z.number().finite().min(min).max(max);
+export const recipeSchema=z.object({id:z.string().min(1).max(160),name:z.string().min(1).max(200),styleId:z.string(),batchL:n(.5,10000),efficiency:n(1,100),mashC:n(40,85),mashMinutes:n(1,240),fermentC:n(0,45),boilMinutes:n(0,240),boilOffLPerHour:n(0,1000),lossL:n(0,10000),whirlpoolFactor:n(0,1),carbonation:n(0,5),pitchMultiplier:n(.1,3),yeastId:z.string().min(1),grains:z.array(z.object({ingredientId:z.string(),kg:n(0,5000)})).max(60),hops:z.array(z.object({ingredientId:z.string(),grams:n(0,100000),use:z.enum(['boil','whirlpool','dry hop']),minutes:n(0,50000),alpha:n(0,100).optional()})).max(80)}).refine(r=>r.lossL<r.batchL,'Transfer loss must be smaller than the batch.');

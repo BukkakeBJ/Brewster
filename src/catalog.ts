@@ -5,4 +5,4 @@ import descriptors from '../data/descriptors.json';
 import vocabulary from '../data/vocabulary.json';
 import styles from '../data/styles.json';
 import type {Catalog} from './engine/types';
-export const catalog = {malts,hops,yeasts,descriptors,vocabulary,styles} as Catalog;
+export const catalog = {malts,hops,yeasts,descriptors,vocabulary,styles} as unknown as Catalog;
