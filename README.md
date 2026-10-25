@@ -34,3 +34,18 @@ Add an objective record to `malts.json`, `hops.json`, or `yeasts.json`, using a 
 4. Contextual flavor prediction and source explanations.
 5. Constrained recipe solver with ranked candidates and tradeoffs.
 6. Brew logs, tasting feedback and opt-in calibration.
+
+## Deterministic calculations and explicit approximations
+
+- OG = 1 + Σ(lb × PPG × efficiency fraction) / gallons / 1000. Extract and sugars use 100%. Seed PPG = extract % × 0.46214 (46.214 PPG sucrose basis).
+- FG = OG − (OG − 1) × apparent attenuation. Baseline uses midpoint of the yeast range. **Heuristic:** each °C below 65°C adds 0.75 percentage points of attenuation; each °C above subtracts 0.75, clamped to 40–95%. Each fermentable's gravity points are weighted separately: crystal/caramel uses 65% of baseline attenuation; lactose 0%; simple sugars 100%. These are rough planning assumptions, not laboratory fermentability analyses. Mash time does not change attenuation in this model.
+- ABV standard = (OG − FG) × 131.25. Default accurate formula = (76.08 × (OG − FG)/(1.775 − OG)) × (FG/0.794). Both remain gravity-based estimates.
+- Tinseth U = 1.65 × 0.000125^(boilSG − 1) × (1 − exp(−0.04t))/4.15. IBU = U × AA fraction × oz × 7490 / gal. Boil SG is the mean of pre/post-boil gravity (approximation). Whirlpool uses its entered duration times a configurable 0–1 multiplier (default .15); this does not model temperature decay. Dry hop IBU = 0 (no isomerized-alpha contribution; perceived bitterness can still change).
+- Morey SRM = 1.4922 × MCU^0.6859; MCU = Σ(lb × °L)/gal. EBC = SRM × 1.97. Screen swatch is an illustrative exponential RGB approximation, not calibrated photometry.
+- BU:GU = IBU / ((OG−1)×1000), zero for zero gravity points.
+- Degrees Plato = −616.868 + 1111.14 SG − 630.272 SG² + 135.997 SG³. ABW = 76.08(OG−FG)/(1.775−OG); real extract = .1808 × OG Plato + .8192 × FG Plato. Calories per 12 US fl oz = [6.9 ABW + 4(real extract − .1)] × FG × 3.55; 330mL scales by 330/354.88235. Approximate; not nutritional labeling.
+- Batch volume means **post-boil kettle volume**, before entered transfer loss. Pre-boil L = batch L + boil-off L/h × boil hours. Transfer loss reduces fermenter volume, not kettle concentration. Pre-boil SG conserves gravity points. Does not model grain absorption, shrinkage or sparge water.
+- Pitch cells (billions) = 0.75 (ale) or 1.5 (lager) × volume L × degrees Plato × pitch multiplier. No viability or starter-growth model.
+- Scaling multiplies all masses by new/old volume and mash grains additionally by old/new efficiency. Extract/sugars keep full yield. It preserves OG, color approximately changes when efficiency changes; hop timing and boil-off rate stay equipment settings.
+
+Reference formula names: Tinseth hop utilization, Morey color, standard apparent attenuation/ABV and real-extract calorie estimation. Formula constants are recorded here so each can be independently checked; high gravity and extreme color recipes exceed their practical accuracy.
