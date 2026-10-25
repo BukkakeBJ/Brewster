@@ -1,0 +1,314 @@
+[
+  {
+    "id": "grainy",
+    "parent": "malt",
+    "label": "Grainy",
+    "axis": false
+  },
+  {
+    "id": "bready",
+    "parent": "malt",
+    "label": "Bready",
+    "axis": true
+  },
+  {
+    "id": "biscuit",
+    "parent": "malt",
+    "label": "Biscuit",
+    "axis": false
+  },
+  {
+    "id": "toasty",
+    "parent": "malt",
+    "label": "Toasty",
+    "axis": false
+  },
+  {
+    "id": "nutty",
+    "parent": "malt",
+    "label": "Nutty",
+    "axis": false
+  },
+  {
+    "id": "honey",
+    "parent": "malt",
+    "label": "Honey",
+    "axis": false
+  },
+  {
+    "id": "caramel",
+    "parent": "malt",
+    "label": "Caramel",
+    "axis": true
+  },
+  {
+    "id": "toffee",
+    "parent": "malt",
+    "label": "Toffee",
+    "axis": false
+  },
+  {
+    "id": "dark-fruit",
+    "parent": "malt",
+    "label": "Dark Fruit",
+    "axis": false
+  },
+  {
+    "id": "raisin",
+    "parent": "malt",
+    "label": "Raisin",
+    "axis": false
+  },
+  {
+    "id": "plum",
+    "parent": "malt",
+    "label": "Plum",
+    "axis": false
+  },
+  {
+    "id": "chocolate",
+    "parent": "malt",
+    "label": "Chocolate",
+    "axis": false
+  },
+  {
+    "id": "coffee",
+    "parent": "malt",
+    "label": "Coffee",
+    "axis": false
+  },
+  {
+    "id": "roast",
+    "parent": "malt",
+    "label": "Roast",
+    "axis": true
+  },
+  {
+    "id": "burnt",
+    "parent": "malt",
+    "label": "Burnt",
+    "axis": false
+  },
+  {
+    "id": "smoky",
+    "parent": "malt",
+    "label": "Smoky",
+    "axis": false
+  },
+  {
+    "id": "citrus",
+    "parent": "hops",
+    "label": "Citrus",
+    "axis": true
+  },
+  {
+    "id": "grapefruit",
+    "parent": "hops",
+    "label": "Grapefruit",
+    "axis": false
+  },
+  {
+    "id": "lemon",
+    "parent": "hops",
+    "label": "Lemon",
+    "axis": false
+  },
+  {
+    "id": "orange",
+    "parent": "hops",
+    "label": "Orange",
+    "axis": false
+  },
+  {
+    "id": "tropical",
+    "parent": "hops",
+    "label": "Tropical",
+    "axis": true
+  },
+  {
+    "id": "mango",
+    "parent": "hops",
+    "label": "Mango",
+    "axis": false
+  },
+  {
+    "id": "passionfruit",
+    "parent": "hops",
+    "label": "Passionfruit",
+    "axis": false
+  },
+  {
+    "id": "pineapple",
+    "parent": "hops",
+    "label": "Pineapple",
+    "axis": false
+  },
+  {
+    "id": "stone-fruit",
+    "parent": "hops",
+    "label": "Stone Fruit",
+    "axis": false
+  },
+  {
+    "id": "berry",
+    "parent": "hops",
+    "label": "Berry",
+    "axis": false
+  },
+  {
+    "id": "pine",
+    "parent": "hops",
+    "label": "Pine",
+    "axis": true
+  },
+  {
+    "id": "resin",
+    "parent": "hops",
+    "label": "Resin",
+    "axis": false
+  },
+  {
+    "id": "dank",
+    "parent": "hops",
+    "label": "Dank",
+    "axis": false
+  },
+  {
+    "id": "floral",
+    "parent": "hops",
+    "label": "Floral",
+    "axis": true
+  },
+  {
+    "id": "herbal",
+    "parent": "hops",
+    "label": "Herbal",
+    "axis": false
+  },
+  {
+    "id": "grassy",
+    "parent": "hops",
+    "label": "Grassy",
+    "axis": false
+  },
+  {
+    "id": "earthy",
+    "parent": "hops",
+    "label": "Earthy",
+    "axis": false
+  },
+  {
+    "id": "spicy",
+    "parent": "hops",
+    "label": "Spicy",
+    "axis": false
+  },
+  {
+    "id": "woody",
+    "parent": "hops",
+    "label": "Woody",
+    "axis": false
+  },
+  {
+    "id": "noble",
+    "parent": "hops",
+    "label": "Noble",
+    "axis": false
+  },
+  {
+    "id": "clean",
+    "parent": "yeast",
+    "label": "Clean",
+    "axis": true
+  },
+  {
+    "id": "banana",
+    "parent": "yeast",
+    "label": "Banana",
+    "axis": true
+  },
+  {
+    "id": "clove",
+    "parent": "yeast",
+    "label": "Clove",
+    "axis": true
+  },
+  {
+    "id": "pear",
+    "parent": "yeast",
+    "label": "Pear",
+    "axis": false
+  },
+  {
+    "id": "apple",
+    "parent": "yeast",
+    "label": "Apple",
+    "axis": false
+  },
+  {
+    "id": "bubblegum",
+    "parent": "yeast",
+    "label": "Bubblegum",
+    "axis": false
+  },
+  {
+    "id": "pepper",
+    "parent": "yeast",
+    "label": "Pepper",
+    "axis": false
+  },
+  {
+    "id": "tart",
+    "parent": "yeast",
+    "label": "Tart",
+    "axis": false
+  },
+  {
+    "id": "funky",
+    "parent": "yeast",
+    "label": "Funky",
+    "axis": false
+  },
+  {
+    "id": "sulfur",
+    "parent": "yeast",
+    "label": "Sulfur",
+    "axis": false
+  },
+  {
+    "id": "body",
+    "parent": "structure",
+    "label": "Body",
+    "axis": true
+  },
+  {
+    "id": "sweetness",
+    "parent": "structure",
+    "label": "Sweetness",
+    "axis": true
+  },
+  {
+    "id": "bitterness",
+    "parent": "structure",
+    "label": "Bitterness",
+    "axis": true
+  },
+  {
+    "id": "dryness",
+    "parent": "structure",
+    "label": "Dryness",
+    "axis": true
+  },
+  {
+    "id": "carbonation",
+    "parent": "structure",
+    "label": "Carbonation",
+    "axis": true
+  },
+  {
+    "id": "astringency",
+    "parent": "structure",
+    "label": "Astringency",
+    "axis": true
+  }
+]

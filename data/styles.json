@@ -1,0 +1,2942 @@
+[
+  {
+    "id": "american-amber-ale",
+    "name": "American Amber Ale",
+    "og": [
+      1.045,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.5,
+      6.2
+    ],
+    "ibu": [
+      25.0,
+      40.0
+    ],
+    "srm": [
+      10.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-barleywine",
+    "name": "American Barleywine",
+    "og": [
+      1.08,
+      1.12
+    ],
+    "fg": [
+      1.016,
+      1.03
+    ],
+    "abv": [
+      8.0,
+      12.0
+    ],
+    "ibu": [
+      50.0,
+      120.0
+    ],
+    "srm": [
+      10.0,
+      19.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-brown-ale",
+    "name": "American Brown Ale",
+    "og": [
+      1.045,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.016
+    ],
+    "abv": [
+      4.3,
+      6.2
+    ],
+    "ibu": [
+      20.0,
+      40.0
+    ],
+    "srm": [
+      18.0,
+      35.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-ipa",
+    "name": "American IPA",
+    "og": [
+      1.056,
+      1.075
+    ],
+    "fg": [
+      1.01,
+      1.018
+    ],
+    "abv": [
+      5.5,
+      7.5
+    ],
+    "ibu": [
+      40.0,
+      70.0
+    ],
+    "srm": [
+      6.0,
+      15.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-pale-ale",
+    "name": "American Pale Ale",
+    "og": [
+      1.045,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.5,
+      6.2
+    ],
+    "ibu": [
+      30.0,
+      45.0
+    ],
+    "srm": [
+      5.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-stout",
+    "name": "American Stout",
+    "og": [
+      1.05,
+      1.075
+    ],
+    "fg": [
+      1.01,
+      1.022
+    ],
+    "abv": [
+      5.0,
+      7.0
+    ],
+    "ibu": [
+      35.0,
+      75.0
+    ],
+    "srm": [
+      30.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "american-wheat-or-rye-beer",
+    "name": "American Wheat or Rye Beer",
+    "og": [
+      1.04,
+      1.055
+    ],
+    "fg": [
+      1.008,
+      1.013
+    ],
+    "abv": [
+      4.0,
+      5.5
+    ],
+    "ibu": [
+      15.0,
+      30.0
+    ],
+    "srm": [
+      3.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "applewine",
+    "name": "Applewine",
+    "og": [
+      1.07,
+      1.1
+    ],
+    "fg": [
+      0.995,
+      1.01
+    ],
+    "abv": [
+      9.0,
+      12.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "baltic-porter",
+    "name": "Baltic Porter",
+    "og": [
+      1.06,
+      1.09
+    ],
+    "fg": [
+      1.016,
+      1.024
+    ],
+    "abv": [
+      5.5,
+      9.5
+    ],
+    "ibu": [
+      20.0,
+      40.0
+    ],
+    "srm": [
+      17.0,
+      30.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-blond-ale",
+    "name": "Belgian Blond Ale",
+    "og": [
+      1.062,
+      1.075
+    ],
+    "fg": [
+      1.008,
+      1.018
+    ],
+    "abv": [
+      6.0,
+      7.5
+    ],
+    "ibu": [
+      15.0,
+      30.0
+    ],
+    "srm": [
+      4.0,
+      7.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-dark-strong-ale",
+    "name": "Belgian Dark Strong Ale",
+    "og": [
+      1.075,
+      1.11
+    ],
+    "fg": [
+      1.01,
+      1.024
+    ],
+    "abv": [
+      8.0,
+      11.0
+    ],
+    "ibu": [
+      20.0,
+      30.0
+    ],
+    "srm": [
+      12.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-dubbel",
+    "name": "Belgian Dubbel",
+    "og": [
+      1.062,
+      1.075
+    ],
+    "fg": [
+      1.008,
+      1.018
+    ],
+    "abv": [
+      6.3,
+      7.6
+    ],
+    "ibu": [
+      15.0,
+      25.0
+    ],
+    "srm": [
+      10.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-golden-strong-ale",
+    "name": "Belgian Golden Strong Ale",
+    "og": [
+      1.07,
+      1.095
+    ],
+    "fg": [
+      1.005,
+      1.016
+    ],
+    "abv": [
+      7.5,
+      10.5
+    ],
+    "ibu": [
+      22.0,
+      35.0
+    ],
+    "srm": [
+      3.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-pale-ale",
+    "name": "Belgian Pale Ale",
+    "og": [
+      1.048,
+      1.054
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.8,
+      5.5
+    ],
+    "ibu": [
+      20.0,
+      30.0
+    ],
+    "srm": [
+      8.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-specialty-ale",
+    "name": "Belgian Specialty Ale",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      20.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "belgian-tripel",
+    "name": "Belgian Tripel",
+    "og": [
+      1.075,
+      1.085
+    ],
+    "fg": [
+      1.008,
+      1.014
+    ],
+    "abv": [
+      7.5,
+      9.5
+    ],
+    "ibu": [
+      20.0,
+      40.0
+    ],
+    "srm": [
+      4.5,
+      7.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "berliner-weisse",
+    "name": "Berliner Weisse",
+    "og": [
+      1.028,
+      1.032
+    ],
+    "fg": [
+      1.003,
+      1.006
+    ],
+    "abv": [
+      2.8,
+      3.8
+    ],
+    "ibu": [
+      3.0,
+      8.0
+    ],
+    "srm": [
+      2.0,
+      3.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "bi-re-de-garde",
+    "name": "Bi�re de Garde",
+    "og": [
+      1.06,
+      1.08
+    ],
+    "fg": [
+      1.008,
+      1.016
+    ],
+    "abv": [
+      6.0,
+      8.5
+    ],
+    "ibu": [
+      18.0,
+      28.0
+    ],
+    "srm": [
+      6.0,
+      19.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "blonde-ale",
+    "name": "Blonde Ale",
+    "og": [
+      1.038,
+      1.054
+    ],
+    "fg": [
+      1.008,
+      1.013
+    ],
+    "abv": [
+      3.8,
+      5.5
+    ],
+    "ibu": [
+      15.0,
+      28.0
+    ],
+    "srm": [
+      3.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "bohemian-pilsener",
+    "name": "Bohemian Pilsener",
+    "og": [
+      1.044,
+      1.056
+    ],
+    "fg": [
+      1.013,
+      1.017
+    ],
+    "abv": [
+      4.2,
+      5.4
+    ],
+    "ibu": [
+      35.0,
+      45.0
+    ],
+    "srm": [
+      3.5,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "braggot",
+    "name": "Braggot",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "brown-porter",
+    "name": "Brown Porter",
+    "og": [
+      1.04,
+      1.052
+    ],
+    "fg": [
+      1.008,
+      1.014
+    ],
+    "abv": [
+      4.0,
+      5.4
+    ],
+    "ibu": [
+      18.0,
+      35.0
+    ],
+    "srm": [
+      20.0,
+      30.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "california-common-beer",
+    "name": "California Common Beer",
+    "og": [
+      1.048,
+      1.054
+    ],
+    "fg": [
+      1.011,
+      1.014
+    ],
+    "abv": [
+      4.5,
+      5.5
+    ],
+    "ibu": [
+      30.0,
+      45.0
+    ],
+    "srm": [
+      10.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "christmas-winter-specialty-spiced-beer",
+    "name": "Christmas/Winter Specialty Spiced Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "classic-american-pilsner",
+    "name": "Classic American Pilsner",
+    "og": [
+      1.044,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.5,
+      6.0
+    ],
+    "ibu": [
+      25.0,
+      40.0
+    ],
+    "srm": [
+      3.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "classic-rauchbier",
+    "name": "Classic Rauchbier",
+    "og": [
+      1.05,
+      1.057
+    ],
+    "fg": [
+      1.012,
+      1.016
+    ],
+    "abv": [
+      4.8,
+      6.0
+    ],
+    "ibu": [
+      20.0,
+      30.0
+    ],
+    "srm": [
+      12.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "common-cider",
+    "name": "Common Cider",
+    "og": [
+      1.045,
+      1.065
+    ],
+    "fg": [
+      1.0,
+      1.02
+    ],
+    "abv": [
+      5.0,
+      8.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "common-perry",
+    "name": "Common Perry",
+    "og": [
+      1.05,
+      1.06
+    ],
+    "fg": [
+      1.0,
+      1.02
+    ],
+    "abv": [
+      5.0,
+      7.2
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "cream-ale",
+    "name": "Cream Ale",
+    "og": [
+      1.042,
+      1.055
+    ],
+    "fg": [
+      1.006,
+      1.012
+    ],
+    "abv": [
+      4.2,
+      5.6
+    ],
+    "ibu": [
+      15.0,
+      20.0
+    ],
+    "srm": [
+      3.0,
+      5.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "cyser",
+    "name": "Cyser",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "dark-american-lager",
+    "name": "Dark American Lager",
+    "og": [
+      1.044,
+      1.056
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      4.2,
+      6.0
+    ],
+    "ibu": [
+      8.0,
+      20.0
+    ],
+    "srm": [
+      14.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "doppelbock",
+    "name": "Doppelbock",
+    "og": [
+      1.072,
+      1.112
+    ],
+    "fg": [
+      1.016,
+      1.024
+    ],
+    "abv": [
+      7.0,
+      10.0
+    ],
+    "ibu": [
+      16.0,
+      26.0
+    ],
+    "srm": [
+      6.0,
+      25.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "dortmunder-export",
+    "name": "Dortmunder Export",
+    "og": [
+      1.048,
+      1.056
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.8,
+      6.0
+    ],
+    "ibu": [
+      23.0,
+      30.0
+    ],
+    "srm": [
+      4.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "dry-mead",
+    "name": "Dry Mead",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "dry-stout",
+    "name": "Dry Stout",
+    "og": [
+      1.036,
+      1.05
+    ],
+    "fg": [
+      1.007,
+      1.011
+    ],
+    "abv": [
+      4.0,
+      5.0
+    ],
+    "ibu": [
+      30.0,
+      45.0
+    ],
+    "srm": [
+      25.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "dunkelweizen",
+    "name": "Dunkelweizen",
+    "og": [
+      1.044,
+      1.056
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.3,
+      5.6
+    ],
+    "ibu": [
+      10.0,
+      18.0
+    ],
+    "srm": [
+      14.0,
+      23.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "d-sseldorf-altbier",
+    "name": "D�sseldorf Altbier",
+    "og": [
+      1.046,
+      1.054
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.5,
+      5.2
+    ],
+    "ibu": [
+      35.0,
+      50.0
+    ],
+    "srm": [
+      11.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "eisbock",
+    "name": "Eisbock",
+    "og": [
+      1.078,
+      1.12
+    ],
+    "fg": [
+      1.02,
+      1.035
+    ],
+    "abv": [
+      9.0,
+      14.0
+    ],
+    "ibu": [
+      25.0,
+      35.0
+    ],
+    "srm": [
+      18.0,
+      30.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "english-barleywine",
+    "name": "English Barleywine",
+    "og": [
+      1.08,
+      1.12
+    ],
+    "fg": [
+      1.018,
+      1.03
+    ],
+    "abv": [
+      8.0,
+      12.0
+    ],
+    "ibu": [
+      35.0,
+      70.0
+    ],
+    "srm": [
+      8.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "english-cider",
+    "name": "English Cider ",
+    "og": [
+      1.05,
+      1.075
+    ],
+    "fg": [
+      0.995,
+      1.01
+    ],
+    "abv": [
+      6.0,
+      9.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "english-ipa",
+    "name": "English IPA",
+    "og": [
+      1.05,
+      1.075
+    ],
+    "fg": [
+      1.01,
+      1.018
+    ],
+    "abv": [
+      5.0,
+      7.5
+    ],
+    "ibu": [
+      40.0,
+      60.0
+    ],
+    "srm": [
+      8.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "extra-special-strong-bitter-english-pale-ale",
+    "name": "Extra Special/Strong Bitter (English Pale Ale)",
+    "og": [
+      1.048,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.016
+    ],
+    "abv": [
+      4.6,
+      6.2
+    ],
+    "ibu": [
+      30.0,
+      50.0
+    ],
+    "srm": [
+      6.0,
+      18.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "flanders-brown-ale-oud-bruin",
+    "name": "Flanders Brown Ale/Oud Bruin",
+    "og": [
+      1.04,
+      1.074
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      4.0,
+      8.0
+    ],
+    "ibu": [
+      20.0,
+      25.0
+    ],
+    "srm": [
+      15.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "flanders-red-ale",
+    "name": "Flanders Red Ale",
+    "og": [
+      1.048,
+      1.057
+    ],
+    "fg": [
+      1.002,
+      1.012
+    ],
+    "abv": [
+      4.6,
+      6.5
+    ],
+    "ibu": [
+      10.0,
+      25.0
+    ],
+    "srm": [
+      10.0,
+      16.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "foreign-extra-stout",
+    "name": "Foreign Extra Stout",
+    "og": [
+      1.056,
+      1.075
+    ],
+    "fg": [
+      1.01,
+      1.018
+    ],
+    "abv": [
+      5.5,
+      8.0
+    ],
+    "ibu": [
+      30.0,
+      70.0
+    ],
+    "srm": [
+      30.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "french-cider",
+    "name": "French Cider",
+    "og": [
+      1.05,
+      1.065
+    ],
+    "fg": [
+      1.01,
+      1.02
+    ],
+    "abv": [
+      3.0,
+      6.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "fruit-beer",
+    "name": "Fruit Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "fruit-cider",
+    "name": "Fruit Cider",
+    "og": [
+      1.045,
+      1.07
+    ],
+    "fg": [
+      0.995,
+      1.01
+    ],
+    "abv": [
+      5.0,
+      9.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "fruit-lambic",
+    "name": "Fruit Lambic",
+    "og": [
+      1.04,
+      1.06
+    ],
+    "fg": [
+      1.0,
+      1.01
+    ],
+    "abv": [
+      5.0,
+      7.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      3.0,
+      7.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "german-pilsner-pils",
+    "name": "German Pilsner (Pils)",
+    "og": [
+      1.044,
+      1.05
+    ],
+    "fg": [
+      1.008,
+      1.013
+    ],
+    "abv": [
+      4.4,
+      5.2
+    ],
+    "ibu": [
+      25.0,
+      45.0
+    ],
+    "srm": [
+      2.0,
+      5.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "gueuze",
+    "name": "Gueuze",
+    "og": [
+      1.04,
+      1.06
+    ],
+    "fg": [
+      1.0,
+      1.006
+    ],
+    "abv": [
+      5.0,
+      8.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      3.0,
+      7.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "imperial-ipa",
+    "name": "Imperial IPA",
+    "og": [
+      1.07,
+      1.09
+    ],
+    "fg": [
+      1.01,
+      1.02
+    ],
+    "abv": [
+      7.5,
+      10.0
+    ],
+    "ibu": [
+      60.0,
+      120.0
+    ],
+    "srm": [
+      8.0,
+      15.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "irish-red-ale",
+    "name": "Irish Red Ale",
+    "og": [
+      1.044,
+      1.06
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.0,
+      6.0
+    ],
+    "ibu": [
+      17.0,
+      28.0
+    ],
+    "srm": [
+      9.0,
+      18.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "k-lsch",
+    "name": "K�lsch",
+    "og": [
+      1.044,
+      1.05
+    ],
+    "fg": [
+      1.007,
+      1.011
+    ],
+    "abv": [
+      4.4,
+      5.2
+    ],
+    "ibu": [
+      20.0,
+      30.0
+    ],
+    "srm": [
+      4.0,
+      5.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "lite-american-lager",
+    "name": "Lite American Lager",
+    "og": [
+      1.028,
+      1.04
+    ],
+    "fg": [
+      0.998,
+      1.008
+    ],
+    "abv": [
+      2.8,
+      4.2
+    ],
+    "ibu": [
+      8.0,
+      12.0
+    ],
+    "srm": [
+      2.0,
+      3.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "maibock-helles-bock",
+    "name": "Maibock/Helles Bock",
+    "og": [
+      1.064,
+      1.072
+    ],
+    "fg": [
+      1.011,
+      1.018
+    ],
+    "abv": [
+      6.3,
+      7.4
+    ],
+    "ibu": [
+      23.0,
+      35.0
+    ],
+    "srm": [
+      6.0,
+      11.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "metheglin",
+    "name": "Metheglin",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "mild",
+    "name": "Mild",
+    "og": [
+      1.03,
+      1.038
+    ],
+    "fg": [
+      1.008,
+      1.013
+    ],
+    "abv": [
+      2.8,
+      4.5
+    ],
+    "ibu": [
+      10.0,
+      25.0
+    ],
+    "srm": [
+      12.0,
+      25.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "munich-dunkel",
+    "name": "Munich Dunkel",
+    "og": [
+      1.048,
+      1.056
+    ],
+    "fg": [
+      1.01,
+      1.016
+    ],
+    "abv": [
+      4.5,
+      5.6
+    ],
+    "ibu": [
+      18.0,
+      28.0
+    ],
+    "srm": [
+      14.0,
+      28.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "munich-helles",
+    "name": "Munich Helles",
+    "og": [
+      1.045,
+      1.051
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      4.7,
+      5.4
+    ],
+    "ibu": [
+      16.0,
+      22.0
+    ],
+    "srm": [
+      3.0,
+      5.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "new-england-cider",
+    "name": "New England Cider",
+    "og": [
+      1.06,
+      1.1
+    ],
+    "fg": [
+      0.995,
+      1.01
+    ],
+    "abv": [
+      7.0,
+      13.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "northern-english-brown-ale",
+    "name": "Northern English Brown Ale",
+    "og": [
+      1.04,
+      1.052
+    ],
+    "fg": [
+      1.008,
+      1.014
+    ],
+    "abv": [
+      4.2,
+      5.4
+    ],
+    "ibu": [
+      20.0,
+      30.0
+    ],
+    "srm": [
+      12.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "northern-german-altbier",
+    "name": "Northern German Altbier",
+    "og": [
+      1.046,
+      1.054
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      4.5,
+      5.2
+    ],
+    "ibu": [
+      25.0,
+      40.0
+    ],
+    "srm": [
+      13.0,
+      19.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "oatmeal-stout",
+    "name": "Oatmeal Stout",
+    "og": [
+      1.048,
+      1.065
+    ],
+    "fg": [
+      1.01,
+      1.018
+    ],
+    "abv": [
+      4.2,
+      5.9
+    ],
+    "ibu": [
+      25.0,
+      40.0
+    ],
+    "srm": [
+      22.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "oktoberfest-m-rzen",
+    "name": "Oktoberfest/M�rzen",
+    "og": [
+      1.05,
+      1.057
+    ],
+    "fg": [
+      1.012,
+      1.016
+    ],
+    "abv": [
+      4.8,
+      5.7
+    ],
+    "ibu": [
+      20.0,
+      28.0
+    ],
+    "srm": [
+      7.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "old-ale",
+    "name": "Old Ale",
+    "og": [
+      1.06,
+      1.09
+    ],
+    "fg": [
+      1.015,
+      1.022
+    ],
+    "abv": [
+      6.0,
+      9.0
+    ],
+    "ibu": [
+      30.0,
+      60.0
+    ],
+    "srm": [
+      10.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "open-category-mead",
+    "name": "Open Category Mead",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "other-fruit-melomel",
+    "name": "Other Fruit Melomel",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "other-smoked-beer",
+    "name": "Other Smoked Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "other-specialty-cider-perry",
+    "name": "Other Specialty Cider/Perry",
+    "og": [
+      1.045,
+      1.1
+    ],
+    "fg": [
+      0.995,
+      1.02
+    ],
+    "abv": [
+      5.0,
+      12.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "premium-american-lager",
+    "name": "Premium American Lager",
+    "og": [
+      1.046,
+      1.056
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      4.6,
+      6.0
+    ],
+    "ibu": [
+      15.0,
+      25.0
+    ],
+    "srm": [
+      2.0,
+      6.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "pyment",
+    "name": "Pyment",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "robust-porter",
+    "name": "Robust Porter",
+    "og": [
+      1.048,
+      1.065
+    ],
+    "fg": [
+      1.012,
+      1.016
+    ],
+    "abv": [
+      4.8,
+      6.5
+    ],
+    "ibu": [
+      25.0,
+      50.0
+    ],
+    "srm": [
+      22.0,
+      35.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "roggenbier-german-rye-beer",
+    "name": "Roggenbier (German Rye Beer)",
+    "og": [
+      1.046,
+      1.056
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.5,
+      6.0
+    ],
+    "ibu": [
+      10.0,
+      20.0
+    ],
+    "srm": [
+      14.0,
+      19.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "russian-imperial-stout",
+    "name": "Russian Imperial Stout",
+    "og": [
+      1.075,
+      1.115
+    ],
+    "fg": [
+      1.018,
+      1.03
+    ],
+    "abv": [
+      8.0,
+      12.0
+    ],
+    "ibu": [
+      50.0,
+      90.0
+    ],
+    "srm": [
+      30.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "saison",
+    "name": "Saison",
+    "og": [
+      1.048,
+      1.065
+    ],
+    "fg": [
+      1.002,
+      1.012
+    ],
+    "abv": [
+      5.0,
+      7.0
+    ],
+    "ibu": [
+      20.0,
+      35.0
+    ],
+    "srm": [
+      5.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "schwarzbier-black-beer",
+    "name": "Schwarzbier (Black Beer)",
+    "og": [
+      1.046,
+      1.052
+    ],
+    "fg": [
+      1.01,
+      1.016
+    ],
+    "abv": [
+      4.4,
+      5.4
+    ],
+    "ibu": [
+      22.0,
+      32.0
+    ],
+    "srm": [
+      17.0,
+      30.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "scottish-export-80",
+    "name": "Scottish Export 80/-",
+    "og": [
+      1.04,
+      1.054
+    ],
+    "fg": [
+      1.01,
+      1.016
+    ],
+    "abv": [
+      3.9,
+      5.0
+    ],
+    "ibu": [
+      15.0,
+      30.0
+    ],
+    "srm": [
+      9.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "scottish-heavy-70",
+    "name": "Scottish Heavy 70/-",
+    "og": [
+      1.035,
+      1.04
+    ],
+    "fg": [
+      1.01,
+      1.015
+    ],
+    "abv": [
+      3.2,
+      3.9
+    ],
+    "ibu": [
+      10.0,
+      25.0
+    ],
+    "srm": [
+      9.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "scottish-light-60",
+    "name": "Scottish Light 60/-",
+    "og": [
+      1.03,
+      1.035
+    ],
+    "fg": [
+      1.01,
+      1.013
+    ],
+    "abv": [
+      2.5,
+      3.2
+    ],
+    "ibu": [
+      10.0,
+      20.0
+    ],
+    "srm": [
+      9.0,
+      17.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "semi-sweet-mead",
+    "name": "Semi-sweet Mead",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "southern-english-brown",
+    "name": "Southern English Brown",
+    "og": [
+      1.033,
+      1.042
+    ],
+    "fg": [
+      1.011,
+      1.014
+    ],
+    "abv": [
+      2.8,
+      4.1
+    ],
+    "ibu": [
+      12.0,
+      20.0
+    ],
+    "srm": [
+      19.0,
+      35.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "special-best-premium-bitter",
+    "name": "Special/Best/Premium Bitter",
+    "og": [
+      1.04,
+      1.048
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      3.8,
+      4.6
+    ],
+    "ibu": [
+      25.0,
+      40.0
+    ],
+    "srm": [
+      5.0,
+      16.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "specialty-beer",
+    "name": "Specialty Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "spice-herb-or-vegetable-beer",
+    "name": "Spice, Herb, or Vegetable Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "standard-american-lager",
+    "name": "Standard American Lager",
+    "og": [
+      1.04,
+      1.05
+    ],
+    "fg": [
+      1.004,
+      1.01
+    ],
+    "abv": [
+      4.2,
+      5.3
+    ],
+    "ibu": [
+      8.0,
+      15.0
+    ],
+    "srm": [
+      2.0,
+      4.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "standard-ordinary-bitter",
+    "name": "Standard/Ordinary Bitter",
+    "og": [
+      1.032,
+      1.04
+    ],
+    "fg": [
+      1.007,
+      1.011
+    ],
+    "abv": [
+      3.2,
+      3.8
+    ],
+    "ibu": [
+      25.0,
+      35.0
+    ],
+    "srm": [
+      4.0,
+      14.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "straight-unblended-lambic",
+    "name": "Straight (Unblended) Lambic",
+    "og": [
+      1.04,
+      1.054
+    ],
+    "fg": [
+      1.001,
+      1.01
+    ],
+    "abv": [
+      5.0,
+      6.5
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      3.0,
+      7.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "strong-scotch-ale",
+    "name": "Strong Scotch Ale",
+    "og": [
+      1.07,
+      1.13
+    ],
+    "fg": [
+      1.018,
+      1.056
+    ],
+    "abv": [
+      6.5,
+      10.0
+    ],
+    "ibu": [
+      17.0,
+      35.0
+    ],
+    "srm": [
+      14.0,
+      25.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "sweet-mead",
+    "name": "Sweet Mead",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "sweet-stout",
+    "name": "Sweet Stout",
+    "og": [
+      1.044,
+      1.06
+    ],
+    "fg": [
+      1.012,
+      1.024
+    ],
+    "abv": [
+      4.0,
+      6.0
+    ],
+    "ibu": [
+      20.0,
+      40.0
+    ],
+    "srm": [
+      30.0,
+      40.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "traditional-bock",
+    "name": "Traditional Bock",
+    "og": [
+      1.064,
+      1.072
+    ],
+    "fg": [
+      1.013,
+      1.019
+    ],
+    "abv": [
+      6.3,
+      7.2
+    ],
+    "ibu": [
+      20.0,
+      27.0
+    ],
+    "srm": [
+      14.0,
+      22.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "traditional-perry",
+    "name": "Traditional Perry",
+    "og": [
+      1.05,
+      1.07
+    ],
+    "fg": [
+      1.0,
+      1.02
+    ],
+    "abv": [
+      5.0,
+      9.0
+    ],
+    "ibu": [
+      0.0,
+      0.0
+    ],
+    "srm": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "vienna-lager",
+    "name": "Vienna Lager",
+    "og": [
+      1.046,
+      1.052
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.5,
+      5.5
+    ],
+    "ibu": [
+      18.0,
+      30.0
+    ],
+    "srm": [
+      10.0,
+      16.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "weizen-weissbier",
+    "name": "Weizen/Weissbier",
+    "og": [
+      1.044,
+      1.052
+    ],
+    "fg": [
+      1.01,
+      1.014
+    ],
+    "abv": [
+      4.3,
+      5.6
+    ],
+    "ibu": [
+      8.0,
+      15.0
+    ],
+    "srm": [
+      2.0,
+      8.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "weizenbock",
+    "name": "Weizenbock",
+    "og": [
+      1.064,
+      1.09
+    ],
+    "fg": [
+      1.015,
+      1.022
+    ],
+    "abv": [
+      6.5,
+      8.0
+    ],
+    "ibu": [
+      15.0,
+      30.0
+    ],
+    "srm": [
+      12.0,
+      25.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "witbier",
+    "name": "Witbier",
+    "og": [
+      1.044,
+      1.052
+    ],
+    "fg": [
+      1.008,
+      1.012
+    ],
+    "abv": [
+      4.5,
+      5.5
+    ],
+    "ibu": [
+      10.0,
+      20.0
+    ],
+    "srm": [
+      2.0,
+      4.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  },
+  {
+    "id": "wood-aged-beer",
+    "name": "Wood-Aged Beer",
+    "og": [
+      1.0,
+      1.2
+    ],
+    "fg": [
+      1.0,
+      1.2
+    ],
+    "abv": [
+      0.0,
+      100.0
+    ],
+    "ibu": [
+      0.0,
+      100.0
+    ],
+    "srm": [
+      0.0,
+      100.0
+    ],
+    "source": {
+      "title": "Brewtarget numeric brewing reference",
+      "url": "https://github.com/Brewtarget/brewtarget/blob/main/data/DefaultContent001-OriginalDefaultData.xml",
+      "accessed": "2026-10-25",
+      "note": "Legacy numeric style ranges in Brewtarget; not current competition guidance. No guideline prose retained."
+    }
+  }
+]
