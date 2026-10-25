@@ -1,10 +1,10 @@
 # Brew Designer
 
-A local recipe workbench with two visibly distinct layers: deterministic brewing calculations and subjective flavor estimates. Work in progress, built in six committed stages.
+A local recipe workbench with two visibly distinct layers: deterministic brewing calculations and subjective flavor estimates. Built in six committed stages.
 
 ## Run
 
-Node 22.13+ required (Node's built-in SQLite avoids native dependency compilation).
+Node 22.13+ required; Node 24+ recommended (Node's built-in SQLite avoids native dependency compilation).
 
 ```sh
 npm install && npm run dev
@@ -37,7 +37,7 @@ Add an objective record to `malts.json`, `hops.json`, or `yeasts.json`, using a 
 
 ## Deterministic calculations and explicit approximations
 
-- OG = 1 + Σ(lb × PPG × efficiency fraction) / gallons / 1000. Extract and sugars use 100%. Seed PPG = extract % × 0.46214 (46.214 PPG sucrose basis).
+- OG = 1 + Σ(lb × PPG × efficiency fraction) / gallons / 1000. Extract and sugars use 100%. Malt EBC ≈ 2.65 × °Lovibond − 1.2 (clamped at zero); this is distinct from beer EBC = 1.97 × SRM. Seed PPG = extract % × 0.46214 (46.214 PPG sucrose basis).
 - FG = OG − (OG − 1) × apparent attenuation. Baseline uses midpoint of the yeast range. **Heuristic:** each °C below 65°C adds 0.75 percentage points of attenuation; each °C above subtracts 0.75, clamped to 40–95%. Each fermentable's gravity points are weighted separately: crystal/caramel uses 65% of baseline attenuation; lactose 0%; simple sugars 100%. These are rough planning assumptions, not laboratory fermentability analyses. Mash time does not change attenuation in this model.
 - ABV standard = (OG − FG) × 131.25. Default accurate formula = (76.08 × (OG − FG)/(1.775 − OG)) × (FG/0.794). Both remain gravity-based estimates.
 - Tinseth U = 1.65 × 0.000125^(boilSG − 1) × (1 − exp(−0.04t))/4.15. IBU = U × AA fraction × oz × 7490 / gal. Boil SG is the mean of pre/post-boil gravity (approximation). Whirlpool uses its entered duration times a configurable 0–1 multiplier (default .15); this does not model temperature decay. Dry hop IBU = 0 (no isomerized-alpha contribution; perceived bitterness can still change).
@@ -66,7 +66,7 @@ Every score is an estimate on a 0–5 scale, never a measurement. Context is mat
 
 The library exposes all records and weighted context previews. Hop Aroma/Flavor/Bittering/Dry hopping roles overlap and are editorial suitability filters, separate from analytical hop purpose. Malts filter by grist role, yeasts by family/form. Yeast tolerance filtering excludes unknowns only when a minimum is active. Potential ABV filtering uses entered OG and midpoint yeast attenuation with the accurate ABV formula; it is not a promise that a yeast produces a particular ABV. Full guides are newly written using record-specific numbers and clearly labeled process heuristics. Hop substitutions score 65% descriptor cosine similarity, 25% mean shared-oil closeness, 10% alpha similarity; missing data weakens the evidence.
 
-Navigation preserves the editor and library components, their controls and each screen's scroll position. Recipe drafts are backed up to browser localStorage after edits (250ms debounce), while explicit Save writes the durable SQLite copy. A browser backup is not a cross-device sync service. The mobile navigation stays available while scrolling on brew day.
+Navigation preserves the editor and library components, their controls and each screen's scroll position. Recipe drafts are backed up to browser localStorage immediately after each edit, while explicit Save writes the durable SQLite copy. A browser backup is not a cross-device sync service. The mobile navigation stays available while scrolling on brew day.
 
 ## Solver
 
@@ -81,3 +81,11 @@ Logs store the complete recipe and prediction snapshot at save time, measured OG
 Whole-beer tasting ratings show residuals (actual minus predicted); they do **not** automatically become assertions about individual ingredients. The brewer can explicitly attribute a controlled descriptor to one ingredient, at a chosen confidence. Those notes persist in the separate `flavor_descriptors` table as source_type=user. Usage context is hop use, fermentation ±1°C, or grist fraction ±2 percentage points. Personal notes remain visible in the library; including them in recipe/solver predictions is opt-in, with adjustable source weight 1–3. This learns associations, not validated causality.
 
 Efficiency calibration solves E = (actual gravity points × actual post-boil gallons − fixed extract/sugar points) / mash potential points. Values outside 20–100% are excluded. Valid brews are averaged; applying the estimate keeps ingredient amounts fixed and changes recipe efficiency explicitly. Per-yeast calibration first inverts the model's sugar/lactose/crystal weighting and mash-temperature offset from observed attenuation, then averages valid 40–95% baseline estimates for that yeast. This avoids applying those heuristics twice. Per-yeast calibration is separately opt-in for the editor; solver uses catalog attenuation and personal descriptors, not the strain calibration, so candidate predictions should be checked in the editor. No automatic accuracy guarantee: sampling bias, measurement errors and process changes affect calibration. Preferences persist locally; stored user notes and measurements live in SQLite.
+
+Manufacturer corrections live in `data/overrides.json`, applied after reference import. The US-05 attenuation, temperature, tolerance and POF fields were checked against [Fermentis technical specifications](https://fermentis.com/en/product/safale-us-05/); unverified remaining strain fields retain reference provenance.
+
+Upstream Brewtarget numeric tables are pinned to commit `531d5e7523f9e72a0054349bd5b14aa1c7bf16ad`; the reference blobs match `32f20aa8f9fcf689de138d4c33cb5ac5797090a4` (XML) and `58a031c568afa19f4999b0d1c23b64b1a038ff46` (BeerJSON). Three legacy malt records lack a usable max-in-batch value; their permissive 100% model cap is not manufacturer usage advice.
+
+## Verification
+
+`npm test`: reference-value calculations, seed integrity, flavor attribution totals and context, solver constraints/determinism, calibration inversion, BeerXML round trip, SQLite API persistence and validation. API tests create an isolated temporary database under `.runtime` and remove it afterward. Browser checks covered mobile navigation, preserving edited amounts and scroll position across library visits, solver execution, yeast tolerance search, detailed guides and the brew-log form. `npm run build` performs strict TypeScript checking and a production build. The ingredient catalog is intentionally large and compressed transfer size is approximately 220KB for the app bundle; Vite may warn about the uncompressed catalog chunk.

@@ -1,3 +1,171 @@
-import {useState} from 'react';import type {Catalog,Flavor} from '../engine/types';import {Section,Tag} from './ui';
-export function Radar({scores,target,axes=['bready','caramel','roast','citrus','tropical','floral','body','bitterness'],size=300}:{scores:Record<string,number>;target?:Record<string,number>;axes?:string[];size?:number}){const point=(i:number,v:number)=>{const a=i/axes.length*Math.PI*2-Math.PI/2;return [150+Math.cos(a)*v*94/5,150+Math.sin(a)*v*94/5]};const poly=(s:Record<string,number>)=>axes.map((a,i)=>point(i,s[a]??0).join(',')).join(' ');return <svg className="radar" role="img" aria-label="Flavor estimate radar on a zero to five scale" viewBox="0 0 300 300" width={size} height={size}>{[1,2,3,4,5].map(n=><polygon key={n} points={axes.map((_,i)=>point(i,n).join(',')).join(' ')} fill="none" stroke="#dfe2d2" strokeWidth=".6"/>)}{axes.map((a,i)=>{const [x,y]=point(i,6.1);const [lx,ly]=point(i,5);return <g key={a}><line x1="150" y1="150" x2={lx} y2={ly} stroke="#e1e4d7" strokeWidth=".7"/><text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#8d967b" fontSize="8">{a.replace('-',' ').toUpperCase()}</text></g>})}{target&&<polygon points={poly(target)} fill="#c8a36510" stroke="#bf9e65" strokeDasharray="4 3" strokeWidth="1.2"/>}<polygon points={poly(scores)} fill="#708b5b28" stroke="#6b8b58" strokeWidth="1.8"/>{axes.map((a,i)=>{const [x,y]=point(i,scores[a]??0);return <circle key={a} cx={x} cy={y} r="2.6" fill="#688654"/>})}<text x="153" y="147" fill="#c1c6b5" fontSize="7">0</text></svg>}
-export default function FlavorPanel({flavor:f,catalog:c,target}:{flavor:Flavor;catalog:Catalog;target?:Record<string,number>}){const [axis,setAxis]=useState('citrus');const rows=f.contributions[axis]??[];return <Section title="In the glass" eyebrow="SUBJECTIVE / FLAVOR ESTIMATE"><Tag>BREWER-CONSENSUS MODEL</Tag><Radar scores={f.scores} target={target}/><div className="radar-legend"><span>● Predicted</span>{target&&<span>◌ Target</span>}</div><p className="muted">A sensory estimate, not a measurement. Select any axis to see what’s behind it.</p><select aria-label="Explain flavor axis" value={axis} onChange={e=>setAxis(e.target.value)}>{c.vocabulary.map(v=><option value={v.id} key={v.id}>{v.label} · {(f.scores[v.id]??0).toFixed(1)}/5</option>)}</select><div className="flavor-explanation">{rows.length===0?<p className="muted">No matching descriptors for this context. Missing evidence does not prove absence.</p>:rows.map((r,i)=><div key={i}><b>{r.ingredient} <span>+{r.score.toFixed(2)}</span></b><p>{r.reason}</p>{r.descriptorIds.map(id=>{const d=c.descriptors.find(d=>d.id===id);return d&&<details key={id}><summary>{d.sourceType} · {d.confidence} confidence · {d.intensity}/5</summary><p>{d.usageContext} · {d.note}</p><a href={d.source.url} target="_blank" rel="noreferrer">{d.source.title} ↗</a></details>})}</div>)}</div></Section>}
+import { useState } from "react";
+import type { Catalog, Flavor } from "../engine/types";
+import { Section, Tag } from "./ui";
+export function Radar({
+  scores,
+  target,
+  axes = [
+    "bready",
+    "caramel",
+    "roast",
+    "citrus",
+    "tropical",
+    "floral",
+    "body",
+    "bitterness",
+  ],
+  size = 300,
+}: {
+  scores: Record<string, number>;
+  target?: Record<string, number>;
+  axes?: string[];
+  size?: number;
+}) {
+  const point = (i: number, v: number) => {
+    const a = (i / axes.length) * Math.PI * 2 - Math.PI / 2;
+    return [150 + (Math.cos(a) * v * 94) / 5, 150 + (Math.sin(a) * v * 94) / 5];
+  };
+  const poly = (s: Record<string, number>) =>
+    axes.map((a, i) => point(i, s[a] ?? 0).join(",")).join(" ");
+  return (
+    <svg
+      className="radar"
+      role="img"
+      aria-label="Flavor estimate radar on a zero to five scale"
+      viewBox="0 0 300 300"
+      width={size}
+      height={size}
+    >
+      {[1, 2, 3, 4, 5].map((n) => (
+        <polygon
+          key={n}
+          points={axes.map((_, i) => point(i, n).join(",")).join(" ")}
+          fill="none"
+          stroke="#dfe2d2"
+          strokeWidth=".6"
+        />
+      ))}
+      {axes.map((a, i) => {
+        const [x, y] = point(i, 6.1);
+        const [lx, ly] = point(i, 5);
+        return (
+          <g key={a}>
+            <line
+              x1="150"
+              y1="150"
+              x2={lx}
+              y2={ly}
+              stroke="#e1e4d7"
+              strokeWidth=".7"
+            />
+            <text
+              x={x}
+              y={y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#8d967b"
+              fontSize="8"
+            >
+              {a.replace("-", " ").toUpperCase()}
+            </text>
+          </g>
+        );
+      })}
+      {target && (
+        <polygon
+          points={poly(target)}
+          fill="#c8a36510"
+          stroke="#bf9e65"
+          strokeDasharray="4 3"
+          strokeWidth="1.2"
+        />
+      )}
+      <polygon
+        points={poly(scores)}
+        fill="#708b5b28"
+        stroke="#6b8b58"
+        strokeWidth="1.8"
+      />
+      {axes.map((a, i) => {
+        const [x, y] = point(i, scores[a] ?? 0);
+        return <circle key={a} cx={x} cy={y} r="2.6" fill="#688654" />;
+      })}
+      <text x="153" y="147" fill="#c1c6b5" fontSize="7">
+        0
+      </text>
+    </svg>
+  );
+}
+export default function FlavorPanel({
+  flavor: f,
+  catalog: c,
+  target,
+}: {
+  flavor: Flavor;
+  catalog: Catalog;
+  target?: Record<string, number>;
+}) {
+  const [axis, setAxis] = useState("citrus");
+  const rows = f.contributions[axis] ?? [];
+  return (
+    <Section title="In the glass" eyebrow="SUBJECTIVE / FLAVOR ESTIMATE">
+      <Tag>BREWER-CONSENSUS MODEL</Tag>
+      <Radar scores={f.scores} target={target} />
+      <div className="radar-legend">
+        <span>● Predicted</span>
+        {target && <span>◌ Target</span>}
+      </div>
+      <p className="muted">
+        A sensory estimate, not a measurement. Select any axis to see what’s
+        behind it.
+      </p>
+      <select
+        aria-label="Explain flavor axis"
+        value={axis}
+        onChange={(e) => setAxis(e.target.value)}
+      >
+        {c.vocabulary.map((v) => (
+          <option value={v.id} key={v.id}>
+            {v.label} · {(f.scores[v.id] ?? 0).toFixed(1)}/5
+          </option>
+        ))}
+      </select>
+      <div className="flavor-explanation">
+        {rows.length === 0 ? (
+          <p className="muted">
+            No matching descriptors for this context. Missing evidence does not
+            prove absence.
+          </p>
+        ) : (
+          rows.map((r, i) => (
+            <div key={i}>
+              <b>
+                {r.ingredient} <span>+{r.score.toFixed(2)}</span>
+              </b>
+              <p>{r.reason}</p>
+              {r.descriptorIds.map((id) => {
+                const d = c.descriptors.find((d) => d.id === id);
+                return (
+                  d && (
+                    <details key={id}>
+                      <summary>
+                        {d.sourceType} · {d.confidence} confidence ·{" "}
+                        {d.intensity}/5
+                      </summary>
+                      <p>
+                        {d.usageContext} · {d.note}
+                      </p>
+                      <a href={d.source.url} target="_blank" rel="noreferrer">
+                        {d.source.title} ↗
+                      </a>
+                    </details>
+                  )
+                );
+              })}
+            </div>
+          ))
+        )}
+      </div>
+    </Section>
+  );
+}

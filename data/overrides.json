@@ -1,0 +1,16 @@
+{
+  "yeasts": {
+    "y-fermentis-us-05-safale-us-05": {
+      "tempC": [18, 26],
+      "attenuation": [78, 82],
+      "alcoholTolerance": 10,
+      "pof": false,
+      "source": {
+        "title": "Fermentis SafAle US-05 technical specifications + Brewtarget reference",
+        "url": "https://fermentis.com/en/product/safale-us-05/",
+        "accessed": "2026-10-25",
+        "note": "Manufacturer verified: attenuation 78–82%, recommended temperature 18–26°C, tolerance 10%, POF absent. Diastaticus unstated. Other fields retained from Brewtarget reference: https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json"
+      }
+    }
+  }
+}

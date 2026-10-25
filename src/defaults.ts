@@ -1,4 +1,85 @@
-import {catalog as c} from './catalog';
-import type {Recipe,Target} from './engine/types';
-export const defaultRecipe:Recipe={id:'first-light',name:'First Light Pale Ale',styleId:'american-pale-ale',batchL:20,efficiency:72,mashC:66,mashMinutes:60,fermentC:19,boilMinutes:60,boilOffLPerHour:3,lossL:1,whirlpoolFactor:.15,carbonation:2.4,pitchMultiplier:1,yeastId:c.yeasts.find(y=>y.code==='US-05')?.id??c.yeasts.find(y=>y.code==='WLP001')!.id,grains:[{ingredientId:c.malts.find(m=>/2 Row Brewers Malt/.test(m.name))!.id,kg:4.2},{ingredientId:c.malts.find(m=>/Caramel Malt 40L/.test(m.name))!.id,kg:.25}],hops:[{ingredientId:c.hops.find(h=>h.name==='Cascade')!.id,grams:25,use:'boil',minutes:60},{ingredientId:c.hops.find(h=>h.name==='Citra')!.id,grams:30,use:'whirlpool',minutes:20},{ingredientId:c.hops.find(h=>h.name==='Citra')!.id,grams:45,use:'dry hop',minutes:4320}]};
-export const defaultTarget:Target={abv:5.5,ibu:35,srm:6,batchL:20,efficiency:72,styleId:'american-pale-ale',flavors:{bready:2,caramel:1,roast:0,citrus:3.5,tropical:3,pine:1,floral:1,clean:3,banana:0,clove:0,body:2.5,sweetness:1.5,bitterness:2.5,dryness:3,carbonation:2.5,astringency:0},must:[],avoid:[],onHand:[],exclude:[],yeastForm:'any',budget:'any',equipment:{boilMinutes:60,boilOffLPerHour:3,lossL:1},weights:{flavor:1,numbers:4,style:1}};
+import { catalog as c } from "./catalog";
+import type { Recipe, Target } from "./engine/types";
+export const defaultRecipe: Recipe = {
+  id: "first-light",
+  name: "First Light Pale Ale",
+  styleId: "american-pale-ale",
+  batchL: 20,
+  efficiency: 72,
+  mashC: 66,
+  mashMinutes: 60,
+  fermentC: 19,
+  boilMinutes: 60,
+  boilOffLPerHour: 3,
+  lossL: 1,
+  whirlpoolFactor: 0.15,
+  carbonation: 2.4,
+  pitchMultiplier: 1,
+  yeastId:
+    c.yeasts.find((y) => y.code === "US-05")?.id ??
+    c.yeasts.find((y) => y.code === "WLP001")!.id,
+  grains: [
+    {
+      ingredientId: c.malts.find((m) => /2 Row Brewers Malt/.test(m.name))!.id,
+      kg: 4.2,
+    },
+    {
+      ingredientId: c.malts.find((m) => /Caramel Malt 40L/.test(m.name))!.id,
+      kg: 0.25,
+    },
+  ],
+  hops: [
+    {
+      ingredientId: c.hops.find((h) => h.name === "Cascade")!.id,
+      grams: 25,
+      use: "boil",
+      minutes: 60,
+    },
+    {
+      ingredientId: c.hops.find((h) => h.name === "Citra")!.id,
+      grams: 30,
+      use: "whirlpool",
+      minutes: 20,
+    },
+    {
+      ingredientId: c.hops.find((h) => h.name === "Citra")!.id,
+      grams: 45,
+      use: "dry hop",
+      minutes: 4320,
+    },
+  ],
+};
+export const defaultTarget: Target = {
+  abv: 5.5,
+  ibu: 35,
+  srm: 6,
+  batchL: 20,
+  efficiency: 72,
+  styleId: "american-pale-ale",
+  flavors: {
+    bready: 2,
+    caramel: 1,
+    roast: 0,
+    citrus: 3.5,
+    tropical: 3,
+    pine: 1,
+    floral: 1,
+    clean: 3,
+    banana: 0,
+    clove: 0,
+    body: 2.5,
+    sweetness: 1.5,
+    bitterness: 2.5,
+    dryness: 3,
+    carbonation: 2.5,
+    astringency: 0,
+  },
+  must: [],
+  avoid: [],
+  onHand: [],
+  exclude: [],
+  yeastForm: "any",
+  budget: "any",
+  equipment: { boilMinutes: 60, boilOffLPerHour: 3, lossL: 1 },
+  weights: { flavor: 1, numbers: 4, style: 1 },
+};

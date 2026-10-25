@@ -1,18 +1,566 @@
-import {useState,useEffect} from 'react';import {Save,Download,NotebookPen,Plus} from 'lucide-react';import type {BrewLog as Log,Catalog,Descriptor,Flavor,Prediction,Recipe} from '../engine/types';import {calibrate,tastingErrors} from '../engine/feedback';import {Field,Section,Tag} from './ui';import {Radar} from './FlavorPanel';import {download} from '../io';import {lToGal,L_PER_GAL,cToF,fToC} from '../engine/calculations';
-export interface Preferences {personalize:boolean;userWeight:number;calibrateYeast:boolean}
-export default function BrewLog({recipe:r,prediction:p,flavor:f,catalog:c,logs,onSaved,us,prefs,setPrefs,onEfficiency}:{recipe:Recipe;prediction:Prediction;flavor:Flavor;catalog:Catalog;logs:Log[];onSaved:(l:Log)=>void;us:boolean;prefs:Preferences;setPrefs:(p:Preferences)=>void;onEfficiency:(n:number)=>void}){
- const [date,setDate]=useState(()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}),[og,setOg]=useState(p.og),[fg,setFg]=useState(p.fg),[volume,setVolume]=useState(r.batchL),[temp,setTemp]=useState(r.fermentC),[notes,setNotes]=useState(''),[tasting,setTasting]=useState<Record<string,number>>({}),[attribute,setAttribute]=useState(r.yeastId),[descriptor,setDescriptor]=useState('clean'),[intensity,setIntensity]=useState(3),[noteText,setNoteText]=useState(''),[contextUse,setContextUse]=useState('dry hop'),[confidence,setConfidence]=useState<'low'|'medium'|'high'>('medium'),[added,setAdded]=useState<Descriptor[]>([]),[status,setStatus]=useState(''),[busy,setBusy]=useState(false),[selected,setSelected]=useState<string|null>(null);
- useEffect(()=>{setOg(p.og);setFg(p.fg);setVolume(r.batchL);setTemp(r.fermentC);setAttribute(r.yeastId);setNotes('');setAdded([]);setTasting({})},[r.id]);
- const calibration=calibrate(logs,c);const ingredients=[...new Set([...r.grains.map(g=>g.ingredientId),...r.hops.map(h=>h.ingredientId),r.yeastId])].map(id=>[...c.malts,...c.hops,...c.yeasts].find(i=>i.id===id)!);
- const item=ingredients.find(i=>i.id===attribute)??ingredients[0];
- function addNote(){const total=r.grains.reduce((s,g)=>s+g.kg,0);const share=total?r.grains.filter(g=>g.ingredientId===item.id).reduce((s,g)=>s+g.kg,0)/total*100:0;
-  const context=item.kind==='hop'?{use:contextUse}:item.kind==='yeast'?{minTempC:temp-1,maxTempC:temp+1}:{minPercent:Math.max(0,share-2),maxPercent:share+2};
-  const label=item.kind==='hop'?contextUse:item.kind==='yeast'?`fermented at ${temp.toFixed(1)}°C (±1°C)`:`${share.toFixed(1)}% of grist (±2 percentage points)`;
-  setAdded(a=>[...a,{id:crypto.randomUUID(),ingredientId:item.id,descriptor,intensity,context,usageContext:label,sourceType:'user',confidence,note:noteText||'Brewer-attributed tasting observation.',source:{title:'Your tasting notes',url:'local:brew-log',accessed:date,note:'Personal opinion attributed by the brewer; not a controlled ingredient trial.'}}]);setNoteText('')
- }
- async function save(){setBusy(true);setStatus('');try{const l:Log={id:crypto.randomUUID(),date,recipe:structuredClone(r),predicted:structuredClone(p),predictedFlavor:{...f.scores},actualOg:og,actualFg:fg,actualVolumeL:volume,actualTempC:temp,tasting,notes,descriptors:added};const response=await fetch('/api/logs/'+l.id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(l)});const body=await response.json();if(!response.ok)throw new Error(body.error);onSaved(body);setSelected(body.id);setAdded([]);setStatus('Brew recorded. Your prediction snapshot is preserved.')}catch(e){setStatus(String(e))}setBusy(false)}
- return <><div className="log-grid"><div className="log-inputs"><Section title="Record this brew" eyebrow="MEASURED / BREW-DAY DATA" action={<NotebookPen size={21}/>}><p className="muted">Current recipe: <b>{r.name}</b>. Saving records an immutable recipe and prediction snapshot alongside your measurements.</p><label className="field log-date"><span>Brew date</span><input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><div className="field-grid"><Field label="Measured OG" value={og} min={1.001} max={1.3} step={.001} onChange={setOg}/><Field label="Measured FG" value={fg} min={1} max={1.3} step={.001} onChange={setFg}/><Field label="Measured post-boil volume" suffix={us?'gal':'L'} value={us?lToGal(volume):volume} min={.1} onChange={n=>setVolume(us?n*L_PER_GAL:n)}/><Field label="Actual fermentation temperature" suffix={us?'°F':'°C'} value={us?cToF(temp):temp} min={us?32:0} max={us?113:45} onChange={n=>setTemp(us?fToC(n):n)}/></div><p className="muted">Measurements are prefilled from predictions for convenience. Replace them with readings before saving; calibration depends on their accuracy.</p><label className="field"><span>Brew-day & tasting notes</span><textarea rows={4} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Mash behavior, fermentation observations, what you taste…"/></label></Section>
- <Section title="What’s actually in the glass?" eyebrow="SUBJECTIVE / YOUR TASTING"><Tag>PERSONAL SENSORY OBSERVATION</Tag><p className="muted">Enable the axes you tasted, then rate 0–5. Unrated axes stay unknown.</p><div className="tasting-list">{c.vocabulary.map(v=><label key={v.id}><input type="checkbox" checked={tasting[v.id]!==undefined} onChange={e=>setTasting(a=>{const b={...a};if(e.target.checked)b[v.id]=0;else delete b[v.id];return b})}/><span>{v.label}</span>{tasting[v.id]!==undefined&&<><input type="range" min="0" max="5" step=".25" value={tasting[v.id]} onChange={e=>setTasting({...tasting,[v.id]:Number(e.target.value)})}/><b>{tasting[v.id].toFixed(1)}</b></>}</label>)}</div><details className="advanced"><summary>Attribute a descriptor to one ingredient</summary><p className="muted">Whole-beer tasting cannot prove an individual ingredient caused a flavor. Add an ingredient note only when you choose to make that attribution. This becomes a separate personal source.</p><div className="field-grid"><label className="field"><span>Ingredient</span><select value={attribute} onChange={e=>setAttribute(e.target.value)}>{ingredients.map(i=><option key={i.id} value={i.id}>{i.name}</option>)}</select></label><label className="field"><span>Descriptor</span><select value={descriptor} onChange={e=>setDescriptor(e.target.value)}>{c.vocabulary.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}</select></label><Field label="Personal descriptor intensity" value={intensity} min={0} max={5} step={.25} onChange={setIntensity}/><label className="field"><span>Confidence</span><select value={confidence} onChange={e=>setConfidence(e.target.value as typeof confidence)}><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label>{item?.kind==='hop'&&<label className="field"><span>Observed hop use</span><select value={contextUse} onChange={e=>setContextUse(e.target.value)}><option value="dry hop">Dry hop</option><option value="whirlpool">Whirlpool</option><option value="boil">Boil</option></select></label>}</div><label className="field"><span>Ingredient tasting note</span><textarea rows={2} value={noteText} onChange={e=>setNoteText(e.target.value)}/></label><button className="text-button" onClick={addNote}><Plus size={14}/> Add personal evidence</button><div className="filter-chips">{added.map((d,i)=><button key={d.id} onClick={()=>setAdded(a=>a.filter((_,j)=>i!==j))}>{d.descriptor} · {d.intensity}/5 · {d.usageContext} ×</button>)}</div></details></Section><button className="button primary" disabled={busy} onClick={save}><Save size={15}/>{busy?'Saving…':'Save brew & tasting'}</button>{status&&<p className="log-status" role="status">{status}</p>}</div>
- <aside className="log-aside"><Section title="Make it personal" eyebrow="OPT-IN / LEARN FROM YOUR BREWS"><label className="checkbox"><input type="checkbox" checked={prefs.personalize} onChange={e=>setPrefs({...prefs,personalize:e.target.checked})}/> Include my ingredient tasting notes</label><Field label="Personal source weight" value={prefs.userWeight} min={1} max={3} step={.25} suffix="×" onChange={n=>setPrefs({...prefs,userWeight:n})}/><label className="checkbox"><input type="checkbox" checked={prefs.calibrateYeast} onChange={e=>setPrefs({...prefs,calibrateYeast:e.target.checked})}/> Use per-yeast attenuation calibration</label><p className="muted">Calibration corrects for the recipe’s mash and grist model before estimating a strain baseline. Small samples may reflect equipment or measurement error.</p><div className="calibration-number"><strong>{calibration.efficiency?.toFixed(1)??'—'}<small>%</small></strong><span>Observed brewhouse efficiency<br/>{calibration.efficiencySamples} valid brew{calibration.efficiencySamples===1?'':'s'}</span></div>{calibration.efficiency!==null&&<button className="button secondary" onClick={()=>onEfficiency(calibration.efficiency!)}>Apply efficiency to current recipe</button>}<p className="muted">Applying efficiency keeps ingredient amounts fixed and updates predictions. It does not scale your grist.</p>{Object.entries(calibration.yeasts).map(([id,value])=><div className="calibration-yeast" key={id}><b>{c.yeasts.find(y=>y.id===id)?.name}</b><span>{value.attenuation.toFixed(1)}% baseline · {value.samples} brew{value.samples===1?'':'s'}</span></div>)}</Section><Section title="Your brew archive" eyebrow={`${logs.length} BREWS RECORDED`}>{logs.length===0?<p className="muted">Your first measurement is the beginning of a better prediction.</p>:logs.map(l=><button className={`log-archive-item ${selected===l.id?'active':''}`} key={l.id} onClick={()=>setSelected(l.id)}><b>{l.recipe.name}</b><span>{l.date} · OG {l.actualOg.toFixed(3)}</span></button>)}{logs.length>0&&<button className="text-button" onClick={()=>download('brew-designer-logs.json',JSON.stringify(logs,null,2))}><Download size={14}/> Export all brew logs</button>}</Section></aside></div>
- {selected&&logs.find(l=>l.id===selected)&&(()=>{const l=logs.find(l=>l.id===selected)!;return <Section title={l.recipe.name+' · '+l.date} eyebrow="PREDICTED VS ACTUAL"><div className="comparison-grid"><table><thead><tr><th>Measurement</th><th>Predicted</th><th>Actual</th><th>Difference</th></tr></thead><tbody>{[['OG',l.predicted.og,l.actualOg,3],['FG',l.predicted.fg,l.actualFg,3],['Volume (L)',l.recipe.batchL,l.actualVolumeL,2],['Fermentation (°C)',l.recipe.fermentC,l.actualTempC,1]].map(([label,pred,act,digits])=><tr key={label}><td>{label}</td><td>{Number(pred).toFixed(Number(digits))}</td><td>{Number(act).toFixed(Number(digits))}</td><td>{Number(act)-Number(pred)>=0?'+':''}{(Number(act)-Number(pred)).toFixed(Number(digits))}</td></tr>)}</tbody></table><div><Radar scores={l.tasting} target={l.predictedFlavor}/><div className="radar-legend"><span>● Tasted</span><span>◌ Predicted</span></div></div></div><p className="muted">{l.notes}</p><h3 className="tasting-heading">Sensory differences · rated axes only</h3><div className="tasting-errors">{tastingErrors(l).map(e=><div key={e.axis}><b>{e.axis}</b><span>{e.predicted.toFixed(1)} → {e.actual.toFixed(1)}</span><small>{e.delta>=0?'+':''}{e.delta.toFixed(1)}</small></div>)}</div><p className="muted">Unrated radar axes appear at zero for plotting; they are unknown, not reported absences.</p></Section>})()}</>
+import { useState, useEffect } from "react";
+import { Save, Download, NotebookPen, Plus } from "lucide-react";
+import type {
+  BrewLog as Log,
+  Catalog,
+  Descriptor,
+  Flavor,
+  Prediction,
+  Recipe,
+} from "../engine/types";
+import { calibrate, tastingErrors } from "../engine/feedback";
+import { Field, Section, Tag } from "./ui";
+import { Radar } from "./FlavorPanel";
+import { download } from "../io";
+import { lToGal, L_PER_GAL, cToF, fToC } from "../engine/calculations";
+export interface Preferences {
+  personalize: boolean;
+  userWeight: number;
+  calibrateYeast: boolean;
+}
+export default function BrewLog({
+  recipe: r,
+  prediction: p,
+  flavor: f,
+  catalog: c,
+  logs,
+  onSaved,
+  us,
+  prefs,
+  setPrefs,
+  onEfficiency,
+}: {
+  recipe: Recipe;
+  prediction: Prediction;
+  flavor: Flavor;
+  catalog: Catalog;
+  logs: Log[];
+  onSaved: (l: Log) => void;
+  us: boolean;
+  prefs: Preferences;
+  setPrefs: (p: Preferences) => void;
+  onEfficiency: (n: number) => void;
+}) {
+  const [date, setDate] = useState(() => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }),
+    [og, setOg] = useState(p.og),
+    [fg, setFg] = useState(p.fg),
+    [volume, setVolume] = useState(r.batchL),
+    [temp, setTemp] = useState(r.fermentC),
+    [notes, setNotes] = useState(""),
+    [tasting, setTasting] = useState<Record<string, number>>({}),
+    [attribute, setAttribute] = useState(r.yeastId),
+    [descriptor, setDescriptor] = useState("clean"),
+    [intensity, setIntensity] = useState(3),
+    [noteText, setNoteText] = useState(""),
+    [contextUse, setContextUse] = useState("dry hop"),
+    [confidence, setConfidence] = useState<"low" | "medium" | "high">("medium"),
+    [added, setAdded] = useState<Descriptor[]>([]),
+    [status, setStatus] = useState(""),
+    [busy, setBusy] = useState(false),
+    [selected, setSelected] = useState<string | null>(null);
+  useEffect(() => {
+    setOg(p.og);
+    setFg(p.fg);
+    setVolume(r.batchL);
+    setTemp(r.fermentC);
+    setAttribute(r.yeastId);
+    setNotes("");
+    setAdded([]);
+    setTasting({});
+  }, [r.id]);
+  const calibration = calibrate(logs, c);
+  const ingredients = [
+    ...new Set([
+      ...r.grains.map((g) => g.ingredientId),
+      ...r.hops.map((h) => h.ingredientId),
+      r.yeastId,
+    ]),
+  ].map((id) => [...c.malts, ...c.hops, ...c.yeasts].find((i) => i.id === id)!);
+  const item = ingredients.find((i) => i.id === attribute) ?? ingredients[0];
+  function addNote() {
+    const total = r.grains.reduce((s, g) => s + g.kg, 0);
+    const share = total
+      ? (r.grains
+          .filter((g) => g.ingredientId === item.id)
+          .reduce((s, g) => s + g.kg, 0) /
+          total) *
+        100
+      : 0;
+    const context =
+      item.kind === "hop"
+        ? { use: contextUse }
+        : item.kind === "yeast"
+          ? { minTempC: temp - 1, maxTempC: temp + 1 }
+          : { minPercent: Math.max(0, share - 2), maxPercent: share + 2 };
+    const label =
+      item.kind === "hop"
+        ? contextUse
+        : item.kind === "yeast"
+          ? `fermented at ${temp.toFixed(1)}°C (±1°C)`
+          : `${share.toFixed(1)}% of grist (±2 percentage points)`;
+    setAdded((a) => [
+      ...a,
+      {
+        id: crypto.randomUUID(),
+        ingredientId: item.id,
+        descriptor,
+        intensity,
+        context,
+        usageContext: label,
+        sourceType: "user",
+        confidence,
+        note: noteText || "Brewer-attributed tasting observation.",
+        source: {
+          title: "Your tasting notes",
+          url: "local:brew-log",
+          accessed: date,
+          note: "Personal opinion attributed by the brewer; not a controlled ingredient trial.",
+        },
+      },
+    ]);
+    setNoteText("");
+  }
+  async function save() {
+    setBusy(true);
+    setStatus("");
+    try {
+      const l: Log = {
+        id: crypto.randomUUID(),
+        date,
+        recipe: structuredClone(r),
+        predicted: structuredClone(p),
+        predictedFlavor: { ...f.scores },
+        actualOg: og,
+        actualFg: fg,
+        actualVolumeL: volume,
+        actualTempC: temp,
+        tasting,
+        notes,
+        descriptors: added,
+      };
+      const response = await fetch("/api/logs/" + l.id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(l),
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error);
+      onSaved(body);
+      setSelected(body.id);
+      setAdded([]);
+      setStatus("Brew recorded. Your prediction snapshot is preserved.");
+    } catch (e) {
+      setStatus(String(e));
+    }
+    setBusy(false);
+  }
+  return (
+    <>
+      <div className="log-grid">
+        <div className="log-inputs">
+          <Section
+            title="Record this brew"
+            eyebrow="MEASURED / BREW-DAY DATA"
+            action={<NotebookPen size={21} />}
+          >
+            <p className="muted">
+              Current recipe: <b>{r.name}</b>. Saving records an immutable
+              recipe and prediction snapshot alongside your measurements.
+            </p>
+            <label className="field log-date">
+              <span>Brew date</span>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </label>
+            <div className="field-grid">
+              <Field
+                label="Measured OG"
+                value={og}
+                min={1.001}
+                max={1.3}
+                step={0.001}
+                onChange={setOg}
+              />
+              <Field
+                label="Measured FG"
+                value={fg}
+                min={1}
+                max={1.3}
+                step={0.001}
+                onChange={setFg}
+              />
+              <Field
+                label="Measured post-boil volume"
+                suffix={us ? "gal" : "L"}
+                value={us ? lToGal(volume) : volume}
+                min={0.1}
+                onChange={(n) => setVolume(us ? n * L_PER_GAL : n)}
+              />
+              <Field
+                label="Actual fermentation temperature"
+                suffix={us ? "°F" : "°C"}
+                value={us ? cToF(temp) : temp}
+                min={us ? 32 : 0}
+                max={us ? 113 : 45}
+                onChange={(n) => setTemp(us ? fToC(n) : n)}
+              />
+            </div>
+            <p className="muted">
+              Measurements are prefilled from predictions for convenience.
+              Replace them with readings before saving; calibration depends on
+              their accuracy.
+            </p>
+            <label className="field">
+              <span>Brew-day & tasting notes</span>
+              <textarea
+                rows={4}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Mash behavior, fermentation observations, what you taste…"
+              />
+            </label>
+          </Section>
+          <Section
+            title="What’s actually in the glass?"
+            eyebrow="SUBJECTIVE / YOUR TASTING"
+          >
+            <Tag>PERSONAL SENSORY OBSERVATION</Tag>
+            <p className="muted">
+              Enable the axes you tasted, then rate 0–5. Unrated axes stay
+              unknown.
+            </p>
+            <div className="tasting-list">
+              {c.vocabulary.map((v) => (
+                <label key={v.id}>
+                  <input
+                    type="checkbox"
+                    checked={tasting[v.id] !== undefined}
+                    onChange={(e) =>
+                      setTasting((a) => {
+                        const b = { ...a };
+                        if (e.target.checked) b[v.id] = 0;
+                        else delete b[v.id];
+                        return b;
+                      })
+                    }
+                  />
+                  <span>{v.label}</span>
+                  {tasting[v.id] !== undefined && (
+                    <>
+                      <input
+                        type="range"
+                        min="0"
+                        max="5"
+                        step=".25"
+                        value={tasting[v.id]}
+                        onChange={(e) =>
+                          setTasting({
+                            ...tasting,
+                            [v.id]: Number(e.target.value),
+                          })
+                        }
+                      />
+                      <b>{tasting[v.id].toFixed(1)}</b>
+                    </>
+                  )}
+                </label>
+              ))}
+            </div>
+            <details className="advanced">
+              <summary>Attribute a descriptor to one ingredient</summary>
+              <p className="muted">
+                Whole-beer tasting cannot prove an individual ingredient caused
+                a flavor. Add an ingredient note only when you choose to make
+                that attribution. This becomes a separate personal source.
+              </p>
+              <div className="field-grid">
+                <label className="field">
+                  <span>Ingredient</span>
+                  <select
+                    value={attribute}
+                    onChange={(e) => setAttribute(e.target.value)}
+                  >
+                    {ingredients.map((i) => (
+                      <option key={i.id} value={i.id}>
+                        {i.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  <span>Descriptor</span>
+                  <select
+                    value={descriptor}
+                    onChange={(e) => setDescriptor(e.target.value)}
+                  >
+                    {c.vocabulary.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <Field
+                  label="Personal descriptor intensity"
+                  value={intensity}
+                  min={0}
+                  max={5}
+                  step={0.25}
+                  onChange={setIntensity}
+                />
+                <label className="field">
+                  <span>Confidence</span>
+                  <select
+                    value={confidence}
+                    onChange={(e) =>
+                      setConfidence(e.target.value as typeof confidence)
+                    }
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </label>
+                {item?.kind === "hop" && (
+                  <label className="field">
+                    <span>Observed hop use</span>
+                    <select
+                      value={contextUse}
+                      onChange={(e) => setContextUse(e.target.value)}
+                    >
+                      <option value="dry hop">Dry hop</option>
+                      <option value="whirlpool">Whirlpool</option>
+                      <option value="boil">Boil</option>
+                    </select>
+                  </label>
+                )}
+              </div>
+              <label className="field">
+                <span>Ingredient tasting note</span>
+                <textarea
+                  rows={2}
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                />
+              </label>
+              <button className="text-button" onClick={addNote}>
+                <Plus size={14} /> Add personal evidence
+              </button>
+              <div className="filter-chips">
+                {added.map((d, i) => (
+                  <button
+                    key={d.id}
+                    onClick={() => setAdded((a) => a.filter((_, j) => i !== j))}
+                  >
+                    {d.descriptor} · {d.intensity}/5 · {d.usageContext} ×
+                  </button>
+                ))}
+              </div>
+            </details>
+          </Section>
+          <button className="button primary" disabled={busy} onClick={save}>
+            <Save size={15} />
+            {busy ? "Saving…" : "Save brew & tasting"}
+          </button>
+          {status && (
+            <p className="log-status" role="status">
+              {status}
+            </p>
+          )}
+        </div>
+        <aside className="log-aside">
+          <Section
+            title="Make it personal"
+            eyebrow="OPT-IN / LEARN FROM YOUR BREWS"
+          >
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={prefs.personalize}
+                onChange={(e) =>
+                  setPrefs({ ...prefs, personalize: e.target.checked })
+                }
+              />{" "}
+              Include my ingredient tasting notes
+            </label>
+            <Field
+              label="Personal source weight"
+              value={prefs.userWeight}
+              min={1}
+              max={3}
+              step={0.25}
+              suffix="×"
+              onChange={(n) => setPrefs({ ...prefs, userWeight: n })}
+            />
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={prefs.calibrateYeast}
+                onChange={(e) =>
+                  setPrefs({ ...prefs, calibrateYeast: e.target.checked })
+                }
+              />{" "}
+              Use per-yeast attenuation calibration
+            </label>
+            <p className="muted">
+              Calibration corrects for the recipe’s mash and grist model before
+              estimating a strain baseline. Small samples may reflect equipment
+              or measurement error.
+            </p>
+            <div className="calibration-number">
+              <strong>
+                {calibration.efficiency?.toFixed(1) ?? "—"}
+                <small>%</small>
+              </strong>
+              <span>
+                Observed brewhouse efficiency
+                <br />
+                {calibration.efficiencySamples} valid brew
+                {calibration.efficiencySamples === 1 ? "" : "s"}
+              </span>
+            </div>
+            {calibration.efficiency !== null && (
+              <button
+                className="button secondary"
+                onClick={() => onEfficiency(calibration.efficiency!)}
+              >
+                Apply efficiency to current recipe
+              </button>
+            )}
+            <p className="muted">
+              Applying efficiency keeps ingredient amounts fixed and updates
+              predictions. It does not scale your grist.
+            </p>
+            {Object.entries(calibration.yeasts).map(([id, value]) => (
+              <div className="calibration-yeast" key={id}>
+                <b>{c.yeasts.find((y) => y.id === id)?.name}</b>
+                <span>
+                  {value.attenuation.toFixed(1)}% baseline · {value.samples}{" "}
+                  brew{value.samples === 1 ? "" : "s"}
+                </span>
+              </div>
+            ))}
+          </Section>
+          <Section
+            title="Your brew archive"
+            eyebrow={`${logs.length} BREWS RECORDED`}
+          >
+            {logs.length === 0 ? (
+              <p className="muted">
+                Your first measurement is the beginning of a better prediction.
+              </p>
+            ) : (
+              logs.map((l) => (
+                <button
+                  className={`log-archive-item ${selected === l.id ? "active" : ""}`}
+                  key={l.id}
+                  onClick={() => setSelected(l.id)}
+                >
+                  <b>{l.recipe.name}</b>
+                  <span>
+                    {l.date} · OG {l.actualOg.toFixed(3)}
+                  </span>
+                </button>
+              ))
+            )}
+            {logs.length > 0 && (
+              <button
+                className="text-button"
+                onClick={() =>
+                  download(
+                    "brew-designer-logs.json",
+                    JSON.stringify(logs, null, 2),
+                  )
+                }
+              >
+                <Download size={14} /> Export all brew logs
+              </button>
+            )}
+          </Section>
+        </aside>
+      </div>
+      {selected &&
+        logs.find((l) => l.id === selected) &&
+        (() => {
+          const l = logs.find((l) => l.id === selected)!;
+          return (
+            <Section
+              title={l.recipe.name + " · " + l.date}
+              eyebrow="PREDICTED VS ACTUAL"
+            >
+              <div className="comparison-grid">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Measurement</th>
+                      <th>Predicted</th>
+                      <th>Actual</th>
+                      <th>Difference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["OG", l.predicted.og, l.actualOg, 3],
+                      ["FG", l.predicted.fg, l.actualFg, 3],
+                      ["Volume (L)", l.recipe.batchL, l.actualVolumeL, 2],
+                      [
+                        "Fermentation (°C)",
+                        l.recipe.fermentC,
+                        l.actualTempC,
+                        1,
+                      ],
+                    ].map(([label, pred, act, digits]) => (
+                      <tr key={label}>
+                        <td>{label}</td>
+                        <td>{Number(pred).toFixed(Number(digits))}</td>
+                        <td>{Number(act).toFixed(Number(digits))}</td>
+                        <td>
+                          {Number(act) - Number(pred) >= 0 ? "+" : ""}
+                          {(Number(act) - Number(pred)).toFixed(Number(digits))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div>
+                  <Radar scores={l.tasting} target={l.predictedFlavor} />
+                  <div className="radar-legend">
+                    <span>● Tasted</span>
+                    <span>◌ Predicted</span>
+                  </div>
+                </div>
+              </div>
+              <p className="muted">{l.notes}</p>
+              <h3 className="tasting-heading">
+                Sensory differences · rated axes only
+              </h3>
+              <div className="tasting-errors">
+                {tastingErrors(l).map((e) => (
+                  <div key={e.axis}>
+                    <b>{e.axis}</b>
+                    <span>
+                      {e.predicted.toFixed(1)} → {e.actual.toFixed(1)}
+                    </span>
+                    <small>
+                      {e.delta >= 0 ? "+" : ""}
+                      {e.delta.toFixed(1)}
+                    </small>
+                  </div>
+                ))}
+              </div>
+              <p className="muted">
+                Unrated radar axes appear at zero for plotting; they are
+                unknown, not reported absences.
+              </p>
+            </Section>
+          );
+        })()}
+    </>
+  );
 }
