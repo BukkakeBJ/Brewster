@@ -89,3 +89,13 @@ Upstream Brewtarget numeric tables are pinned to commit `531d5e7523f9e72a0054349
 ## Verification
 
 `npm test`: reference-value calculations, seed integrity, flavor attribution totals and context, solver constraints/determinism, calibration inversion, BeerXML round trip, SQLite API persistence and validation. API tests create an isolated temporary database under `.runtime` and remove it afterward. Browser checks covered mobile navigation, preserving edited amounts and scroll position across library visits, solver execution, yeast tolerance search, detailed guides and the brew-log form. `npm run build` performs strict TypeScript checking and a production build. The ingredient catalog is intentionally large and compressed transfer size is approximately 220KB for the app bundle; Vite may warn about the uncompressed catalog chunk.
+
+## Suggested hops and malts
+
+The recipe editor's **Suggested hops / Suggested malts** panels provide a hand-curated shortlist in `data/suggestions.json`. “For this recipe” prioritizes an editorial style-family match and ingredients not yet present; “Popular starting points” keeps the curated order. Neither mode is a measured popularity, sales or sensory ranking. The library can filter to the same beginner shortlist. Existing acid, color and potential specs stay separate from the suggestion's subjective rationale and its source link.
+
+Hop suggestions filter bittering, late flavor/aroma and dry hopping. Trial doses are respectively 0.5, 1 and 1.5 g/L; bittering time is min(60, recipe boil minutes), whirlpool 20 minutes, dry hop 3 days. These are editable trial heuristics, not optimized IBU targets. Bittering suggestions require a positive boil duration. Each card previews deterministic changes in ABV percentage points, IBU and SRM before applying. Adding a hop preserves previous additions.
+
+Malt suggestions filter base, malt character, caramel, body and roast roles. A base swap replaces the first base malt and adjusts mass by old PPG/new PPG to retain that grain's gravity contribution. Other grains remain fixed. A new specialty's mass = existing total × desired final grist fraction/(1−fraction), bounded by the catalog max share. Duplicate malts are directed to the existing editor row. With an empty grist, add a base first (initial base trial 0.2 kg/L). Suggestions never silently remove an existing recipe to install a full preset. Actual flavor impact is uncertain and should be evaluated on the live profile.
+
+An applied suggestion can be undone from its panel while the recipe still matches that suggestion’s result. Later manual edits or other additions disable that undo so it cannot overwrite newer work.

@@ -10,6 +10,7 @@ import {
   lToGal,
   L_PER_GAL,
 } from "../engine/calculations";
+import Suggestions from "./Suggestions";
 import { Field, Section, Tag } from "./ui";
 export default function Editor({
   recipe: r,
@@ -123,6 +124,13 @@ export default function Editor({
           Total grist: {(us ? kgToLb(total) : total).toFixed(2)}{" "}
           {us ? "lb" : "kg"}
         </small>
+        <Suggestions
+          kind="malt"
+          recipe={r}
+          catalog={c}
+          onChange={set}
+          us={us}
+        />
       </Section>
       <Section
         title="Hop schedule"
@@ -245,6 +253,7 @@ export default function Editor({
         >
           <Plus size={15} /> Add hop addition
         </button>
+        <Suggestions kind="hop" recipe={r} catalog={c} onChange={set} us={us} />
       </Section>
       <Section
         title="Yeast & process"

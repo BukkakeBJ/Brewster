@@ -1,0 +1,148 @@
+{
+  "note": "Editorial starting points, not a measured popularity or sales ranking. Sensory descriptions and recipe suitability are subjective. Suggested doses are conservative starting heuristics, not complete recipes.",
+  "hops": [
+    {
+      "ingredientId": "h-cascade",
+      "families": ["hoppy", "general"],
+      "roles": ["bittering", "aroma", "dry hop"],
+      "group": "citrus",
+      "reason": "A familiar starting point for American pale ales; explore grapefruit-like and floral character with late additions."
+    },
+    {
+      "ingredientId": "h-citra",
+      "families": ["hoppy"],
+      "roles": ["aroma", "dry hop"],
+      "group": "citrus",
+      "reason": "A starting point for bright, fruit-led hop character. Use late or dry-hop additions when aroma is the goal."
+    },
+    {
+      "ingredientId": "h-mosaic",
+      "families": ["hoppy"],
+      "roles": ["aroma", "dry hop"],
+      "group": "fruit",
+      "reason": "Explore berry and citrus associations in hop-forward recipes; compare its contribution with a simpler single-hop beer.",
+      "source": {
+        "title": "Yakima Chief Hops · Mosaic variety",
+        "url": "https://www.yakimachief.com/variety/mosaic-brand"
+      }
+    },
+    {
+      "ingredientId": "h-centennial",
+      "families": ["hoppy", "general"],
+      "roles": ["bittering", "aroma", "dry hop"],
+      "group": "citrus",
+      "reason": "A versatile American-ale option when you want citrus-led late additions and a hop that can also provide kettle bitterness."
+    },
+    {
+      "ingredientId": "h-magnum-gr",
+      "families": ["general", "hoppy", "lager", "dark"],
+      "roles": ["bittering"],
+      "group": "bittering",
+      "reason": "A practical kettle-bittering starting point. Its higher alpha acid content can reach an IBU contribution with less hop mass."
+    },
+    {
+      "ingredientId": "h-saaz-cz",
+      "families": ["lager", "belgian", "wheat"],
+      "roles": ["aroma", "bittering"],
+      "group": "noble",
+      "reason": "Explore restrained herbal and spicy associations in pale lagers or Belgian-inspired recipes; check the lot alpha acids for bittering."
+    },
+    {
+      "ingredientId": "h-hallertau-mittelfr-h",
+      "families": ["lager", "wheat"],
+      "roles": ["aroma", "bittering"],
+      "group": "noble",
+      "reason": "A traditional starting point for restrained hop character when a pale malt bill or wheat fermentation should lead."
+    },
+    {
+      "ingredientId": "h-east-kent-goldings",
+      "families": ["british", "dark", "belgian"],
+      "roles": ["aroma", "bittering"],
+      "group": "herbal",
+      "reason": "Consider it for a gentler herbal or floral hop layer in bitters, malt-led ales and darker recipes."
+    },
+    {
+      "ingredientId": "h-fuggle",
+      "families": ["british", "dark"],
+      "roles": ["aroma", "bittering"],
+      "group": "herbal",
+      "reason": "A malt-led ale starting point when earthy or woody hop associations are more useful than strong citrus."
+    },
+    {
+      "ingredientId": "h-simcoe",
+      "families": ["hoppy"],
+      "roles": ["aroma", "dry hop", "bittering"],
+      "group": "pine",
+      "reason": "Explore a pine/resin direction in a hop-forward recipe; compare the consensus descriptors before pairing it with fruit-led hops."
+    },
+    {
+      "ingredientId": "h-galaxy",
+      "families": ["hoppy"],
+      "roles": ["aroma", "dry hop"],
+      "group": "fruit",
+      "reason": "A fruit-forward starting point for late additions. Start with a modest dose and evaluate before increasing dry-hop intensity."
+    }
+  ],
+  "malts": [
+    {
+      "ingredientId": "m-briess-2-row-brewers-malt",
+      "families": ["hoppy", "general", "dark"],
+      "group": "base",
+      "percent": 80,
+      "reason": "A straightforward fermentable backbone for a first all-grain ale. Leave room for small specialty additions rather than building a complicated grist."
+    },
+    {
+      "ingredientId": "m-briess-pilsen-malt",
+      "families": ["lager", "belgian", "wheat", "general"],
+      "group": "base",
+      "percent": 85,
+      "reason": "A pale base to explore when a light color and room for fermentation or hop character are priorities."
+    },
+    {
+      "ingredientId": "m-simpsons-maris-otter",
+      "families": ["british", "dark", "hoppy"],
+      "group": "base",
+      "percent": 85,
+      "reason": "A British-ale base option for exploring a fuller bready malt impression. It can be tested as a base-malt swap before adding more specialty grains."
+    },
+    {
+      "ingredientId": "m-briess-vienna-malt",
+      "families": ["lager", "british", "general"],
+      "group": "malt character",
+      "percent": 10,
+      "reason": "Try a modest share to explore richer malt character and a little more color without immediately adding crystal malt."
+    },
+    {
+      "ingredientId": "m-briess-munich-malt-10l",
+      "families": ["lager", "dark", "british"],
+      "group": "malt character",
+      "percent": 10,
+      "reason": "A starting addition for a malt-led direction. A small trial makes it easier to judge color and grist balance before using a larger share."
+    },
+    {
+      "ingredientId": "m-briess-2-row-caramel-malt-40l",
+      "families": ["hoppy", "british", "dark"],
+      "group": "caramel",
+      "percent": 3,
+      "reason": "Begin with a small caramel-malt share for color and caramel-like associations. More is not automatically better; watch FG and sweetness estimates.",
+      "source": {
+        "title": "Briess · roasted caramel malts",
+        "url": "https://brewingwithbriess.com/products/roasted-caramel-malts/"
+      }
+    },
+    {
+      "ingredientId": "m-briess-oat-flakes",
+      "families": ["hoppy", "wheat", "dark"],
+      "group": "body",
+      "percent": 5,
+      "reason": "An adjunct option for exploring texture. Keep an enzymatic base malt in the mash; body and haze depend on more than oat percentage alone."
+    },
+    {
+      "ingredientId": "m-briess-2-row-chocolate-malt",
+      "families": ["dark"],
+      "group": "roast",
+      "percent": 2,
+      "reason": "Start small when exploring chocolate or roast character: a little strongly colored grain can change the beer substantially."
+    }
+  ]
+}

@@ -9,6 +9,8 @@ import {
   maltRole,
   yeastFamily,
 } from "../engine/library";
+import { startingPoints } from "../engine/suggestions";
+import { defaultRecipe } from "../defaults";
 import { Field, Tag } from "./ui";
 export default function Library({
   catalog: c,
@@ -27,7 +29,8 @@ export default function Library({
     [og, setOg] = useState(1.06),
     [form, setForm] = useState("any"),
     [expanded, setExpanded] = useState(""),
-    [limit, setLimit] = useState(24);
+    [limit, setLimit] = useState(24),
+    [popularOnly, setPopularOnly] = useState(false);
   const all = kind === "hop" ? c.hops : kind === "malt" ? c.malts : c.yeasts;
   const roles =
     kind === "hop"
@@ -44,7 +47,18 @@ export default function Library({
       ),
     [c, descriptor],
   );
+  const popularIds = new Set(
+    kind === "yeast"
+      ? []
+      : startingPoints(
+          kind === "hop" ? "hop" : "malt",
+          c,
+          defaultRecipe,
+          "popular",
+        ).map((s) => s.item.ingredientId),
+  );
   const filtered = all.filter((i) => {
+    if (popularOnly && kind !== "yeast" && !popularIds.has(i.id)) return false;
     const text = JSON.stringify({ ...i, source: undefined }).toLowerCase();
     if (q && !text.includes(q.toLowerCase())) return false;
     if (descriptor && !byDescriptor.has(i.id)) return false;
@@ -95,6 +109,25 @@ export default function Library({
           </button>
         ))}
       </div>
+      {kind !== "yeast" && (
+        <div className="popular-library">
+          <button
+            className="button secondary"
+            aria-pressed={popularOnly}
+            onClick={() => {
+              setPopularOnly(!popularOnly);
+              setLimit(24);
+            }}
+          >
+            {popularOnly
+              ? "✓ Popular starting points"
+              : "Show popular starting points"}
+          </button>
+          <span>
+            Curated beginner options · editorial selection, not a sales ranking
+          </span>
+        </div>
+      )}
       <div className="library-search">
         <Search size={17} />
         <input
