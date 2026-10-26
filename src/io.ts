@@ -1,6 +1,7 @@
 import { XMLParser, XMLBuilder, XMLValidator } from "fast-xml-parser";
 import type { Catalog, Recipe } from "./engine/types";
 import { recipeSchema } from "./validation";
+import { processNoteEntries } from "./engine/processNotes";
 export function exportBeerXML(r: Recipe, c: Catalog) {
   const y = c.yeasts.find((y) => y.id === r.yeastId)!;
   const data = {
@@ -16,7 +17,16 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
         EFFICIENCY: r.efficiency,
         PRIMARY_TEMP: r.fermentC,
         CARBONATION: r.carbonation,
-        NOTES: r.notes ?? "",
+        NOTES: [
+          r.notes ?? "",
+          ...processNoteEntries(r.processNotes).map(
+            (s) => `${s.label}:\n${s.note}`,
+          ),
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
+        BD_GENERAL_NOTES: r.notes ?? "",
+        BD_PROCESS_NOTES: JSON.stringify(r.processNotes ?? {}),
         BD_DESCRIPTION: r.description ?? "",
         BD_TAGS: JSON.stringify(r.tags ?? []),
         BD_ORIGIN: r.origin ? JSON.stringify(r.origin) : "",
@@ -138,7 +148,10 @@ export function importRecipe(
     id: crypto.randomUUID(),
     name: x.NAME,
     styleId: x.BD_STYLE_ID ?? "",
-    notes: String(x.NOTES ?? ""),
+    notes: String(x.BD_GENERAL_NOTES ?? x.NOTES ?? ""),
+    processNotes: x.BD_PROCESS_NOTES
+      ? JSON.parse(String(x.BD_PROCESS_NOTES))
+      : undefined,
     description: String(x.BD_DESCRIPTION ?? ""),
     tags: x.BD_TAGS ? JSON.parse(String(x.BD_TAGS)) : [],
     origin: x.BD_ORIGIN ? JSON.parse(String(x.BD_ORIGIN)) : undefined,

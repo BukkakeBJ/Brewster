@@ -112,6 +112,7 @@ export function filterBook(
       r.name,
       r.description ?? "",
       r.notes ?? "",
+      ...Object.values(r.processNotes ?? {}),
       ...(r.tags ?? []),
       c.styles.find((s) => s.id === r.styleId)?.name ?? "",
       ...ingredients,

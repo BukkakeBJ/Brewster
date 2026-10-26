@@ -2403,3 +2403,14 @@ footer > span:last-child {
 .book-coverage summary { cursor: pointer; color: var(--green, #36533f); font-weight: 600; }
 .book-style-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .6rem; margin-top: 1rem; }
 .book-style-list button { text-align: left; }
+
+.process-note-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: .75rem; margin: 1rem 0; }
+.process-note-stage { border: 1px solid #dce1d6; padding: .8rem; border-radius: 8px; background: #fafbf7; }
+.process-note-stage summary { cursor: pointer; }
+.saved-process-notes p, .print-recipe-notes p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.saved-process-notes h4 { margin-bottom: .4rem; }
+.print-recipe-notes { display: none; }
+@media print {
+  .print-recipe-notes { display: block; }
+  .print-recipe-notes h3, .print-recipe-notes h4 { break-after: avoid; }
+}

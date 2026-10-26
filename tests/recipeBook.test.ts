@@ -36,7 +36,11 @@ describe("recipe book", () => {
     expect(published.hops.map((h) => h.minutes)).toEqual([90, 60, 30, 0]);
   });
   it("combines saved recipes and drafts without duplicating IDs, preserving unsaved edits", () => {
-    const edited = { ...r, name: "Unsaved change" };
+    const edited = {
+      ...r,
+      name: "Unsaved change",
+      processNotes: { mash: "Experiment at 65C" },
+    };
     const entries = recipeBookEntries([r], {
       [r.id]: edited,
       new: { ...r, id: "new" },
@@ -45,6 +49,17 @@ describe("recipe book", () => {
     expect(mine).toHaveLength(1);
     expect(mine[0].recipe.name).toBe("Unsaved change");
     expect(mine[0].unsaved).toBe(true);
+    expect(mine[0].recipe.processNotes).toEqual(edited.processNotes);
+    const bank = readDraftBank(JSON.stringify({ [edited.id]: edited }));
+    expect(bank[edited.id].processNotes).toEqual(edited.processNotes);
+    expect(
+      filterBook(recipeBookEntries([edited], {}), c, {
+        query: "Experiment at 65C",
+      }),
+    ).toHaveLength(1);
+    const copied = copyBookRecipe(edited, "experiment-copy");
+    copied.processNotes!.mash = "Different experiment";
+    expect(edited.processNotes.mash).toBe("Experiment at 65C");
     const { name, ...rest } = r;
     expect(sameRecipe(r, { ...rest, name })).toBe(true);
     expect(entries.filter((e) => e.collection === "draft")).toHaveLength(1);

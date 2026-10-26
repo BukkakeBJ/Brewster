@@ -21,6 +21,7 @@ import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
 import { recipeSchema } from "./validation";
 import RecipeBook from "./components/RecipeBook";
+import RecipeNotes from "./components/RecipeNotes";
 import { readDraftBank, copyBookRecipe } from "./engine/recipeBook";
 import { defaultRecipe } from "./defaults";
 import type { Recipe, Prediction, BrewLog as Log } from "./engine/types";
@@ -353,47 +354,7 @@ export default function App() {
                 </button>
               </div>
             </div>
-            <details className="recipe-note-editor">
-              <summary>Recipe description, notes & source</summary>
-              <label className="field">
-                <span>Recipe description</span>
-                <textarea
-                  rows={2}
-                  maxLength={1000}
-                  value={recipe.description ?? ""}
-                  placeholder="Describe your beer for the Recipe Book…"
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, description: e.target.value })
-                  }
-                />
-              </label>
-              <label className="field">
-                <span>Brewing notes</span>
-                <textarea
-                  rows={4}
-                  maxLength={20000}
-                  value={recipe.notes ?? ""}
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, notes: e.target.value })
-                  }
-                />
-              </label>
-              {recipe.origin && (
-                <p className="muted">
-                  Source: {recipe.origin.author} · {recipe.origin.title}.{" "}
-                  {recipe.origin.adaptations}{" "}
-                  {recipe.origin.url && (
-                    <a
-                      href={recipe.origin.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Published source ↗
-                    </a>
-                  )}
-                </p>
-              )}
-            </details>
+            <RecipeNotes recipe={recipe} onChange={setRecipe} />
             {p && (
               <>
                 <div className="metrics">

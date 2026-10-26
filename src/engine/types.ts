@@ -1,3 +1,4 @@
+import type { ProcessNotes } from "./processNotes";
 export type Range = [number, number];
 export interface Source {
   title: string;
@@ -126,6 +127,7 @@ export interface RecipeOrigin {
   adaptations?: string;
 }
 export interface Recipe {
+  processNotes?: ProcessNotes;
   id: string;
   name: string;
   styleId: string;

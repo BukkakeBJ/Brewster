@@ -26,6 +26,7 @@ import {
   G_PER_OZ,
 } from "../engine/calculations";
 import { Tag } from "./ui";
+import { SavedProcessNotes } from "./RecipeNotes";
 import { download, exportBeerXML } from "../io";
 export default function RecipeBook({
   saved,
@@ -428,6 +429,7 @@ export default function RecipeBook({
                       <p className="book-notes">{r.notes}</p>
                     </>
                   )}
+                  <SavedProcessNotes recipe={r} />
                   {r.origin && (
                     <div className="book-source">
                       <h3>Recipe provenance</h3>

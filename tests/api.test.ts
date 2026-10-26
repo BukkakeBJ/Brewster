@@ -37,6 +37,11 @@ it("persists recipes and returns actionable validation errors", async () => {
     ...r,
     description: "Recipe book description",
     notes: "Brew notes",
+    processNotes: {
+      mash: "Test a longer rest",
+      fermentation: "Dry hop on day 3",
+      packaging: "Keg at 2.4 volumes",
+    },
     tags: ["test"],
     origin: {
       kind: "original-starter",
@@ -54,6 +59,8 @@ it("persists recipes and returns actionable validation errors", async () => {
   expect(list[0].grains).toEqual(r.grains);
   expect(list[0].description).toBe(described.description);
   expect(list[0].origin).toEqual(described.origin);
+  expect(list[0].notes).toBe(described.notes);
+  expect(list[0].processNotes).toEqual(described.processNotes);
   const bad = await fetch(api + "/api/recipes/" + r.id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

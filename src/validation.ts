@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { processStages } from "./engine/processNotes";
 const n = (min: number, max: number) => z.number().finite().min(min).max(max);
 export const recipeSchema = z
   .object({
@@ -7,6 +8,12 @@ export const recipeSchema = z
     styleId: z.string(),
     description: z.string().max(1000).optional(),
     notes: z.string().max(20000).optional(),
+    processNotes: z
+      .partialRecord(
+        z.enum(processStages.map((s) => s.id)),
+        z.string().max(10000),
+      )
+      .optional(),
     tags: z.array(z.string().max(60)).max(20).optional(),
     origin: z
       .object({
