@@ -75,5 +75,7 @@ for item in malts:
 overrides=json.loads((D/'overrides.json').read_text()) if (D/'overrides.json').exists() else {}
 for group,items in [('malts',malts),('hops',hops),('yeasts',yeasts)]:
  for item in items:item.update(overrides.get(group,{}).get(item['id'],{}))
+for ingredient_id,replacements in overrides.get('descriptorReplacements',{}).items():
+ des=[d for d in des if d['ingredientId']!=ingredient_id]+replacements
 for name,value in [('malts',malts),('hops',hops),('yeasts',yeasts),('descriptors',des),('vocabulary',vocab),('styles',styles)]:
  (D/(name+'.json')).write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\n');print(name,len(value))

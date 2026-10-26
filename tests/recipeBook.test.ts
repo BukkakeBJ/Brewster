@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
   sameRecipe,
+  isCraftRecipe,
+  recipeOriginLabel,
   starterRecipes,
   recipeBookEntries,
   filterBook,
@@ -13,12 +15,15 @@ import { predict } from "../src/engine/calculations";
 import { exportBeerXML, importRecipe } from "../src/io";
 describe("recipe book", () => {
   it("ships usable labeled recipes with valid ingredient references and attribution", () => {
-    expect(starterRecipes).toHaveLength(8);
+    expect(starterRecipes).toHaveLength(19);
+    expect(starterRecipes.filter(isCraftRecipe)).toHaveLength(12);
     for (const r of starterRecipes) {
       expect(Number.isFinite(predict(r, c).abv)).toBe(true);
       expect(r.description).toBeTruthy();
       expect(r.notes).toBeTruthy();
-      expect(r.origin?.kind).toMatch(/original-starter|published-adaptation/);
+      expect(r.origin?.kind).toMatch(
+        /original-starter|published-adaptation|published-clone|clone-inspired/,
+      );
     }
     const published = starterRecipes.find(
       (r) => r.origin?.kind === "published-adaptation",
@@ -56,7 +61,9 @@ describe("recipe book", () => {
     );
   });
   it("creates independent copies and retains provenance through exchange", () => {
-    const original = starterRecipes.at(-1)!;
+    const original = starterRecipes.find(
+      (r) => r.origin?.kind === "clone-inspired",
+    )!;
     const copy = copyBookRecipe(original, "new-copy");
     copy.grains[0].kg = 99;
     expect(original.grains[0].kg).not.toBe(99);
@@ -66,6 +73,37 @@ describe("recipe book", () => {
     expect(imported.description).toBe(original.description);
     expect(imported.notes).toBe(original.notes);
     expect(imported.tags).toEqual(original.tags);
+  });
+  it("separates brewery recipes, published clones and house approximations and filters by brewery", () => {
+    const entries = recipeBookEntries([], {});
+    const craft = filterBook(entries, c, { collection: "craft" });
+    expect(craft).toHaveLength(12);
+    expect(
+      craft.every((e) => e.collection === "starter" && isCraftRecipe(e.recipe)),
+    ).toBe(true);
+    expect(
+      filterBook(entries, c, { collection: "craft", brewery: "Sierra Nevada" }),
+    ).toHaveLength(3);
+    expect(
+      filterBook(entries, c, {
+        collection: "craft",
+        originKind: "clone-inspired",
+      }),
+    ).toHaveLength(8);
+    expect(filterBook(entries, c, { query: "Two Hearted" })).toHaveLength(1);
+    for (const { recipe: r } of craft) {
+      expect(r.origin?.brewery).toBeTruthy();
+      expect(r.origin?.beer).toBeTruthy();
+      expect(r.origin?.url).toMatch(/^https:/);
+      expect(r.origin?.adaptations).toBeTruthy();
+      expect(recipeOriginLabel(r)).not.toBe("ORIGINAL STARTER");
+    }
+    for (const { recipe: r } of craft.filter(
+      (e) => e.recipe.origin?.kind === "clone-inspired",
+    )) {
+      expect(r.origin?.adaptations).toMatch(/not a homebrew formula/);
+      expect(r.origin?.referenceSpecs?.abv).toBeGreaterThan(0);
+    }
   });
   it("restores valid drafts and ignores corrupt records", () => {
     expect(readDraftBank("not JSON")).toEqual({});

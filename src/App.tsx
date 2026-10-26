@@ -265,7 +265,7 @@ export default function App() {
                     : tab === "Ingredient Library"
                       ? "Measured specifications and sensory opinions, side by side."
                       : tab === "Recipe Book"
-                        ? "Find a starting point. Save your experiments. Build your own brewing collection."
+                        ? "Explore craft brewery recipes and clone-inspired beers. Keep your own experiments alongside them."
                         : "Connect what you predicted with what ended up in the glass."}
               </p>
             </div>

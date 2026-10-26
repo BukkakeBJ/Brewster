@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import type { Catalog, Recipe } from "../engine/types";
 import {
+  isCraftRecipe,
+  recipeOriginLabel,
   recipeBookEntries,
   filterBook,
   copyBookRecipe,
@@ -40,7 +42,9 @@ export default function RecipeBook({
   onNew: () => void;
 }) {
   const [query, setQuery] = useState(""),
-    [collection, setCollection] = useState("all"),
+    [collection, setCollection] = useState("craft"),
+    [brewery, setBrewery] = useState(""),
+    [originKind, setOriginKind] = useState(""),
     [styleId, setStyleId] = useState(""),
     [selected, setSelected] = useState<string | null>(null),
     [sort, setSort] = useState("collection");
@@ -48,15 +52,31 @@ export default function RecipeBook({
     () => recipeBookEntries(saved, drafts),
     [saved, drafts],
   );
-  const filtered = filterBook(entries, c, { query, collection, styleId });
+  const filtered = filterBook(entries, c, {
+    query,
+    collection,
+    styleId,
+    brewery,
+    originKind,
+  });
   if (sort === "name")
     filtered.sort((a, b) => a.recipe.name.localeCompare(b.recipe.name));
   const counts = {
     all: entries.length,
+    craft: entries.filter(
+      (e) => e.collection === "starter" && isCraftRecipe(e.recipe),
+    ).length,
     mine: entries.filter((e) => e.collection === "mine").length,
     draft: entries.filter((e) => e.collection === "draft").length,
     starter: entries.filter((e) => e.collection === "starter").length,
   };
+  const breweries = [
+    ...new Set(
+      entries
+        .map((e) => e.recipe.origin?.brewery)
+        .filter((s): s is string => !!s),
+    ),
+  ].sort();
   const styleIds = [...new Set(entries.map((e) => e.recipe.styleId))];
   const open = (e: BookEntry, copy = false) =>
     onOpen(copy ? copyBookRecipe(e.recipe, crypto.randomUUID()) : e.recipe);
@@ -66,9 +86,10 @@ export default function RecipeBook({
         <div>
           <BookOpen size={22} />
           <p>
-            Start with a recipe, then make it yours. Saved recipes live in
-            SQLite; unsaved drafts stay in this browser. Starter originals and
-            published adaptations are labeled.
+            Explore familiar brewery beers, published clone recipes and
+            independent house approximations. Source badges tell you which is
+            which. Your own saved recipes and drafts remain in their
+            collections.
           </p>
         </div>
         <button className="button primary" onClick={onNew}>
@@ -78,7 +99,7 @@ export default function RecipeBook({
       <div className="book-tabs" role="group" aria-label="Recipe collections">
         {[
           ["all", "All recipes"],
-          ["starter", "Starter collection"],
+          ["craft", "Craft & clones"],
           ["mine", "My recipes"],
           ["draft", "Drafts"],
         ].map(([key, label]) => (
@@ -101,18 +122,6 @@ export default function RecipeBook({
           onChange={(e) => setQuery(e.target.value)}
         />
         <select
-          aria-label="Filter recipe book by style"
-          value={styleId}
-          onChange={(e) => setStyleId(e.target.value)}
-        >
-          <option value="">All styles</option>
-          {styleIds.map((id) => (
-            <option key={id} value={id}>
-              {c.styles.find((s) => s.id === id)?.name ?? "Freeform"}
-            </option>
-          ))}
-        </select>
-        <select
           aria-label="Sort recipe book"
           value={sort}
           onChange={(e) => setSort(e.target.value)}
@@ -120,6 +129,54 @@ export default function RecipeBook({
           <option value="collection">My work first</option>
           <option value="name">Name A–Z</option>
         </select>
+      </div>
+      <div className="book-filters">
+        <label className="field">
+          <span>Beer style</span>
+          <select
+            aria-label="Filter recipe book by style"
+            value={styleId}
+            onChange={(e) => setStyleId(e.target.value)}
+          >
+            <option value="">All styles</option>
+            {styleIds.map((id) => (
+              <option key={id} value={id}>
+                {c.styles.find((s) => s.id === id)?.name ?? "Freeform"}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Brewery</span>
+          <select
+            aria-label="Filter recipe book by brewery"
+            value={brewery}
+            onChange={(e) => setBrewery(e.target.value)}
+          >
+            <option value="">All breweries</option>
+            {breweries.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Recipe source</span>
+          <select
+            aria-label="Filter recipe book by source type"
+            value={originKind}
+            onChange={(e) => setOriginKind(e.target.value)}
+          >
+            <option value="">All source types</option>
+            <option value="published-adaptation">
+              Brewery recipe · adapted
+            </option>
+            <option value="published-clone">Published clone · adapted</option>
+            <option value="clone-inspired">House clone · approximate</option>
+            <option value="original-starter">Original starter</option>
+          </select>
+        </label>
       </div>
       <p className="book-count">
         {filtered.length} recipe{filtered.length === 1 ? "" : "s"} · Numbers are
@@ -162,9 +219,7 @@ export default function RecipeBook({
                     }
                   >
                     {entry.collection === "starter"
-                      ? r.origin?.kind === "published-adaptation"
-                        ? "PUBLISHED ADAPTATION"
-                        : "ORIGINAL STARTER"
+                      ? recipeOriginLabel(r)
                       : entry.collection === "draft"
                         ? "UNSAVED DRAFT"
                         : entry.unsaved
@@ -173,6 +228,7 @@ export default function RecipeBook({
                   </Tag>
                   <h2>{r.name}</h2>
                   <p>
+                    {r.origin?.brewery && <>{r.origin.brewery} · </>}
                     {c.styles.find((s) => s.id === r.styleId)?.name ??
                       "Freeform recipe"}{" "}
                     · {(us ? lToGal(r.batchL) : r.batchL).toFixed(1)}{" "}
@@ -191,6 +247,11 @@ export default function RecipeBook({
                 {r.description ||
                   "Your own recipe. Open it in the editor to add a description and brewing notes."}
               </p>
+              {entry.collection !== "starter" &&
+                r.origin &&
+                r.origin.kind !== "original-starter" && (
+                  <Tag>{recipeOriginLabel(r)}</Tag>
+                )}
               <div className="book-stats">
                 <div>
                   <strong>
@@ -322,10 +383,43 @@ export default function RecipeBook({
                       <p>
                         {r.origin.author} · {r.origin.title}
                       </p>
+                      <Tag>{recipeOriginLabel(r)}</Tag>
                       <p>{r.origin.adaptations}</p>
+                      {r.origin.referenceSpecs && (
+                        <div className="source-reference-specs">
+                          <Tag tone="objective">PUBLISHED SOURCE NUMBERS</Tag>
+                          <p>
+                            Reference values from the linked source, separate
+                            from this recipe’s calculated predictions.
+                          </p>
+                          <dl>
+                            {Object.entries(r.origin.referenceSpecs).map(
+                              ([key, value]) => (
+                                <div key={key}>
+                                  <dt>
+                                    {key === "ibuAtLeast"
+                                      ? "IBU (at least)"
+                                      : key.toUpperCase()}
+                                  </dt>
+                                  <dd>
+                                    {value}
+                                    {key === "abv"
+                                      ? "%"
+                                      : key === "ibuAtLeast"
+                                        ? "+"
+                                        : ""}
+                                  </dd>
+                                </div>
+                              ),
+                            )}
+                          </dl>
+                        </div>
+                      )}
                       {r.origin.url && (
                         <a href={r.origin.url} target="_blank" rel="noreferrer">
-                          Read the published source ↗
+                          {r.origin.kind === "clone-inspired"
+                            ? "Read brewery product reference ↗"
+                            : "Read published recipe ↗"}
                         </a>
                       )}
                       {r.origin.accessed && (
@@ -378,6 +472,8 @@ export default function RecipeBook({
             onClick={() => {
               setQuery("");
               setStyleId("");
+              setBrewery("");
+              setOriginKind("");
               setCollection("all");
             }}
           >

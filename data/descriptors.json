@@ -669,40 +669,6 @@
     }
   },
   {
-    "id": "d-40",
-    "ingredientId": "m-briess-2-row-carapils-malt",
-    "descriptor": "caramel",
-    "intensity": 3,
-    "context": {},
-    "usageContext": "grist contribution",
-    "sourceType": "literature",
-    "confidence": "low",
-    "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
-    "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent001-OriginalDefaultData.xml",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
-    }
-  },
-  {
-    "id": "d-41",
-    "ingredientId": "m-briess-2-row-carapils-malt",
-    "descriptor": "toffee",
-    "intensity": 3,
-    "context": {},
-    "usageContext": "grist contribution",
-    "sourceType": "literature",
-    "confidence": "low",
-    "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
-    "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent001-OriginalDefaultData.xml",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
-    }
-  },
-  {
     "id": "d-42",
     "ingredientId": "m-briess-2-row-chocolate-malt",
     "descriptor": "chocolate",
@@ -51548,6 +51514,23 @@
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
       "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+    }
+  },
+  {
+    "id": "d-carapils-body",
+    "ingredientId": "m-briess-2-row-carapils-malt",
+    "descriptor": "body",
+    "intensity": 3,
+    "context": {},
+    "usageContext": "grist contribution",
+    "sourceType": "manufacturer",
+    "confidence": "low",
+    "note": "Body association paraphrased from the producer; the 0–5 intensity is an editorial estimate, not a measurement.",
+    "source": {
+      "title": "Briess Carapils explanation + Brewtarget numeric reference",
+      "url": "https://brewingwithbriess.com/blog/understanding-carapils/",
+      "accessed": "2026-10-26",
+      "note": "Briess identifies Carapils as a dextrin malt distinct from caramel. Color, extract, potential and maximum share retained from the pinned Brewtarget numeric reference; body classification and attenuation treatment are model assumptions."
     }
   }
 ]

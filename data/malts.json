@@ -400,7 +400,7 @@
     "kind": "malt",
     "name": "Briess - 2 Row Carapils Malt",
     "maltster": "Briess",
-    "type": "crystal-caramel",
+    "type": "specialty",
     "lovibond": 1.5,
     "ebc": 2.77,
     "ppg": 34.66,
@@ -408,13 +408,13 @@
     "diastaticPower": null,
     "requiresMash": true,
     "maxPercent": 5.0,
-    "fermentabilityNotes": "Crystal/caramel extract receives a model attenuation penalty.",
+    "fermentabilityNotes": "Dextrin malt, not caramel malt. Engine uses baseline attenuation; perceived body remains a model estimate.",
     "bodyContribution": "high",
     "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent001-OriginalDefaultData.xml",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "title": "Briess Carapils explanation + Brewtarget numeric reference",
+      "url": "https://brewingwithbriess.com/blog/understanding-carapils/",
+      "accessed": "2026-10-26",
+      "note": "Briess identifies Carapils as a dextrin malt distinct from caramel. Color, extract, potential and maximum share retained from the pinned Brewtarget numeric reference; body classification and attenuation treatment are model assumptions."
     }
   },
   {

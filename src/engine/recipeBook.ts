@@ -8,6 +8,19 @@ export interface BookEntry {
   collection: "starter" | "mine" | "draft";
   unsaved: boolean;
 }
+export function isCraftRecipe(r: Recipe) {
+  return !!r.origin && r.origin.kind !== "original-starter";
+}
+export function recipeOriginLabel(r: Recipe) {
+  return (
+    {
+      "published-adaptation": "BREWERY RECIPE · ADAPTED",
+      "published-clone": "PUBLISHED CLONE · ADAPTED",
+      "clone-inspired": "HOUSE CLONE · APPROXIMATE",
+      "original-starter": "ORIGINAL STARTER",
+    } as const
+  )[r.origin?.kind ?? "original-starter"];
+}
 export function sameRecipe(a: Recipe, b: Recipe) {
   return (
     JSON.stringify(recipeSchema.parse(a)) ===
@@ -51,11 +64,24 @@ export function filterBook(
     query = "",
     collection = "all",
     styleId = "",
-  }: { query?: string; collection?: string; styleId?: string },
+    brewery = "",
+    originKind = "",
+  }: {
+    query?: string;
+    collection?: string;
+    styleId?: string;
+    brewery?: string;
+    originKind?: string;
+  },
 ) {
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   return entries.filter((e) => {
-    if (collection !== "all" && e.collection !== collection) return false;
+    if (collection === "craft") {
+      if (e.collection !== "starter" || !isCraftRecipe(e.recipe)) return false;
+    } else if (collection !== "all" && e.collection !== collection)
+      return false;
+    if (brewery && e.recipe.origin?.brewery !== brewery) return false;
+    if (originKind && e.recipe.origin?.kind !== originKind) return false;
     if (styleId && e.recipe.styleId !== styleId) return false;
     const r = e.recipe;
     const ingredients = [
@@ -75,6 +101,9 @@ export function filterBook(
       c.styles.find((s) => s.id === r.styleId)?.name ?? "",
       ...ingredients,
       r.origin?.author ?? "",
+      r.origin?.brewery ?? "",
+      r.origin?.beer ?? "",
+      r.origin?.title ?? "",
     ]
       .join(" ")
       .toLowerCase();
@@ -82,7 +111,11 @@ export function filterBook(
   });
 }
 export function copyBookRecipe(recipe: Recipe, id: string): Recipe {
-  return { ...structuredClone(recipe), id, name: recipe.name + " (copy)" };
+  return {
+    ...structuredClone(recipe),
+    id,
+    name: recipe.name.slice(0, 193) + " (copy)",
+  };
 }
 export function readDraftBank(text: string | null): Record<string, Recipe> {
   try {

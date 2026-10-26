@@ -1,5 +1,1018 @@
 [
   {
+    "batchL": 18.92705892,
+    "efficiency": 72,
+    "mashC": 68.33333333333333,
+    "mashMinutes": 60,
+    "fermentC": 20,
+    "boilMinutes": 90,
+    "boilOffLPerHour": 3,
+    "lossL": 0,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "id": "starter-sierra-cascade",
+    "name": "Sierra Nevada Pale Ale",
+    "styleId": "american-pale-ale",
+    "yeastId": "y-white-labs-wlp001-california-ale",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.140000000000001
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "kg": 0.36
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-cascade",
+        "grams": 14.1747615625,
+        "use": "boil",
+        "minutes": 90
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 21.26214234375,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 56.69904625,
+        "use": "boil",
+        "minutes": 30
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 56.69904625,
+        "use": "boil",
+        "minutes": 0
+      }
+    ],
+    "description": "An attributed adaptation of the brewery’s published homebrew recipe, with its grain ratios and Cascade addition schedule retained.",
+    "tags": ["Sierra Nevada", "Pale Ale", "craft beer", "published recipe"],
+    "notes": "Source specifies 92% two-row and 8% caramel 60L rather than a total grain weight; this adaptation assumes 4.5 kg total and 72% efficiency. The source’s 5 US gallon batch is represented as post-boil kettle volume, with zero transfer loss for this template. Uses catalog Briess malts and WLP001 for the source’s generic two-row, caramel and California ale yeast. Cascade weights and 90/60/30/0-minute timings follow the source; the zero-minute addition is flameout, with no assumed hop-stand duration. Source calls for whole cones; this engine has no pellet/cone adjustment. A 170°F (76.7°C), 5-minute mash-out is written here for manual use because the model stores one mash rest. Boil-off, carbonation and pitch settings are app assumptions. Calculated values are this app’s predictions, not the brewery’s specifications.",
+    "origin": {
+      "kind": "published-adaptation",
+      "title": "Sierra Nevada · Pale Ale Homebrew Recipe",
+      "author": "Sierra Nevada Brewing Co.",
+      "url": "https://sierranevada.com/blog/our-beer/pale-ale-homebrew-recipe",
+      "accessed": "2026-10-25",
+      "adaptations": "Grain ratios and hop masses/timings retained. Total grist, catalog ingredient mapping, efficiency, volume interpretation and equipment settings are app assumptions. Mash-out retained in notes. No brewery validation or sensory equivalence is claimed.",
+      "brewery": "Sierra Nevada",
+      "beer": "Pale Ale"
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 68.33333333333333,
+    "mashMinutes": 90,
+    "fermentC": 20,
+    "boilMinutes": 70,
+    "boilOffLPerHour": 3,
+    "lossL": 0,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-white-labs-wlp001-california-ale",
+    "batchL": 18.92705892,
+    "id": "craft-torpedo",
+    "name": "Sierra Nevada Torpedo Extra IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 6.0100989025
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "kg": 0.45359237
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 28.349523125,
+        "use": "boil",
+        "minutes": 70
+      },
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 28.349523125,
+        "use": "boil",
+        "minutes": 10
+      },
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 28.349523125,
+        "use": "boil",
+        "minutes": 0
+      },
+      {
+        "ingredientId": "h-crystal",
+        "grams": 28.349523125,
+        "use": "boil",
+        "minutes": 0
+      },
+      {
+        "ingredientId": "h-crystal",
+        "grams": 28.349523125,
+        "use": "dry hop",
+        "minutes": 4320
+      },
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 14.1747615625,
+        "use": "dry hop",
+        "minutes": 4320
+      },
+      {
+        "ingredientId": "h-citra",
+        "grams": 14.1747615625,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A catalog adaptation of Sierra Nevada’s published Torpedo homebrew recipe, retaining its malt weights and hop schedule.",
+    "tags": [
+      "Sierra Nevada",
+      "Torpedo Extra IPA",
+      "craft beer",
+      "published recipe"
+    ],
+    "notes": "Uses the source’s 13.25 lb pale malt, 1 lb caramel 60L, 70/10/0-minute kettle additions and dry-hop masses. WLP001 maps its generic California ale yeast. Whole-cone/pellet differences are not modeled. Source mash is 155°F for 90 min; a 170°F, 5-min mash-out remains a manual step. Zero-minute additions are flameout without an invented hop stand. Source places dry hopping after 1–2 days of primary; the app’s 3-day contact is an assumption because contact duration is not given. The 5-gallon yield is represented as post-boil volume with zero transfer loss; 72% efficiency, boil-off and carbonation are app settings. Source finishing criterion is 3.7°P; the engine’s attenuation prediction is independent.",
+    "origin": {
+      "kind": "published-adaptation",
+      "brewery": "Sierra Nevada",
+      "beer": "Torpedo Extra IPA",
+      "title": "Sierra Nevada Torpedo Extra IPA · published homebrew recipe",
+      "author": "Sierra Nevada",
+      "url": "https://sierranevada.com/blog/our-beer/torpedo-ipa-homebrew-recipe",
+      "accessed": "2026-10-26",
+      "adaptations": "Published numeric recipe adapted to catalog ingredients and the single-rest brewing model. Equipment assumptions and omitted process steps are recorded in the brewing notes. Predicted values may differ from source specifications."
+    }
+  },
+  {
+    "efficiency": 65,
+    "mashC": 65.55555555555556,
+    "mashMinutes": 45,
+    "fermentC": 17.77777777777778,
+    "boilMinutes": 75,
+    "boilOffLPerHour": 3,
+    "lossL": 0,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-white-labs-wlp001-california-ale",
+    "batchL": 19,
+    "id": "craft-two-hearted",
+    "name": "Bell’s Two Hearted IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.535923700000001
+      },
+      {
+        "ingredientId": "m-briess-pale-ale-malt",
+        "kg": 1.2836664071000001
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.226796185
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-centennial",
+        "grams": 34,
+        "use": "boil",
+        "minutes": 45,
+        "alpha": 9.1
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 34,
+        "use": "boil",
+        "minutes": 30,
+        "alpha": 9.1
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 99,
+        "use": "dry hop",
+        "minutes": 10080,
+        "alpha": 9.1
+      }
+    ],
+    "description": "A published Two Hearted clone by Bell’s General Store staff, adapted to the app’s ingredient catalog.",
+    "tags": ["Bell’s", "Two Hearted IPA", "craft beer", "published recipe"],
+    "notes": "Published by the Homebrewers Association and credited to David Curtis and Ryan Kramer of Bell’s General Store. Retains 10 lb two-row, 2.83 lb pale ale malt, 8 oz caramel 40L and the 34/34/99 g Centennial schedule at 9.1% AA. Uses published 65% efficiency, 19 L and 75-min boil. Represents the initial mash as 150°F for 45 min; the ramp and 170°F rest remain manual. Source gypsum addition and conditioning stages are not modeled. Source chills to 64°F; this is the single fermentation set point used here, rather than a complete temperature schedule. Source suggests dry hopping a week into fermentation for a week. Whirlpool settling is not a whirlpool hop dose.",
+    "origin": {
+      "kind": "published-adaptation",
+      "brewery": "Bell’s",
+      "beer": "Two Hearted IPA",
+      "title": "Bell’s Two Hearted IPA · published homebrew recipe",
+      "author": "David Curtis & Ryan Kramer, Bell’s General Store; published by Homebrewers Association",
+      "url": "https://homebrewersassociation.org/homebrew-recipe/bells-two-hearted-ale-clone/",
+      "accessed": "2026-10-26",
+      "adaptations": "Published numeric recipe adapted to catalog ingredients and the single-rest brewing model. Equipment assumptions and omitted process steps are recorded in the brewing notes. Predicted values may differ from source specifications.",
+      "referenceSpecs": {
+        "og": 1.063,
+        "fg": 1.012,
+        "abv": 6.7,
+        "ibu": 55,
+        "srm": 10
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 67.77777777777777,
+    "mashMinutes": 60,
+    "fermentC": 20,
+    "boilMinutes": 90,
+    "boilOffLPerHour": 3,
+    "lossL": 0,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-white-labs-wlp001-california-ale",
+    "batchL": 19,
+    "id": "craft-celebration",
+    "name": "Sierra Nevada Celebration Ale",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.535923700000001
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.6803885550000001
+      },
+      {
+        "ingredientId": "m-briess-2-row-carapils-malt",
+        "kg": 0.226796185
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-chinook",
+        "grams": 21,
+        "use": "boil",
+        "minutes": 90,
+        "alpha": 11
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 21,
+        "use": "boil",
+        "minutes": 30,
+        "alpha": 6
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 7,
+        "use": "whirlpool",
+        "minutes": 0,
+        "alpha": 6
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 7,
+        "use": "whirlpool",
+        "minutes": 0,
+        "alpha": 10
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 7,
+        "use": "dry hop",
+        "minutes": 4320,
+        "alpha": 6
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 7,
+        "use": "dry hop",
+        "minutes": 4320,
+        "alpha": 10
+      }
+    ],
+    "description": "A published Celebration Ale homebrew interpretation, using its all-grain version rather than mixing in the extract alternative.",
+    "tags": [
+      "Sierra Nevada",
+      "Celebration Ale",
+      "craft beer",
+      "published recipe"
+    ],
+    "notes": "Published source lists 10 lb two-row, 1.5 lb crystal 25–40L, 0.5 lb dextrin malt, and the stated hop masses/AA. Maps the crystal to catalog caramel 40L and dextrin to Briess Carapils. Mash 154°F for 60 min uses the longer end of the source’s 45–60 min range. The 90-min boil follows the earliest hop time. Whirlpool contact time is unspecified and represented as zero rather than inventing utilization; set your own stand time. Three-day dry-hop contact, 72% efficiency, boil-off and carbonation are app assumptions. Fermentation 68°F is carried from the source’s process discussion. Source figures are displayed separately from recalculated predictions.",
+    "origin": {
+      "kind": "published-clone",
+      "brewery": "Sierra Nevada",
+      "beer": "Celebration Ale",
+      "title": "Sierra Nevada Celebration Ale · published homebrew recipe",
+      "author": "Homebrewers Association / Zymurgy published clone",
+      "url": "https://homebrewersassociation.org/homebrew-recipe/sierra-nevada-celebration-ale/",
+      "accessed": "2026-10-26",
+      "adaptations": "Published numeric recipe adapted to catalog ingredients and the single-rest brewing model. Equipment assumptions and omitted process steps are recorded in the brewing notes. Predicted values may differ from source specifications.",
+      "referenceSpecs": {
+        "og": 1.066,
+        "fg": 1.015,
+        "abv": 6.6,
+        "ibu": 54,
+        "srm": 8
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 65,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-ruination",
+    "name": "Stone Ruination IPA",
+    "styleId": "imperial-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 6.0419
+      },
+      {
+        "ingredientId": "m-sugar-table-sucrose",
+        "kg": 0.2289
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.1373
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 60.82,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-chinook",
+        "grams": 25,
+        "use": "boil",
+        "minutes": 15
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 45,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 70,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "An independent double-IPA approximation aimed at Ruination’s firm bitterness and resin-led hop direction.",
+    "tags": ["Stone", "Ruination IPA", "craft beer", "clone-inspired"],
+    "notes": "Official reference lists Magnum, Chinook and Centennial, 8.2% ABV and 100+ IBU. This house recipe chooses the grain bill, sugar, proportions, timing and yeast. The model is tuned toward 8.2% ABV and 100 IBU; 100 is an app target for the open-ended 100+ reference. Neither the amounts nor this process are an official Stone recipe. High-IBU prediction and perceived bitterness are especially uncertain.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Stone",
+      "beer": "Ruination IPA",
+      "title": "Stone Ruination IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Stone",
+      "url": "https://www.stonebrewing.com/beer/special-releases/stone-ruination-ipa",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 8.2,
+        "ibuAtLeast": 100
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 67,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-all-day",
+    "name": "Founders All Day IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 3.4303
+      },
+      {
+        "ingredientId": "m-briess-wheat-malt-white",
+        "kg": 0.2111
+      },
+      {
+        "ingredientId": "m-briess-yellow-corn-flakes",
+        "kg": 0.1583
+      },
+      {
+        "ingredientId": "m-briess-oat-flakes",
+        "kg": 0.1583
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.1267
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-cascade",
+        "grams": 42.34,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-crystal",
+        "grams": 15,
+        "use": "boil",
+        "minutes": 10
+      },
+      {
+        "ingredientId": "h-amarillo",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 35,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A session-IPA house approximation with restrained strength and a mix of kettle and late hop additions.",
+    "tags": ["Founders", "All Day IPA", "craft beer", "clone-inspired"],
+    "notes": "Official product information gives 4.7% ABV, 42 IBU, Crystal/Cascade/Amarillo/Simcoe hops and wheat/corn/oat/crystal ingredients. An enzymatic two-row backbone, all quantities, yeast and timing are house choices. The app targets the advertised strength/IBU; it does not establish a flavor match.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Founders",
+      "beer": "All Day IPA",
+      "title": "Founders All Day IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Founders",
+      "url": "https://foundersbrewing.com/our-beer/all-day-ipa/",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 4.7,
+        "ibu": 42
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 66,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-fresh-squeezed",
+    "name": "Deschutes Fresh Squeezed IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.7822
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "kg": 0.3985
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.2491
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-mosaic",
+        "grams": 30.84,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-citra",
+        "grams": 35,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-mosaic",
+        "grams": 30,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-citra",
+        "grams": 40,
+        "use": "dry hop",
+        "minutes": 4320
+      },
+      {
+        "ingredientId": "h-mosaic",
+        "grams": 30,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "An independent Citra-and-Mosaic IPA approximation inspired by the brewery’s published hop pairing.",
+    "tags": ["Deschutes", "Fresh Squeezed IPA", "craft beer", "clone-inspired"],
+    "notes": "The commercial reference confirms Citra/Mosaic, 6.4% ABV and 50 IBU. It does not provide a complete homebrew formula. This grain bill, bittering choice, masses, hop contact and strain are authored house assumptions. Numbers are tuned with the app, not brewery laboratory data.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Deschutes",
+      "beer": "Fresh Squeezed IPA",
+      "title": "Deschutes Fresh Squeezed IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Deschutes",
+      "url": "https://deschutesbrewery.com/products/fresh-squeezed-ipa",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 6.4,
+        "ibu": 50
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 67,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-fat-tire-amber",
+    "name": "New Belgium Fat Tire Classic Amber",
+    "styleId": "american-amber-ale",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 3.675
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "kg": 0.4725
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-80l",
+        "kg": 0.21
+      },
+      {
+        "ingredientId": "m-briess-victory-malt",
+        "kg": 0.189
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-willamette",
+        "grams": 23.77,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-east-kent-goldings",
+        "grams": 20,
+        "use": "boil",
+        "minutes": 15
+      }
+    ],
+    "description": "A house interpretation of the explicitly named Classic Amber version, rather than the lighter reformulated Fat Tire.",
+    "tags": [
+      "New Belgium",
+      "Fat Tire Classic Amber",
+      "craft beer",
+      "clone-inspired"
+    ],
+    "notes": "The Classic Amber reference lists 5.2% ABV, two-row/Munich/C80/Victory and Willamette/Golding. All proportions, hop schedule and yeast choice are house assumptions; East Kent Goldings is the catalog mapping for the generic Golding entry. The 22-IBU app target is editorial because no IBU is supplied on this source page. The separate current Fat Tire product must not be assumed to share this amber formulation.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "New Belgium",
+      "beer": "Fat Tire Classic Amber",
+      "title": "New Belgium Fat Tire Classic Amber · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: New Belgium",
+      "url": "https://www.newbelgium.com/beer/fat-tire/classic-amber-ale/",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 5.2
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 66,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-60-minute",
+    "name": "Dogfish Head 60 Minute IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.7248
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "kg": 0.2054
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.1541
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 55
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 50
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 45
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 40
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 35
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 30
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 25
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 15
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 10
+      },
+      {
+        "ingredientId": "h-warrior",
+        "grams": 3.42,
+        "use": "boil",
+        "minutes": 5
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-amarillo",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 35,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A continuously-hopped-style house approximation, represented as frequent small kettle additions.",
+    "tags": ["Dogfish Head", "60 Minute IPA", "craft beer", "clone-inspired"],
+    "notes": "Commercial reference: 6.0% ABV and 60 IBU. This recipe uses twelve 5-minute-spaced Warrior charges as a practical stand-in for continuous hopping; the selected hop varieties, grain bill, late additions and quantities are house assumptions, not a disclosed brewery formula. Each kettle charge is individually modeled; real continuous extraction can differ.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Dogfish Head",
+      "beer": "60 Minute IPA",
+      "title": "Dogfish Head 60 Minute IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Dogfish Head",
+      "url": "https://www.dogfish.com/drink/beer/60-minute-ipa",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 6,
+        "ibu": 60
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 66,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-sculpin",
+    "name": "Ballast Point Sculpin IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 5.6338
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.2209
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-warrior",
+        "grams": 30.58,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 25,
+        "use": "boil",
+        "minutes": 15
+      },
+      {
+        "ingredientId": "h-amarillo",
+        "grams": 30,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-amarillo",
+        "grams": 40,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A West Coast IPA house approximation taking Sculpin’s advertised strength and bitterness as numerical reference points.",
+    "tags": ["Ballast Point", "Sculpin IPA", "craft beer", "clone-inspired"],
+    "notes": "Official product reference gives 7% ABV and 70 IBU but no complete ingredient formula. Every hop variety, malt proportion, strain and process setting here is a house choice. This is an exploratory style approximation, not an authenticated Sculpin clone recipe.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Ballast Point",
+      "beer": "Sculpin IPA",
+      "title": "Ballast Point Sculpin IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Ballast Point",
+      "url": "https://ballastpoint.com/beer/sculpin/",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 7,
+        "ibu": 70
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 67,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "batchL": 20,
+    "id": "craft-lagunitas",
+    "name": "Lagunitas IPA",
+    "styleId": "american-ipa",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.7424
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "kg": 0.3162
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.2635
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-chinook",
+        "grams": 24.38,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 20,
+        "use": "boil",
+        "minutes": 15
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 25,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 30,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "An independent malt-supported IPA approximation based on the brewery’s named C-hop and specialty-malt direction.",
+    "tags": ["Lagunitas", "IPA", "craft beer", "clone-inspired"],
+    "notes": "Official description names Cascade, Centennial, Chinook, Simcoe and crystal/caramel/Munich malt, with 6.2% ABV and 51 IBU. The exact bill is not disclosed. This house interpretation chooses quantities, a two-row backbone, the catalog caramel malt, hop times and yeast, then tunes numeric predictions toward the reference.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Lagunitas",
+      "beer": "IPA",
+      "title": "Lagunitas IPA · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Lagunitas",
+      "url": "https://lagunitas.com/beer/ipa/",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 6.2,
+        "ibu": 51
+      }
+    }
+  },
+  {
+    "efficiency": 72,
+    "mashC": 68,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2,
+    "pitchMultiplier": 1,
+    "yeastId": "y-fermentis-s-04-safale-s-04",
+    "batchL": 20,
+    "id": "craft-milk-stout",
+    "name": "Left Hand Milk Stout",
+    "styleId": "sweet-stout",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.0515
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "kg": 0.2597
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "kg": 0.3117
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "kg": 0.2078
+      },
+      {
+        "ingredientId": "m-briess-oat-flakes",
+        "kg": 0.2078
+      },
+      {
+        "ingredientId": "m-briess-barley-flakes",
+        "kg": 0.2078
+      },
+      {
+        "ingredientId": "m-briess-roasted-barley",
+        "kg": 0.1558
+      },
+      {
+        "ingredientId": "m-milk-sugar-lactose",
+        "kg": 0.4675
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-ctz",
+        "grams": 13.32,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-east-kent-goldings",
+        "grams": 15,
+        "use": "boil",
+        "minutes": 10
+      }
+    ],
+    "description": "A lactose-containing house stout approximation following the brewery’s publicly named ingredient families.",
+    "tags": ["Left Hand", "Milk Stout", "craft beer", "clone-inspired"],
+    "notes": "Official reference gives 6% ABV, 25 IBU, two-row/crystal/chocolate/Munich/oats/flaked barley/roasted barley, CTZ/Golding and lactose. All proportions, temperatures and yeast choice are house assumptions. Lactose is modeled as unfermentable. This is the regular Milk Stout direction, not a recreation of the Nitro serving system.",
+    "origin": {
+      "kind": "clone-inspired",
+      "brewery": "Left Hand",
+      "beer": "Milk Stout",
+      "title": "Left Hand Milk Stout · official product information",
+      "author": "BrewMaster · independent house formulation; product reference: Left Hand",
+      "url": "https://lefthandbrewing.com/beers/milk-stout",
+      "accessed": "2026-10-26",
+      "adaptations": "Independent clone-inspired starting point. The source is a commercial beer description, not a homebrew formula. All masses, percentages, timing, strain mapping and process choices are house assumptions; no brewery endorsement or sensory match is claimed.",
+      "referenceSpecs": {
+        "abv": 6,
+        "ibu": 25
+      }
+    }
+  },
+  {
     "batchL": 20,
     "efficiency": 72,
     "mashC": 66,
@@ -355,70 +1368,6 @@
       "title": "Brew Designer starter collection",
       "author": "Brew Designer",
       "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
-    }
-  },
-  {
-    "batchL": 18.92705892,
-    "efficiency": 72,
-    "mashC": 68.33333333333333,
-    "mashMinutes": 60,
-    "fermentC": 20,
-    "boilMinutes": 90,
-    "boilOffLPerHour": 3,
-    "lossL": 0,
-    "whirlpoolFactor": 0.15,
-    "carbonation": 2.4,
-    "pitchMultiplier": 1,
-    "id": "starter-sierra-cascade",
-    "name": "Cascade Pale Ale \u00b7 Sierra Nevada adaptation",
-    "styleId": "american-pale-ale",
-    "yeastId": "y-white-labs-wlp001-california-ale",
-    "grains": [
-      {
-        "ingredientId": "m-briess-2-row-brewers-malt",
-        "kg": 4.140000000000001
-      },
-      {
-        "ingredientId": "m-briess-2-row-caramel-malt-60l",
-        "kg": 0.36
-      }
-    ],
-    "hops": [
-      {
-        "ingredientId": "h-cascade",
-        "grams": 14.1747615625,
-        "use": "boil",
-        "minutes": 90
-      },
-      {
-        "ingredientId": "h-cascade",
-        "grams": 21.26214234375,
-        "use": "boil",
-        "minutes": 60
-      },
-      {
-        "ingredientId": "h-cascade",
-        "grams": 56.69904625,
-        "use": "boil",
-        "minutes": 30
-      },
-      {
-        "ingredientId": "h-cascade",
-        "grams": 56.69904625,
-        "use": "boil",
-        "minutes": 0
-      }
-    ],
-    "description": "An attributed adaptation of the brewery\u2019s published homebrew recipe, with its grain ratios and Cascade addition schedule retained.",
-    "tags": ["published adaptation", "pale ale", "single hop"],
-    "notes": "Source specifies 92% two-row and 8% caramel 60L rather than a total grain weight; this adaptation assumes 4.5 kg total and 72% efficiency. The source\u2019s 5 US gallon batch is represented as post-boil kettle volume, with zero transfer loss for this template. Uses catalog Briess malts and WLP001 for the source\u2019s generic two-row, caramel and California ale yeast. Cascade weights and 90/60/30/0-minute timings follow the source; the zero-minute addition is flameout, with no assumed hop-stand duration. Source calls for whole cones; this engine has no pellet/cone adjustment. A 170\u00b0F (76.7\u00b0C), 5-minute mash-out is written here for manual use because the model stores one mash rest. Boil-off, carbonation and pitch settings are app assumptions. Calculated values are this app\u2019s predictions, not the brewery\u2019s specifications.",
-    "origin": {
-      "kind": "published-adaptation",
-      "title": "Sierra Nevada \u00b7 Pale Ale Homebrew Recipe",
-      "author": "Sierra Nevada Brewing Co.",
-      "url": "https://sierranevada.com/blog/our-beer/pale-ale-homebrew-recipe",
-      "accessed": "2026-10-25",
-      "adaptations": "Grain ratios and hop masses/timings retained. Total grist, catalog ingredient mapping, efficiency, volume interpretation and equipment settings are app assumptions. Mash-out retained in notes. No brewery validation or sensory equivalence is claimed."
     }
   }
 ]

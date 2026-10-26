@@ -10,7 +10,24 @@ export const recipeSchema = z
     tags: z.array(z.string().max(60)).max(20).optional(),
     origin: z
       .object({
-        kind: z.enum(["original-starter", "published-adaptation"]),
+        kind: z.enum([
+          "original-starter",
+          "published-adaptation",
+          "published-clone",
+          "clone-inspired",
+        ]),
+        brewery: z.string().max(200).optional(),
+        beer: z.string().max(200).optional(),
+        referenceSpecs: z
+          .object({
+            abv: n(0, 100).optional(),
+            ibu: n(0, 10000).optional(),
+            ibuAtLeast: n(0, 10000).optional(),
+            og: n(1, 1.3).optional(),
+            fg: n(1, 1.3).optional(),
+            srm: n(0, 5000).optional(),
+          })
+          .optional(),
         title: z.string().max(500),
         author: z.string().max(300),
         url: z

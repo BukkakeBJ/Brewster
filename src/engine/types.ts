@@ -104,7 +104,21 @@ export interface HopAddition {
   alpha?: number;
 }
 export interface RecipeOrigin {
-  kind: "original-starter" | "published-adaptation";
+  kind:
+    | "original-starter"
+    | "published-adaptation"
+    | "published-clone"
+    | "clone-inspired";
+  brewery?: string;
+  beer?: string;
+  referenceSpecs?: {
+    abv?: number;
+    ibu?: number;
+    ibuAtLeast?: number;
+    og?: number;
+    fg?: number;
+    srm?: number;
+  };
   title: string;
   author: string;
   url?: string;
