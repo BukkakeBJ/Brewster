@@ -173,7 +173,7 @@ export default function App() {
       <aside className="sidebar">
         <a className="brand" href="#" onClick={(e) => e.preventDefault()}>
           <span className="brand-icon">
-            <BrandMark size={45} />
+            <BrandMark size={60} />
           </span>
           <span>
             Brew<span className="brand-light">Master</span>
@@ -635,7 +635,7 @@ export default function App() {
             )}
           </div>
           <footer>
-            <BrandMark size={24} />
+            <BrandMark size={30} />
             <span>Good beer starts with curiosity.</span>
             <span>BrewMaster / v0.1</span>
           </footer>

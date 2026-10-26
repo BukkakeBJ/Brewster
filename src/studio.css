@@ -31,8 +31,8 @@ main {
 .brand-icon {
   flex-shrink: 0;
   background: none;
-  width: 46px;
-  height: 51px;
+  width: 60px;
+  height: 64px;
   border: 0;
   border-radius: 0;
   color: #e4be78;
@@ -42,6 +42,10 @@ main {
   letter-spacing: 1.1px;
   color: #c2c6a8;
   margin-top: 7px;
+}
+.brand-icon svg {
+  width: 100%;
+  height: 100%;
 }
 .brand-light {
   color: #e1bd78;
@@ -79,8 +83,8 @@ main {
 }
 .sidebar-botanical svg {
   opacity: 0.4;
-  height: 132px;
-  width: 132px;
+  height: 164px;
+  width: 164px;
   transform: rotate(-17deg);
 }
 .sidebar-botanical span {
@@ -811,10 +815,10 @@ summary:focus-visible {
     font-size: 19px;
   }
   .brand-icon {
-    width: 37px;
+    width: 48px;
   }
   .brand-icon svg {
-    width: 37px;
+    width: 48px;
   }
   .studio-hero {
     grid-template-columns: minmax(0, 1fr) 230px;
@@ -838,7 +842,7 @@ summary:focus-visible {
     padding: 22px 12px;
   }
   .brand-icon {
-    width: 46px;
+    width: 52px;
   }
   .nav-item {
     font-size: 0;
@@ -902,8 +906,8 @@ summary:focus-visible {
   }
   .brand-icon,
   .brand-icon svg {
-    width: 40px;
-    height: 44px;
+    width: 52px;
+    height: 54px;
   }
   .brand small {
     display: block;
@@ -1265,7 +1269,7 @@ summary:focus-visible {
   }
   .brand-icon,
   .brand-icon svg {
-    width: 33px;
+    width: 43px;
   }
   .brand small {
     letter-spacing: 0.6px;
@@ -1372,8 +1376,8 @@ summary:focus-visible {
     margin-bottom: 12px;
   }
   .sidebar-botanical svg {
-    height: 90px;
-    width: 90px;
+    height: 116px;
+    width: 116px;
   }
   .sidebar-label {
     margin-top: 28px;

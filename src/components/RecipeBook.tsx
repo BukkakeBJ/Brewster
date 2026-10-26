@@ -263,7 +263,7 @@ export default function RecipeBook({
               <div className="book-label-art" aria-hidden="true">
                 <span className="label-rule" />
                 <span className="label-kicker">THE BREWMASTER COLLECTION</span>
-                <BrandMark size={72} />
+                <BrandMark size={92} />
                 <span className="label-title">
                   {c.styles.find((s) => s.id === r.styleId)?.name ??
                     "House recipe"}

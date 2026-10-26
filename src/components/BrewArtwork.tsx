@@ -162,7 +162,7 @@ export default function BrewArtwork({
             <path d="M211 238V263L221 255L231 263V238" fill="#c48549" />
           </g>
         ) : (
-          <g transform="translate(88 42) scale(2.1)">
+          <g transform="translate(64 26) scale(2.7)">
             <BrandMark size={80} />
           </g>
         )}
