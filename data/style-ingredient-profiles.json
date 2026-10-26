@@ -1,0 +1,2379 @@
+{
+  "american-pale-ale": {
+    "referenceRecipe": "Sierra Nevada Pale Ale",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-cascade",
+      "h-citra"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale",
+      "y-fermentis-us-05-safale-us-05"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 92.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      }
+    ]
+  },
+  "american-ipa": {
+    "referenceRecipe": "Sierra Nevada Torpedo Extra IPA",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-briess-pale-ale-malt",
+      "m-briess-2-row-caramel-malt-40l",
+      "m-briess-2-row-carapils-malt",
+      "m-briess-wheat-malt-white",
+      "m-briess-yellow-corn-flakes",
+      "m-briess-oat-flakes",
+      "m-briess-munich-malt-10l"
+    ],
+    "hopIds": [
+      "h-magnum-gr",
+      "h-crystal",
+      "h-citra",
+      "h-centennial",
+      "h-chinook",
+      "h-cascade",
+      "h-amarillo",
+      "h-simcoe",
+      "h-mosaic",
+      "h-warrior"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale",
+      "y-fermentis-us-05-safale-us-05"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 93.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      }
+    ]
+  },
+  "imperial-ipa": {
+    "referenceRecipe": "Stone Ruination IPA",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-sugar-table-sucrose",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-magnum-gr",
+      "h-chinook",
+      "h-centennial"
+    ],
+    "yeastIds": [
+      "y-fermentis-us-05-safale-us-05"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 94.3
+      },
+      {
+        "ingredientId": "m-sugar-table-sucrose",
+        "percent": 3.6
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 2.1
+      }
+    ]
+  },
+  "american-amber-ale": {
+    "referenceRecipe": "New Belgium Fat Tire Classic Amber",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-briess-munich-malt-10l",
+      "m-briess-2-row-caramel-malt-80l",
+      "m-briess-victory-malt"
+    ],
+    "hopIds": [
+      "h-willamette",
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-fermentis-us-05-safale-us-05"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 80.8
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "percent": 10.4
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-80l",
+        "percent": 4.6
+      },
+      {
+        "ingredientId": "m-briess-victory-malt",
+        "percent": 4.2
+      }
+    ]
+  },
+  "sweet-stout": {
+    "referenceRecipe": "Left Hand Milk Stout",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-briess-2-row-chocolate-malt",
+      "m-briess-munich-malt-10l",
+      "m-briess-oat-flakes",
+      "m-briess-barley-flakes",
+      "m-briess-roasted-barley",
+      "m-milk-sugar-lactose"
+    ],
+    "hopIds": [
+      "h-ctz",
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-fermentis-s-04-safale-s-04"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 69.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 4.4
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "percent": 5.3
+      },
+      {
+        "ingredientId": "m-briess-munich-malt-10l",
+        "percent": 3.5
+      },
+      {
+        "ingredientId": "m-briess-oat-flakes",
+        "percent": 3.5
+      },
+      {
+        "ingredientId": "m-briess-barley-flakes",
+        "percent": 3.5
+      },
+      {
+        "ingredientId": "m-briess-roasted-barley",
+        "percent": 2.7
+      },
+      {
+        "ingredientId": "m-milk-sugar-lactose",
+        "percent": 8.0
+      }
+    ]
+  },
+  "german-pilsner-pils": {
+    "referenceRecipe": "Garden Pils",
+    "maltIds": [
+      "m-briess-pilsen-malt"
+    ],
+    "hopIds": [
+      "h-magnum-gr",
+      "h-saaz-cz"
+    ],
+    "yeastIds": [
+      "y-fermentis-w-34-70-saflager-w-34-70"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-pilsen-malt",
+        "percent": 100.0
+      }
+    ]
+  },
+  "special-best-premium-bitter": {
+    "referenceRecipe": "Copper Lane Bitter",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings",
+      "h-fuggle"
+    ],
+    "yeastIds": [
+      "y-fermentis-s-04-safale-s-04"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 94.6
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 5.4
+      }
+    ]
+  },
+  "robust-porter": {
+    "referenceRecipe": "Nightfall Porter",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-40l",
+      "m-briess-2-row-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-magnum-gr",
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-fermentis-s-04-safale-s-04"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 88.2
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 6.5
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "percent": 5.4
+      }
+    ]
+  },
+  "oatmeal-stout": {
+    "referenceRecipe": "Fireside Oat Stout",
+    "maltIds": [
+      "m-briess-2-row-brewers-malt",
+      "m-briess-oat-flakes",
+      "m-briess-2-row-chocolate-malt",
+      "m-briess-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-fermentis-s-04-safale-s-04"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "percent": 81.7
+      },
+      {
+        "ingredientId": "m-briess-oat-flakes",
+        "percent": 9.7
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "percent": 4.3
+      },
+      {
+        "ingredientId": "m-briess-roasted-barley",
+        "percent": 4.3
+      }
+    ]
+  },
+  "weizen-weissbier": {
+    "referenceRecipe": "Wheat Field Ale",
+    "maltIds": [
+      "m-briess-wheat-malt-white",
+      "m-briess-pilsen-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-fermentis-wb-06-safale-wb-06"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-briess-wheat-malt-white",
+        "percent": 54.5
+      },
+      {
+        "ingredientId": "m-briess-pilsen-malt",
+        "percent": 45.5
+      }
+    ]
+  },
+  "american-barleywine": {
+    "referenceRecipe": "Sierra Nevada Bigfoot — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 86.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 6.0
+      }
+    ]
+  },
+  "american-brown-ale": {
+    "referenceRecipe": "Big Sky Moose Drool Brown Ale — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "american-stout": {
+    "referenceRecipe": "Deschutes Obsidian Stout — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-barley-flaked",
+      "m-roasted-barley",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 77.0
+      },
+      {
+        "ingredientId": "m-barley-flaked",
+        "percent": 10.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "american-wheat-or-rye-beer": {
+    "referenceRecipe": "Bell’s Oberon — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-pale-wheat-malt",
+      "m-weyermann-light-munich-malt"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy1010-american-wheat"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 50.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 45.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "baltic-porter": {
+    "referenceRecipe": "Southampton Imperial Baltic Porter — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 53.5
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 35.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 3.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 0.5
+      }
+    ]
+  },
+  "belgian-blond-ale": {
+    "referenceRecipe": "La Trappe Blond — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-pale-wheat-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp530-abbey-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 86.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 4.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 10.0
+      }
+    ]
+  },
+  "belgian-dark-strong-ale": {
+    "referenceRecipe": "St. Bernardus Abt 12 — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-special-b-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp540-abbey-iv-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 12.0
+      },
+      {
+        "ingredientId": "m-special-b-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 13.0
+      }
+    ]
+  },
+  "belgian-dubbel": {
+    "referenceRecipe": "New Belgium Abbey Belgian Style Ale — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-special-b-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp530-abbey-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 18.0
+      },
+      {
+        "ingredientId": "m-special-b-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 7.0
+      }
+    ]
+  },
+  "belgian-golden-strong-ale": {
+    "referenceRecipe": "Russian River Damnation — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp570-belgian-golden-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 82.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 18.0
+      }
+    ]
+  },
+  "belgian-pale-ale": {
+    "referenceRecipe": "Russian River Perdition — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp515-antwerp-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 23.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 7.0
+      }
+    ]
+  },
+  "belgian-specialty-ale": {
+    "referenceRecipe": "Belgian Specialty Ale · house starter",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp550-belgian-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 23.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 7.0
+      }
+    ]
+  },
+  "belgian-tripel": {
+    "referenceRecipe": "Victory Golden Monkey — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-pale-wheat-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp530-abbey-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 82.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 3.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 15.0
+      }
+    ]
+  },
+  "berliner-weisse": {
+    "referenceRecipe": "Southampton Berliner Weisse — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp630-berliner-weisse-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 50.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 50.0
+      }
+    ]
+  },
+  "bi-re-de-garde": {
+    "referenceRecipe": "Southampton Bière de Garde — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-vienna-malt",
+      "m-briess-2-row-caramel-malt-40l"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3725-pc-biere-de-garde"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 25.0
+      },
+      {
+        "ingredientId": "m-weyermann-vienna-malt",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 2.0
+      }
+    ]
+  },
+  "blonde-ale": {
+    "referenceRecipe": "Russian River Aud Blonde — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 95.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "bohemian-pilsener": {
+    "referenceRecipe": "Dock Street Bohemian Pilsner — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt"
+    ],
+    "hopIds": [
+      "h-saaz-cz"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp800-pilsner-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 95.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "brown-porter": {
+    "referenceRecipe": "Fuller’s London Porter — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-gladfield-brown-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 79.0
+      },
+      {
+        "ingredientId": "m-gladfield-brown-malt",
+        "percent": 10.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 6.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "california-common-beer": {
+    "referenceRecipe": "Anchor Steam — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l"
+    ],
+    "hopIds": [
+      "h-northern-brewer-us"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp810-san-francisco-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 84.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 9.0
+      }
+    ]
+  },
+  "christmas-winter-specialty-spiced-beer": {
+    "referenceRecipe": "Christmas/Winter Specialty Spiced Beer · house starter",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 10.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 2.0
+      }
+    ]
+  },
+  "classic-american-pilsner": {
+    "referenceRecipe": "Classic American Pilsner · house starter",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-corn-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp840-american-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-corn-flaked",
+        "percent": 20.0
+      }
+    ]
+  },
+  "classic-rauchbier": {
+    "referenceRecipe": "Schlenkerla Rauchbier Märzen — inspired",
+    "maltIds": [
+      "m-weyermann-smoked-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-dehusked-carafa-iii",
+      "m-briess-2-row-caramel-malt-60l"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp830-german-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-smoked-malt",
+        "percent": 55.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 40.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 3.0
+      }
+    ]
+  },
+  "cream-ale": {
+    "referenceRecipe": "New Glarus Spotted Cow — inspired",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-corn-flaked",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp080-cream-ale-yeast-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-corn-flaked",
+        "percent": 15.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 5.0
+      }
+    ]
+  },
+  "dark-american-lager": {
+    "referenceRecipe": "Shiner Bock — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-corn-flaked",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp940-mexican-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-corn-flaked",
+        "percent": 20.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 3.0
+      }
+    ]
+  },
+  "doppelbock": {
+    "referenceRecipe": "Bell’s Consecrator — inspired",
+    "maltIds": [
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 30.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 3.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "dortmunder-export": {
+    "referenceRecipe": "Great Lakes Dortmunder Gold — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp830-german-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 92.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 8.0
+      }
+    ]
+  },
+  "dry-stout": {
+    "referenceRecipe": "O’Hara’s Celtic Stout — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-barley-flaked",
+      "m-roasted-barley",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp004-irish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-barley-flaked",
+        "percent": 19.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 10.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 1.0
+      }
+    ]
+  },
+  "dunkelweizen": {
+    "referenceRecipe": "Ayinger Ur-Weisse — inspired",
+    "maltIds": [
+      "m-weyermann-dark-wheat-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp300-hefeweizen-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-dark-wheat-malt",
+        "percent": 50.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 30.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 18.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "d-sseldorf-altbier": {
+    "referenceRecipe": "Zum Uerige Altbier — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp036-dusseldorf-alt-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 64.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 28.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 1.0
+      }
+    ]
+  },
+  "eisbock": {
+    "referenceRecipe": "Capital Eisphyre — inspired",
+    "maltIds": [
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 30.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 3.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "english-barleywine": {
+    "referenceRecipe": "North Coast Old Stock Ale (aged) — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp007-dry-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 3.0
+      }
+    ]
+  },
+  "english-ipa": {
+    "referenceRecipe": "Brooklyn East India Pale Ale — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp007-dry-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 92.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 3.0
+      }
+    ]
+  },
+  "extra-special-strong-bitter-english-pale-ale": {
+    "referenceRecipe": "Fuller’s ESB — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 3.0
+      }
+    ]
+  },
+  "flanders-brown-ale-oud-bruin": {
+    "referenceRecipe": "Liefmans Goudenband — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3763-roeselare-ale-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 67.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 22.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 3.0
+      }
+    ]
+  },
+  "flanders-red-ale": {
+    "referenceRecipe": "New Belgium La Folie — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-vienna-malt",
+      "m-weyermann-light-munich-malt",
+      "m-special-b-malt",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3763-roeselare-ale-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 57.5
+      },
+      {
+        "ingredientId": "m-weyermann-vienna-malt",
+        "percent": 25.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 12.0
+      },
+      {
+        "ingredientId": "m-special-b-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 0.5
+      }
+    ]
+  },
+  "foreign-extra-stout": {
+    "referenceRecipe": "Guinness Foreign Extra Stout — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-roasted-barley",
+      "m-simpsons-chocolate-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp004-irish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 78.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 6.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 4.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 5.0
+      }
+    ]
+  },
+  "fruit-beer": {
+    "referenceRecipe": "Fruit Beer · house starter",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 60.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 40.0
+      }
+    ]
+  },
+  "fruit-lambic": {
+    "referenceRecipe": "Cantillon Kriek — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-wheat-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3278-belgian-lambic-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-wheat-flaked",
+        "percent": 35.0
+      }
+    ]
+  },
+  "gueuze": {
+    "referenceRecipe": "Boon Oude Gueuze — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-wheat-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3278-belgian-lambic-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-wheat-flaked",
+        "percent": 35.0
+      }
+    ]
+  },
+  "irish-red-ale": {
+    "referenceRecipe": "Boulevard Irish Ale — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-40l",
+      "m-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp004-irish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 2.0
+      }
+    ]
+  },
+  "k-lsch": {
+    "referenceRecipe": "Saint Arnold Fancy Lawnmower — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp029-german-ale-kolsch"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 95.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "lite-american-lager": {
+    "referenceRecipe": "Samuel Adams Light — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-rice-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp840-american-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 75.0
+      },
+      {
+        "ingredientId": "m-rice-flaked",
+        "percent": 25.0
+      }
+    ]
+  },
+  "maibock-helles-bock": {
+    "referenceRecipe": "Smuttynose Maibock — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-vienna-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 25.0
+      },
+      {
+        "ingredientId": "m-weyermann-vienna-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "mild": {
+    "referenceRecipe": "Motor City Brewing Works Ghettoblaster — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 82.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 12.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 6.0
+      }
+    ]
+  },
+  "munich-dunkel": {
+    "referenceRecipe": "Penn Dark Lager — inspired",
+    "maltIds": [
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 13.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "munich-helles": {
+    "referenceRecipe": "Stoudt’s Gold Lager — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp860-munich-helles"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 95.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "northern-english-brown-ale": {
+    "referenceRecipe": "Avery Ellie’s Brown Ale — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-biscuit-malt",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-biscuit-malt",
+        "percent": 4.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 3.0
+      }
+    ]
+  },
+  "northern-german-altbier": {
+    "referenceRecipe": "Alaskan Amber — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy1007-german-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 64.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 28.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 1.0
+      }
+    ]
+  },
+  "oktoberfest-m-rzen": {
+    "referenceRecipe": "Great Lakes Oktoberfest — inspired",
+    "maltIds": [
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-vienna-malt",
+      "m-weyermann-pilsner-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp820-oktoberfest-m-rzen-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 45.0
+      },
+      {
+        "ingredientId": "m-weyermann-vienna-malt",
+        "percent": 35.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 20.0
+      }
+    ]
+  },
+  "old-ale": {
+    "referenceRecipe": "Founders Curmudgeon — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-candi-sugar-clear",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp007-dry-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 9.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 4.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 2.0
+      }
+    ]
+  },
+  "other-smoked-beer": {
+    "referenceRecipe": "Alaskan Smoked Porter — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-weyermann-smoked-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-weyermann-smoked-malt",
+        "percent": 20.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 6.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "premium-american-lager": {
+    "referenceRecipe": "Full Sail Session Premium Lager — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-corn-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp840-american-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-corn-flaked",
+        "percent": 20.0
+      }
+    ]
+  },
+  "roggenbier-german-rye-beer": {
+    "referenceRecipe": "Bürgerbräu Wolznacher Roggenbier — inspired",
+    "maltIds": [
+      "m-weyermann-rye-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp300-hefeweizen-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-rye-malt",
+        "percent": 50.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 25.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 17.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 1.0
+      }
+    ]
+  },
+  "russian-imperial-stout": {
+    "referenceRecipe": "North Coast Old Rasputin Imperial Stout — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-barley-flaked",
+      "m-roasted-barley",
+      "m-simpsons-chocolate-malt",
+      "m-briess-2-row-caramel-malt-60l"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp007-dry-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 79.0
+      },
+      {
+        "ingredientId": "m-barley-flaked",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 2.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 6.0
+      }
+    ]
+  },
+  "saison": {
+    "referenceRecipe": "Ommegang Hennepin — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pale-wheat-malt",
+      "m-candi-sugar-clear"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3711-french-saison"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 10.0
+      },
+      {
+        "ingredientId": "m-candi-sugar-clear",
+        "percent": 5.0
+      }
+    ]
+  },
+  "schwarzbier-black-beer": {
+    "referenceRecipe": "Sprecher Black Bavarian — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp830-german-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 55.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 40.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 5.0
+      }
+    ]
+  },
+  "scottish-export-80": {
+    "referenceRecipe": "Orkney Dark Island — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp028-edinburgh-scottish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 2.0
+      }
+    ]
+  },
+  "scottish-heavy-70": {
+    "referenceRecipe": "Orkney Raven Ale — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp028-edinburgh-scottish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 2.0
+      }
+    ]
+  },
+  "scottish-light-60": {
+    "referenceRecipe": "Belhaven 60/- — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp028-edinburgh-scottish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 2.0
+      }
+    ]
+  },
+  "southern-english-brown": {
+    "referenceRecipe": "Harvey’s Nut Brown Ale — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 15.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 5.0
+      }
+    ]
+  },
+  "specialty-beer": {
+    "referenceRecipe": "Specialty Beer · house starter",
+    "maltIds": [
+      "m-pale-malt-2-row-us",
+      "m-weyermann-rye-malt",
+      "m-briess-2-row-caramel-malt-60l"
+    ],
+    "hopIds": [
+      "h-cascade"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp001-california-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-pale-malt-2-row-us",
+        "percent": 75.0
+      },
+      {
+        "ingredientId": "m-weyermann-rye-malt",
+        "percent": 20.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 5.0
+      }
+    ]
+  },
+  "spice-herb-or-vegetable-beer": {
+    "referenceRecipe": "Spice, Herb, or Vegetable Beer · house starter",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-pale-wheat-malt",
+      "m-weyermann-light-munich-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp550-belgian-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 70.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 20.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 10.0
+      }
+    ]
+  },
+  "standard-american-lager": {
+    "referenceRecipe": "Pabst Blue Ribbon — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-corn-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp840-american-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 80.0
+      },
+      {
+        "ingredientId": "m-corn-flaked",
+        "percent": 20.0
+      }
+    ]
+  },
+  "standard-ordinary-bitter": {
+    "referenceRecipe": "Fuller’s Chiswick Bitter — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-pale-wheat-malt"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp002-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 90.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 3.0
+      }
+    ]
+  },
+  "straight-unblended-lambic": {
+    "referenceRecipe": "Cantillon Grand Cru Bruocsella — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-wheat-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-wyeast-labs-wy3278-belgian-lambic-blend"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-wheat-flaked",
+        "percent": 35.0
+      }
+    ]
+  },
+  "strong-scotch-ale": {
+    "referenceRecipe": "Founders Dirty Bastard — inspired",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-weyermann-light-munich-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-roasted-barley"
+    ],
+    "hopIds": [
+      "h-east-kent-goldings"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp028-edinburgh-scottish-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 7.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 6.0
+      },
+      {
+        "ingredientId": "m-roasted-barley",
+        "percent": 2.0
+      }
+    ]
+  },
+  "traditional-bock": {
+    "referenceRecipe": "Great Lakes Rockefeller Bock — inspired",
+    "maltIds": [
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp833-german-bock-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 65.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 30.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 3.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "vienna-lager": {
+    "referenceRecipe": "Great Lakes Eliot Ness — inspired",
+    "maltIds": [
+      "m-weyermann-vienna-malt",
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp940-mexican-lager"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-vienna-malt",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 13.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "weizenbock": {
+    "referenceRecipe": "Victory Moonglow Weizenbock — inspired",
+    "maltIds": [
+      "m-weyermann-dark-wheat-malt",
+      "m-weyermann-pale-wheat-malt",
+      "m-weyermann-light-munich-malt",
+      "m-weyermann-pilsner-malt",
+      "m-weyermann-dehusked-carafa-iii"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp300-hefeweizen-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-dark-wheat-malt",
+        "percent": 50.0
+      },
+      {
+        "ingredientId": "m-weyermann-pale-wheat-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 30.0
+      },
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 13.0
+      },
+      {
+        "ingredientId": "m-weyermann-dehusked-carafa-iii",
+        "percent": 2.0
+      }
+    ]
+  },
+  "witbier": {
+    "referenceRecipe": "Allagash White — inspired",
+    "maltIds": [
+      "m-weyermann-pilsner-malt",
+      "m-wheat-flaked",
+      "m-oats-flaked"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp400-belgian-wit-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-weyermann-pilsner-malt",
+        "percent": 55.0
+      },
+      {
+        "ingredientId": "m-wheat-flaked",
+        "percent": 40.0
+      },
+      {
+        "ingredientId": "m-oats-flaked",
+        "percent": 5.0
+      }
+    ]
+  },
+  "wood-aged-beer": {
+    "referenceRecipe": "Wood-Aged Beer · house starter",
+    "maltIds": [
+      "m-simpsons-maris-otter",
+      "m-briess-2-row-caramel-malt-60l",
+      "m-weyermann-light-munich-malt",
+      "m-simpsons-chocolate-malt"
+    ],
+    "hopIds": [
+      "h-hallertau-mittelfr-h"
+    ],
+    "yeastIds": [
+      "y-white-labs-wlp007-dry-english-ale"
+    ],
+    "grist": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "percent": 85.0
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "percent": 8.0
+      },
+      {
+        "ingredientId": "m-weyermann-light-munich-malt",
+        "percent": 5.0
+      },
+      {
+        "ingredientId": "m-simpsons-chocolate-malt",
+        "percent": 2.0
+      }
+    ]
+  }
+}

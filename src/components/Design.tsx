@@ -5,17 +5,24 @@ import type { Candidate } from "../engine/solver";
 import { defaultTarget } from "../defaults";
 import { Field, Section, Tag } from "./ui";
 import { Radar } from "./FlavorPanel";
-import { L_PER_GAL, lToGal } from "../engine/calculations";
+import { L_PER_GAL, lToGal, predict } from "../engine/calculations";
+import IngredientMatches from "./IngredientMatches";
+import hopDirections from "../../data/hop-flavor-directions.json";
+import { starterRecipes } from "../engine/recipeBook";
+import { flavorPredict } from "../engine/flavor";
+import { recipeDesignBrief, styleFlavorBrief } from "../engine/recommendations";
 export default function Design({
   catalog: c,
   onOpen,
   us,
   userWeight = 1,
+  fromRecipe,
 }: {
   catalog: Catalog;
   onOpen: (r: Recipe) => void;
   us: boolean;
   userWeight?: number;
+  fromRecipe?: Recipe;
 }) {
   const [t, setT] = useState<Target>(defaultTarget),
     [results, setResults] = useState<Candidate[]>([]),
@@ -23,7 +30,26 @@ export default function Design({
     [error, setError] = useState(""),
     [stale, setStale] = useState(false),
     [ingredientQuery, setIngredientQuery] = useState("");
+  const applyStyleFlavor = (id = t.styleId) => {
+    const recipe = starterRecipes.find((r) => r.styleId === id);
+    if (recipe)
+      update({
+        flavors: styleFlavorBrief(
+          flavorPredict(recipe, c, predict(recipe, c), userWeight).scores,
+          c,
+        ),
+      });
+  };
   const worker = useRef<Worker | null>(null);
+  useEffect(() => {
+    if (!fromRecipe) return;
+    worker.current?.terminate();
+    setBusy(false);
+    setResults([]);
+    setError("");
+    setT(recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight));
+    setStale(true);
+  }, [fromRecipe]);
   useEffect(() => () => worker.current?.terminate(), []);
   useEffect(() => {
     worker.current?.terminate();
@@ -75,14 +101,26 @@ export default function Design({
       <div className="design-grid">
         <div className="design-inputs">
           <Section title="Define your beer" eyebrow="01 / MEASURABLE TARGETS">
+            {fromRecipe && (
+              <p className="muted">
+                Starting from {fromRecipe.name}. Change targets to explore a
+                redesigned copy; your current draft stays in the Recipe Book.
+                The new version keeps your name and experiment notes, but may
+                use different ingredients.
+              </p>
+            )}
             <label className="field">
               <span>Base style · legacy numeric ranges</span>
               <select
+                aria-label="Design beer style"
                 value={t.styleId}
                 onChange={(e) => {
                   const s = c.styles.find((s) => s.id === e.target.value);
                   update({
                     styleId: e.target.value,
+                    hopChoices: [],
+                    baseMaltChoice: undefined,
+                    yeastChoice: undefined,
                     ...(s
                       ? {
                           abv: (s.abv[0] + s.abv[1]) / 2,
@@ -244,6 +282,84 @@ export default function Design({
           </Section>
           <Section title="Find your flavor" eyebrow="02 / SUBJECTIVE TARGETS">
             <Tag>ESTIMATED SENSORY INTENSITY · 0–5</Tag>
+            <p className="muted">
+              Choose a hop direction or set individual flavors below. Style
+              changes update numeric ranges; your custom flavor targets stay
+              until you choose a new starting point.
+            </p>
+            <button
+              className="button secondary"
+              disabled={!starterRecipes.some((r) => r.styleId === t.styleId)}
+              onClick={() => applyStyleFlavor()}
+            >
+              Use style flavor starting point
+            </button>
+            <label className="field">
+              <span>Hop flavor direction</span>
+              <select
+                aria-label="Hop flavor direction"
+                value=""
+                onChange={(e) => {
+                  const direction = hopDirections.find(
+                    (d) => d.id === e.target.value,
+                  );
+                  if (direction) {
+                    const hopIds = c.vocabulary
+                      .filter((v) => v.parent === "hops")
+                      .map((v) => v.id);
+                    update({
+                      flavors: {
+                        ...t.flavors,
+                        ...Object.fromEntries(hopIds.map((id) => [id, 0])),
+                        ...Object.fromEntries(
+                          Object.entries(direction.flavors).filter(
+                            ([, value]) => typeof value === "number",
+                          ),
+                        ),
+                      },
+                      matchHopFlavor: true,
+                      hopChoices: [],
+                    });
+                  }
+                }}
+              >
+                <option value="">Choose a direction or customize below…</option>
+                {hopDirections.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Evaluate hop character for</span>
+              <select
+                aria-label="Hop recommendation use"
+                value={t.hopFocus ?? "aroma"}
+                onChange={(e) =>
+                  update({
+                    hopFocus: e.target.value as Target["hopFocus"],
+                    hopChoices: [],
+                  })
+                }
+              >
+                <option value="bittering">Kettle bittering</option>
+                <option value="flavor">Late-boil flavor</option>
+                <option value="aroma">Whirlpool aroma</option>
+                <option value="dry hop">Dry hopping</option>
+              </select>
+            </label>
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={t.matchHopFlavor ?? false}
+                onChange={(e) =>
+                  update({ matchHopFlavor: e.target.checked, hopChoices: [] })
+                }
+              />{" "}
+              Only suggest hops with evidence for at least one positive
+              hop-flavor target
+            </label>
             <div className="flavor-sliders">
               {c.vocabulary
                 .filter((v) => v.axis)
@@ -251,6 +367,7 @@ export default function Design({
                   <label key={v.id}>
                     <span>{v.label}</span>
                     <input
+                      aria-label={`Target flavor ${v.label}`}
                       type="range"
                       min="0"
                       max="5"
@@ -312,6 +429,42 @@ export default function Design({
               ))}
             </div>
           </Section>
+          <details className="advanced hop-flavor-detail">
+            <summary>Fine-tune individual hop flavors</summary>
+            <div className="flavor-sliders">
+              {c.vocabulary
+                .filter((v) => v.parent === "hops" && !v.axis)
+                .map((v) => (
+                  <label key={v.id}>
+                    <span>{v.label}</span>
+                    <input
+                      aria-label={`Target hop flavor ${v.label}`}
+                      type="range"
+                      min="0"
+                      max="5"
+                      step=".25"
+                      value={t.flavors[v.id] ?? 0}
+                      onChange={(e) =>
+                        update({
+                          flavors: {
+                            ...t.flavors,
+                            [v.id]: Number(e.target.value),
+                          },
+                        })
+                      }
+                    />
+                    <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
+                  </label>
+                ))}
+            </div>
+          </details>
+          <IngredientMatches
+            target={t}
+            catalog={c}
+            us={us}
+            update={update}
+            userWeight={userWeight}
+          />
           <Section title="Your constraints" eyebrow="03 / WHAT YOU HAVE">
             <div className="field-grid">
               <label className="field">
@@ -525,7 +678,24 @@ export default function Design({
                 <button
                   className="button primary"
                   onClick={() =>
-                    onOpen({ ...b.recipe, id: crypto.randomUUID() })
+                    onOpen({
+                      ...b.recipe,
+                      id: crypto.randomUUID(),
+                      ...(fromRecipe
+                        ? {
+                            name: fromRecipe.name.slice(0, 180) + " (redesign)",
+                            description: fromRecipe.description,
+                            notes: fromRecipe.notes,
+                            processNotes: structuredClone(
+                              fromRecipe.processNotes,
+                            ),
+                            tags: [
+                              ...(fromRecipe.tags ?? []).slice(0, 19),
+                              "redesign",
+                            ],
+                          }
+                        : {}),
+                    })
                   }
                 >
                   Make it my own <ArrowUpRight size={14} />

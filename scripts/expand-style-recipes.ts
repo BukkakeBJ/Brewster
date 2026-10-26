@@ -335,3 +335,42 @@ fs.writeFileSync(
 console.log(
   `Wrote ${recipes.length} recipes (${rows.length} style additions).`,
 );
+
+// Keep the recommendation engine's editorial style priors in sync with the book.
+const ingredientProfiles: Record<
+  string,
+  {
+    referenceRecipe: string;
+    maltIds: string[];
+    hopIds: string[];
+    yeastIds: string[];
+    grist: { ingredientId: string; percent: number }[];
+  }
+> = {};
+for (const recipe of recipes) {
+  const total = recipe.grains.reduce((sum, grain) => sum + grain.kg, 0);
+  const profile = (ingredientProfiles[recipe.styleId] ??= {
+    referenceRecipe: recipe.name,
+    maltIds: [],
+    hopIds: [],
+    yeastIds: [],
+    grist: recipe.grains.map((g) => ({
+      ingredientId: g.ingredientId,
+      percent: +((g.kg / total) * 100).toFixed(1),
+    })),
+  });
+  profile.maltIds = [
+    ...new Set([
+      ...profile.maltIds,
+      ...recipe.grains.map((g) => g.ingredientId),
+    ]),
+  ];
+  profile.hopIds = [
+    ...new Set([...profile.hopIds, ...recipe.hops.map((h) => h.ingredientId)]),
+  ];
+  profile.yeastIds = [...new Set([...profile.yeastIds, recipe.yeastId])];
+}
+fs.writeFileSync(
+  new URL("../data/style-ingredient-profiles.json", import.meta.url),
+  JSON.stringify(ingredientProfiles, null, 2) + "\n",
+);

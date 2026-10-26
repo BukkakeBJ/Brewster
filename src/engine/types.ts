@@ -182,6 +182,11 @@ export interface Flavor {
   contributions: Record<string, Contribution[]>;
 }
 export interface Target {
+  hopFocus?: import("./recommendations").HopFocus;
+  matchHopFlavor?: boolean;
+  hopChoices?: string[];
+  baseMaltChoice?: string;
+  yeastChoice?: string;
   og?: Range;
   fg?: Range;
   abv: number;

@@ -2423,3 +2423,11 @@ footer > span:last-child {
 .book-flavor-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
 .book-flavor-chips span { font-size: .75rem; padding: .3rem .5rem; border-radius: 20px; background: #fffaf0; border: 1px solid #e4dac4; }
 .book-recipe-details .radar { max-width: 100%; height: auto; }
+
+.match-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1rem 0; }
+.match-tabs [aria-pressed="true"] { background: #e1e8d8; border-color: #718368; }
+.live-match-cards { display: grid; gap: .75rem; margin-top: 1rem; }
+.live-match-cards .suggestion-card h3 { margin-top: 0; }
+.live-match-cards .suggestion-card a { display: block; margin-top: .75rem; font-size: .75rem; }
+.hop-flavor-detail { padding: 1rem; background: #fafbf6; border: 1px solid #e1e4da; border-radius: 8px; }
+.redesign-button { margin: 0 0 1rem; }

@@ -1,0 +1,6 @@
+[
+  { "id": "tropical", "label": "Tropical & citrus", "flavors": { "tropical": 4, "citrus": 3, "mango": 3, "passionfruit": 3, "pine": 0, "herbal": 0 } },
+  { "id": "pine", "label": "Pine & resin", "flavors": { "pine": 4, "resin": 3, "citrus": 2, "tropical": 0, "mango": 0, "passionfruit": 0 } },
+  { "id": "noble", "label": "Floral, herbal & spicy", "flavors": { "floral": 3, "herbal": 3, "spicy": 2, "noble": 3, "citrus": 0, "tropical": 0, "pine": 0 } },
+  { "id": "earthy", "label": "Earthy & woody", "flavors": { "earthy": 3, "woody": 3, "herbal": 2, "tropical": 0, "citrus": 0, "pine": 0 } }
+]

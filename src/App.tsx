@@ -49,6 +49,7 @@ export default function App() {
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
   const [logs, setLogs] = useState<Log[]>([]);
+  const [designFromRecipe, setDesignFromRecipe] = useState<Recipe>();
   const [drafts, setDrafts] = useState<Record<string, Recipe>>(() => {
     try {
       return readDraftBank(localStorage.getItem("brew-drafts"));
@@ -354,6 +355,16 @@ export default function App() {
                 </button>
               </div>
             </div>
+            <button
+              className="button secondary redesign-button"
+              disabled={!p}
+              onClick={() => {
+                setDesignFromRecipe(structuredClone(recipe));
+                setTab("Design");
+              }}
+            >
+              Adjust targets & get ingredient suggestions
+            </button>
             <RecipeNotes recipe={recipe} onChange={setRecipe} />
             {p && (
               <>
@@ -556,6 +567,7 @@ export default function App() {
           </div>
           <div hidden={tab !== "Design"}>
             <Design
+              fromRecipe={designFromRecipe}
               catalog={catalog}
               userWeight={prefs.userWeight}
               us={us}

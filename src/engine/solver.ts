@@ -8,6 +8,7 @@ import type {
 } from "./types";
 import { clamp, midpoint, predict, hopIbu } from "./calculations";
 import { consensus, flavorPredict } from "./flavor";
+import { ingredientMatches } from "./recommendations";
 export interface Candidate {
   recipe: Recipe;
   prediction: Prediction;
@@ -89,35 +90,26 @@ export function solve(
   const allowed = (i: Ingredient) =>
     !t.exclude.includes(i.id) && (!t.onHand.length || t.onHand.includes(i.id));
   const descriptors = new Map<string, typeof c.descriptors>();
-  for (const d of c.descriptors) {
-    const rows = descriptors.get(d.ingredientId) ?? [];
-    rows.push(d);
-    descriptors.set(d.ingredientId, rows);
-  }
-  const rank = (i: Ingredient) => {
-    const ds = consensus(
-      descriptors.get(i.id) ?? [],
-      i.kind === "hop"
-        ? { use: "dry hop" }
-        : i.kind === "malt"
-          ? { percent: 5 }
-          : { tempC: 20 },
-      userWeight,
-    );
-    return ds.reduce(
-      (s, d) =>
-        s +
-        (t.flavors[d.descriptor] ?? 0) * d.intensity +
-        (t.must.includes(d.descriptor) ? 10 : 0) -
-        (t.avoid.includes(d.descriptor) ? 40 : 0),
-      0,
-    );
-  };
+  for (const d of c.descriptors)
+    descriptors.set(d.ingredientId, [
+      ...(descriptors.get(d.ingredientId) ?? []),
+      d,
+    ]);
+  const matches = ingredientMatches(t, c, userWeight);
+  const scores = new Map(
+    [...matches.malts, ...matches.hops, ...matches.yeasts].map((m) => [
+      m.id,
+      m.score,
+    ]),
+  );
+  const rank = (i: Ingredient) => scores.get(i.id) ?? -1000;
+  const matchingHopIds = new Set(matches.hops.map((h) => h.id));
   const bases = c.malts
     .filter(
       (m) =>
         allowed(m) &&
         m.type === "base" &&
+        (!t.baseMaltChoice || m.id === t.baseMaltChoice) &&
         m.maxPercent >= 70 &&
         m.ppg > 20 &&
         !/hull/i.test(m.name),
@@ -144,7 +136,12 @@ export function solve(
     })
     .slice(0, 8);
   const hops = c.hops
-    .filter(allowed)
+    .filter(
+      (h) =>
+        allowed(h) &&
+        matchingHopIds.has(h.id) &&
+        (!t.hopChoices?.length || t.hopChoices.includes(h.id)),
+    )
     .sort((a, b) => rank(b) - rank(a))
     .slice(0, 8);
   const family = /lager|pils|bock|helles|dunkel|schwarz|oktober/i.test(
@@ -156,6 +153,7 @@ export function solve(
     .filter(
       (y) =>
         allowed(y) &&
+        (!t.yeastChoice || y.id === t.yeastChoice) &&
         (t.yeastForm === "any" || y.form === t.yeastForm) &&
         (t.budget !== "economy" || y.form === "dry") &&
         ["ale", "lager", "wheat", "belgian", "kveik"].includes(
@@ -171,9 +169,13 @@ export function solve(
         (b.type === family ? -5 : 0),
     )
     .slice(0, 6);
-  if (!bases.length || !yeasts.length || (t.ibu > 0 && !hops.length))
+  if (
+    !bases.length ||
+    !yeasts.length ||
+    ((t.ibu > 0 || t.hopChoices?.length || t.matchHopFlavor) && !hops.length)
+  )
     throw new Error(
-      "No feasible ingredient set. Include a base malt, compatible brewing yeast and hops in the on-hand list, or relax exclusions/form/budget.",
+      "No feasible ingredient set. Include a base malt, compatible brewing yeast and hops in the on-hand list, or relax exclusions/form/budget and ingredient choices.",
     );
   let seed = 3761;
   const rand = () => {
@@ -227,15 +229,32 @@ export function solve(
             },
             {
               ingredientId: hop.id,
-              use: "whirlpool",
-              minutes: 20,
-              grams: (30 * t.batchL) / 20,
+              use: t.hopFocus === "flavor" ? "boil" : "whirlpool",
+              minutes:
+                t.hopFocus === "flavor"
+                  ? Math.min(10, t.equipment.boilMinutes)
+                  : 20,
+              grams:
+                t.batchL *
+                (t.hopFocus === "bittering"
+                  ? 0.2
+                  : t.hopFocus === "dry hop"
+                    ? 0.5
+                    : 1.5),
             },
             {
               ingredientId: hop2.id,
               use: "dry hop",
               minutes: 4320,
-              grams: (50 * t.batchL) / 20,
+              grams:
+                t.batchL *
+                (t.hopFocus === "bittering"
+                  ? 0.2
+                  : t.hopFocus === "flavor"
+                    ? 0.5
+                    : t.hopFocus === "dry hop"
+                      ? 3
+                      : 2.5),
             },
           ]
         : [],
@@ -260,7 +279,15 @@ export function solve(
       }
       if (a.hops.length) {
         a.hops[0].grams = 0;
-        const p = predict(a, small);
+        let p = predict(a, small);
+        if (p.ibu > t.ibu) {
+          a.hops = a.hops.map((h, index) =>
+            index > 0 && h.use !== "dry hop"
+              ? { ...h, grams: (h.grams * t.ibu) / p.ibu }
+              : h,
+          );
+          p = predict(a, small);
+        }
         const bg = (p.og + p.preBoilGravity) / 2;
         const per = hopIbu(
           { ...a.hops[0], grams: 1 },
