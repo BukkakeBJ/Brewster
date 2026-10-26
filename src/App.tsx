@@ -175,7 +175,7 @@ export default function App() {
             <Wheat size={25} />
           </span>
           <span>
-            Brew<span className="brand-light">Designer</span>
+            Brew<span className="brand-light">Master</span>
             <small>FROM IDEA TO FIRST POUR</small>
           </span>
         </a>
@@ -269,7 +269,7 @@ export default function App() {
               </div>
               <h1>
                 {tab === "Recipe Editor"
-                  ? "Make it your own."
+                  ? "Your next great beer."
                   : tab === "Design"
                     ? "What’s your next beer?"
                     : tab === "Ingredient Library"
@@ -647,7 +647,7 @@ export default function App() {
           <footer>
             <Wheat size={16} />
             <span>Good beer starts with curiosity.</span>
-            <span>Brew Designer / v0.1</span>
+            <span>BrewMaster / v0.1</span>
           </footer>
         </div>
       </main>
