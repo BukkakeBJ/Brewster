@@ -1,3 +1,4 @@
+import { additives, additiveModelNote } from "./additives";
 import type {
   Catalog,
   Grain,
@@ -194,6 +195,14 @@ export function scaleRecipe(
           : recipe.efficiency / efficiency),
     })),
     hops: recipe.hops.map((h) => ({ ...h, grams: h.grams * ratio })),
+    ...(recipe.additives
+      ? {
+          additives: recipe.additives.map((a) => ({
+            ...a,
+            amount: a.amount * ratio,
+          })),
+        }
+      : {}),
   };
 }
 export function predict(
@@ -244,6 +253,23 @@ export function predict(
   }, 0);
   const total = recipe.grains.reduce((s, g) => s + g.kg, 0),
     warnings: string[] = [];
+  if (recipe.additives?.length) {
+    for (const row of recipe.additives) {
+      const item = additives.find((a) => a.id === row.ingredientId);
+      if (
+        !item ||
+        row.unit !== item.guide.unit ||
+        !Number.isFinite(row.amount) ||
+        row.amount < 0
+      )
+        throw new Error("Invalid additive reference, unit or amount.");
+      if (row.amount === 0)
+        warnings.push(
+          `${item.name}: set an amount from your product label or trial before brewing.`,
+        );
+    }
+    warnings.push(additiveModelNote);
+  }
   recipe.grains.forEach((g) => {
     const m = catalog.malts.find((m) => m.id === g.ingredientId)!;
     if (total && (100 * g.kg) / total > m.maxPercent + 0.01)

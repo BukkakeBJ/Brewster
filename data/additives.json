@@ -1,0 +1,650 @@
+[
+  {
+    "id": "a-cocoa-nibs",
+    "name": "Cocoa / cacao nibs",
+    "aliases": [
+      "cocoa nibs"
+    ],
+    "category": "Flavorings",
+    "form": "Roasted bean pieces",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 100,
+      "unit": "g",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Steep roasted nibs in finished beer using a contained addition that can be removed. Taste during extraction and record the roast level and contact time.",
+      "limits": "Nibs add solids and can absorb beer. A spirit tincture is an alternative extraction method; record both nib and spirit amounts separately. Roasting or soaking is not a validated sanitation step."
+    }
+  },
+  {
+    "id": "a-cocoa-powder",
+    "name": "Unsweetened cocoa powder",
+    "aliases": [
+      "cocoa powder"
+    ],
+    "category": "Flavorings",
+    "form": "Powder",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 50,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "editorial trial",
+      "how": "Disperse unsweetened powder into a small wort slurry before a late-boil trial to reduce clumping. Compare the finished beer with a control.",
+      "limits": "Fat and suspended solids may change foam, texture and settling. Avoid assuming hot-chocolate mixes have the same composition as pure cocoa."
+    }
+  },
+  {
+    "id": "a-oak-chips",
+    "name": "Oak chips",
+    "aliases": [
+      "oak chips"
+    ],
+    "category": "Wood & spirits",
+    "form": "Food-grade toasted wood chips",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 20,
+      "unit": "g",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Choose a toast level and oak origin, then infuse in conditioned beer. Chips extract quickly; sample frequently and remove when the balance suits the beer.",
+      "limits": "Use cooperage products intended for beverages. Toast and chip size change extraction; contact time is a tasting plan, not a guaranteed endpoint."
+    }
+  },
+  {
+    "id": "a-oak-cubes",
+    "name": "Oak cubes",
+    "aliases": [
+      "oak cubes"
+    ],
+    "category": "Wood & spirits",
+    "form": "Food-grade toasted wood cubes",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 30,
+      "unit": "g",
+      "time": 28,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Cubes offer a slower wood-contact trial than chips. Record toast, origin, dose and tasting dates so the experiment is repeatable.",
+      "limits": "Do not treat a small wood addition as equivalent to barrel aging. Geometry, oxygen exposure and previous use all matter."
+    }
+  },
+  {
+    "id": "a-bourbon",
+    "name": "Bourbon whiskey",
+    "aliases": [
+      "bourbon"
+    ],
+    "category": "Wood & spirits",
+    "form": "Spirit; strength varies by bottle",
+    "stages": [
+      "packaging"
+    ],
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 200,
+      "unit": "mL",
+      "time": 0,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Bench blend a small measured beer sample with bourbon first, then scale the preferred blend to the actual beer volume. Record the bottle strength and amount added.",
+      "limits": "Spirit increases both alcohol and volume; the engine currently reports the base beer only. Do not assume every bourbon is 40% ABV, and do not duplicate the same spirit as a separate tincture addition."
+    }
+  },
+  {
+    "id": "a-rum",
+    "name": "Rum",
+    "aliases": [
+      "rum"
+    ],
+    "category": "Wood & spirits",
+    "form": "Spirit; strength and sugar vary",
+    "stages": [
+      "packaging"
+    ],
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 150,
+      "unit": "mL",
+      "time": 0,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Try measured bench blends before adding to the full batch. Record brand, bottle strength and whether the product is sweetened or spiced.",
+      "limits": "Alcohol, dilution and any sugar are not included in the base-beer numbers. This is an editorial alternative to bourbon, not a sourced universal dose."
+    }
+  },
+  {
+    "id": "a-vanilla-beans",
+    "name": "Vanilla beans",
+    "aliases": [
+      "vanilla beans"
+    ],
+    "category": "Flavorings",
+    "form": "Whole bean pods",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 1,
+      "unit": "item",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Split a bean and contain it for a short conditioned-beer extraction trial. A measured tincture lets you compare several blend levels before committing the batch.",
+      "limits": "Bean size and quality vary; count is not a fixed mass. Vanilla-like sweetness is a sensory association, not measured residual sugar."
+    }
+  },
+  {
+    "id": "a-vanilla-extract",
+    "name": "Vanilla extract",
+    "aliases": [
+      "vanilla extract"
+    ],
+    "category": "Flavorings",
+    "form": "Liquid extract; concentration varies",
+    "stages": [
+      "packaging"
+    ],
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "mL",
+      "time": 0,
+      "timeUnit": "days",
+      "doseBasis": "set from product label",
+      "how": "Select a food-grade extract and use measured bench trials. Enter your chosen amount after checking the actual concentration.",
+      "limits": "No generic dose is prefilled. Extracts differ in strength, alcohol, sugar and flavor composition; the reference describes vanilla beans rather than verifying a particular extract."
+    }
+  },
+  {
+    "id": "a-coffee-grounds",
+    "name": "Coffee beans / coarse grounds",
+    "aliases": [
+      "coffee grounds"
+    ],
+    "category": "Flavorings",
+    "form": "Roasted coffee",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 60,
+      "unit": "g",
+      "time": 1,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Use a contained coarse-coffee trial in conditioned beer and sample early. Record coffee origin, roast, grind and contact time.",
+      "limits": "Grounds can absorb beer and create sediment. Roast and extraction conditions may push the flavor toward bitterness or acidity; these effects are not predicted."
+    }
+  },
+  {
+    "id": "a-cold-brew",
+    "name": "Prepared coffee / cold brew",
+    "aliases": [
+      "cold brew"
+    ],
+    "category": "Flavorings",
+    "form": "Prepared liquid coffee",
+    "stages": [
+      "packaging"
+    ],
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 250,
+      "unit": "mL",
+      "time": 0,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Bench blend prepared coffee into measured beer samples. Scale the chosen ratio to the actual packaging volume.",
+      "limits": "Strength varies widely; the trial amount is an editorial example. Added water, coffee extract and any sweeteners are not modeled."
+    }
+  },
+  {
+    "id": "a-coconut",
+    "name": "Toasted coconut",
+    "aliases": [
+      "coconut"
+    ],
+    "category": "Flavorings",
+    "form": "Unsweetened flakes",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 100,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Use unsweetened coconut in a contained conditioned-beer trial. Record toast level and sample over several days.",
+      "limits": "Fat can affect foam and shelf character; coconut also absorbs liquid. The app does not model oil extraction or volume loss."
+    }
+  },
+  {
+    "id": "a-cinnamon",
+    "name": "Cinnamon",
+    "aliases": [
+      "cinnamon"
+    ],
+    "category": "Spices & botanicals",
+    "form": "Food-grade sticks or ground spice",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 1,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "editorial trial",
+      "how": "Begin with a small weighed late-boil trial or compare a measured tincture after fermentation. Record the spice form because sticks and powder extract differently.",
+      "limits": "The dose is an editorial trial, not a universal recommendation. Large spice loads can dominate a beer; extraction and perceived heat are not modeled."
+    }
+  },
+  {
+    "id": "a-coriander",
+    "name": "Coriander seed",
+    "aliases": [
+      "coriander"
+    ],
+    "category": "Spices & botanicals",
+    "form": "Dried whole seed",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 10,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "editorial trial",
+      "how": "Crush shortly before a late-boil addition and record the seed source. Useful as a small citrus-spice trial in wheat or Belgian-style beers.",
+      "limits": "Freshness and variety affect aroma. This starting amount is a house suggestion; the source is a general supplier category."
+    }
+  },
+  {
+    "id": "a-orange-peel",
+    "name": "Dried orange peel",
+    "aliases": [
+      "orange peel"
+    ],
+    "category": "Spices & botanicals",
+    "form": "Dried bitter or sweet peel",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 15,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "editorial trial",
+      "how": "Record whether the peel is bitter or sweet and add near the end of the boil for an initial trial. Keep the variety consistent when comparing batches.",
+      "limits": "Pith and processing change bitterness. IBU from peel and its aroma extraction are outside the hop-based engine."
+    }
+  },
+  {
+    "id": "a-ginger",
+    "name": "Fresh ginger",
+    "aliases": [
+      "ginger"
+    ],
+    "category": "Spices & botanicals",
+    "form": "Fresh sliced or grated root",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 10,
+      "unit": "g",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "editorial trial",
+      "how": "Prepare a small weighed amount for a late-boil trial. Record peeling, cut size and contact time to make comparisons useful.",
+      "limits": "Fresh ginger varies in pungency. This is an editorial experimental starting point, not a standardized ingredient potency."
+    }
+  },
+  {
+    "id": "a-chili",
+    "name": "Chili peppers",
+    "aliases": [
+      "chili"
+    ],
+    "category": "Spices & botanicals",
+    "form": "Fresh or dried food-grade peppers",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "g",
+      "time": 1,
+      "timeUnit": "days",
+      "doseBasis": "set from product label",
+      "how": "Choose a known pepper and bench-test a small infusion before a full batch addition. Record variety, seeds, preparation and the amount actually used.",
+      "limits": "No generic dose is prefilled because pepper potency varies greatly. Perceived heat is not represented by IBU or by this flavor model."
+    }
+  },
+  {
+    "id": "a-raspberry-puree",
+    "name": "Raspberry purée",
+    "aliases": [
+      "raspberry puree"
+    ],
+    "category": "Fruit",
+    "form": "Aseptic fruit purée",
+    "stages": [
+      "fermentation"
+    ],
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 2000,
+      "unit": "g",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Use a brewing-suitable purée during or after primary fermentation, following its supplier instructions. Provide space for renewed fermentation and track gravity.",
+      "limits": "Fruit sugars can restart fermentation. Confirm completion before packaging; extract, acidity, color, alcohol and fruit-related losses are not included in predictions."
+    }
+  },
+  {
+    "id": "a-cherry-puree",
+    "name": "Sour cherry purée",
+    "aliases": [
+      "cherry puree"
+    ],
+    "category": "Fruit",
+    "form": "Aseptic fruit purée",
+    "stages": [
+      "fermentation"
+    ],
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 2000,
+      "unit": "g",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Record the fruit variety and use a brewing-suitable purée. Allow renewed fermentation to complete before evaluating a final blend.",
+      "limits": "Sweetened products differ from unsweetened purée. Fruit fermentability and acidity are not inferred from the entered mass."
+    }
+  },
+  {
+    "id": "a-mango-puree",
+    "name": "Mango purée",
+    "aliases": [
+      "mango puree"
+    ],
+    "category": "Fruit",
+    "form": "Aseptic fruit purée",
+    "stages": [
+      "fermentation"
+    ],
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 2000,
+      "unit": "g",
+      "time": 7,
+      "timeUnit": "days",
+      "doseBasis": "editorial trial",
+      "how": "Introduce a brewing-suitable purée during or after primary and track the renewed fermentation. Record the purée product and any dilution.",
+      "limits": "The mass is a house trial suggestion. Pectin, fruit sugar and retained solids can affect haze, gravity and yield; the engine does not calculate them."
+    }
+  },
+  {
+    "id": "a-irish-moss",
+    "name": "Irish moss",
+    "aliases": [
+      "irish moss"
+    ],
+    "category": "Kettle finings",
+    "form": "Dried seaweed kettle fining",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "MoreBeer · brewing clarifiers",
+      "url": "https://morebeer.com/collections/brewing-clarifiers",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "g",
+      "time": 10,
+      "timeUnit": "minutes",
+      "doseBasis": "set from product label",
+      "how": "A kettle fining used to help wort proteins settle. Check your supplier dose and hydration instructions, then add late in the boil.",
+      "limits": "Dose is left at zero until set from your product label; teaspoon mass varies. Clarity depends on the whole process, and no fixed clarity or flavor improvement is promised."
+    }
+  },
+  {
+    "id": "a-whirlfloc",
+    "name": "Whirlfloc tablets",
+    "aliases": [
+      "whirlfloc"
+    ],
+    "category": "Kettle finings",
+    "form": "Carrageenan-based kettle fining tablets",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "MoreBeer · brewing clarifiers",
+      "url": "https://morebeer.com/collections/brewing-clarifiers",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "item",
+      "time": 5,
+      "timeUnit": "minutes",
+      "doseBasis": "set from product label",
+      "how": "A convenient tablet-form kettle fining for late-boil use. Enter a dose appropriate to the specific tablet and batch volume.",
+      "limits": "Tablet sizes and dose directions vary. This row is not a second required addition alongside Irish moss; avoid unintentionally doubling the same fining role."
+    }
+  },
+  {
+    "id": "a-gelatin",
+    "name": "Gelatin fining",
+    "aliases": [
+      "gelatin"
+    ],
+    "category": "Post-fermentation finings",
+    "form": "Animal-derived fining powder",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · brewing clarifiers",
+      "url": "https://morebeer.com/collections/brewing-clarifiers",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "g",
+      "time": 2,
+      "timeUnit": "days",
+      "doseBasis": "set from product label",
+      "how": "A post-fermentation clarification option. Follow product preparation directions, then allow settling under the intended conditioning conditions.",
+      "limits": "Gelatin is animal-derived. Dose and preparation are product-specific, so no universal amount is prefilled. Clarification can change presentation and suspended material; it is not a numerical flavor adjustment."
+    }
+  },
+  {
+    "id": "a-silica-fining",
+    "name": "Silica fining / Biofine Clear",
+    "aliases": [
+      "silica fining"
+    ],
+    "category": "Post-fermentation finings",
+    "form": "Liquid colloidal silica; formulation varies",
+    "stages": [
+      "conditioning"
+    ],
+    "source": {
+      "title": "MoreBeer · brewing clarifiers",
+      "url": "https://morebeer.com/collections/brewing-clarifiers",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 0,
+      "unit": "mL",
+      "time": 2,
+      "timeUnit": "days",
+      "doseBasis": "set from product label",
+      "how": "A post-fermentation fining category used to aid settling. Use the actual product label and a bench trial to choose a dose.",
+      "limits": "Biofine Clear is a product example, not a concentration shared by all silica preparations. No universal dose or guaranteed settling time is assumed."
+    }
+  },
+  {
+    "id": "a-yeast-nutrient",
+    "name": "Wyeast Beer Nutrient Blend",
+    "aliases": [
+      "yeast nutrient"
+    ],
+    "category": "Fermentation aids",
+    "form": "Product-specific nutrient blend",
+    "stages": [
+      "boil"
+    ],
+    "source": {
+      "title": "Wyeast · Beer Nutrient Blend",
+      "url": "https://wyeastlab.com/product/wyeast-beer-nutrient-blend/",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    },
+    "guide": {
+      "amountPer20L": 2.3158,
+      "unit": "g",
+      "time": 10,
+      "timeUnit": "minutes",
+      "doseBasis": "manufacturer homebrew instruction",
+      "how": "This specific homebrew product lists 2.2 g per 19 L and a kettle addition 10–15 minutes before the boil ends. The prefill scales that homebrew instruction to 20 L.",
+      "limits": "The manufacturer separately lists a professional rate; this entry deliberately uses the homebrew directions. Other nutrient products are not interchangeable by mass. Nutrient addition does not automatically raise the model’s attenuation."
+    }
+  }
+]

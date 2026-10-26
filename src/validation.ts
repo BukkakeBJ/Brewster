@@ -1,6 +1,25 @@
 import { z } from "zod";
+import { additives } from "./engine/additives";
 import { processStages } from "./engine/processNotes";
 const n = (min: number, max: number) => z.number().finite().min(min).max(max);
+export const additiveAdditionSchema = z
+  .object({
+    id: z.string().min(1).max(160),
+    ingredientId: z
+      .string()
+      .refine((id) => additives.some((a) => a.id === id), "Unknown additive"),
+    amount: n(0, 10000000),
+    unit: z.enum(["g", "mL", "item"]),
+    stage: z.enum(processStages.map((s) => s.id)),
+    time: n(0, 1000000),
+    timeUnit: z.enum(["minutes", "hours", "days"]),
+    notes: z.string().max(10000),
+  })
+  .refine(
+    (row) =>
+      additives.find((a) => a.id === row.ingredientId)?.guide.unit === row.unit,
+    "Additive unit must match its catalog form",
+  );
 export const recipeSchema = z
   .object({
     id: z.string().min(1).max(160),
@@ -8,6 +27,14 @@ export const recipeSchema = z
     styleId: z.string(),
     description: z.string().max(1000).optional(),
     notes: z.string().max(20000).optional(),
+    additives: z
+      .array(additiveAdditionSchema)
+      .max(100)
+      .refine(
+        (rows) => new Set(rows.map((r) => r.id)).size === rows.length,
+        "Addition IDs must be unique",
+      )
+      .optional(),
     processNotes: z
       .partialRecord(
         z.enum(processStages.map((s) => s.id)),

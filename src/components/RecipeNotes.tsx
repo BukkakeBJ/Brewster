@@ -1,3 +1,4 @@
+import { ReadOnlyAdditives } from "./RecipeAdditives";
 import type { Recipe } from "../engine/types";
 import { processStages, processNoteEntries } from "../engine/processNotes";
 export function SavedProcessNotes({ recipe }: { recipe: Recipe }) {
@@ -18,7 +19,9 @@ export function SavedProcessNotes({ recipe }: { recipe: Recipe }) {
 export default function RecipeNotes({
   recipe,
   onChange,
+  us = false,
 }: {
+  us?: boolean;
   recipe: Recipe;
   onChange: (r: Recipe) => void;
 }) {
@@ -109,6 +112,7 @@ export default function RecipeNotes({
           </>
         )}
         <SavedProcessNotes recipe={recipe} />
+        <ReadOnlyAdditives recipe={recipe} us={us} />
       </div>
     </>
   );

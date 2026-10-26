@@ -1,5 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
+import { additives, additiveDescriptors } from "../src/engine/additives";
 import { catalog as c } from "../src/catalog";
 mkdirSync(".runtime", { recursive: true });
 export const db = new DatabaseSync(
@@ -26,6 +27,21 @@ try {
       name: i.name,
       source: JSON.stringify(i.source),
     });
+  for (const a of additives) {
+    insert("ingredients", {
+      id: a.id,
+      kind: "additive",
+      name: a.name,
+      source: JSON.stringify(a.source),
+    });
+    insert("additive_specs", {
+      ingredient_id: a.id,
+      category: a.category,
+      form: a.form,
+      stages: JSON.stringify(a.stages),
+      usage_guide: JSON.stringify(a.guide),
+    });
+  }
   for (const m of c.malts)
     insert("malt_specs", {
       ingredient_id: m.id,
@@ -72,7 +88,7 @@ try {
       diastaticus: y.diastaticus,
     });
   for (const v of c.vocabulary) insert("vocabulary", { ...v });
-  for (const d of c.descriptors)
+  for (const d of [...c.descriptors, ...additiveDescriptors])
     insert("flavor_descriptors", {
       id: d.id,
       ingredient_id: d.ingredientId,

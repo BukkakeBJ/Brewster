@@ -1,6 +1,7 @@
 import { beforeAll, afterAll, it, expect } from "vitest";
 import { spawn, type ChildProcess } from "node:child_process";
 import { unlinkSync } from "node:fs";
+import { createAdditiveAddition } from "../src/engine/additives";
 import { defaultRecipe as r } from "../src/defaults";
 import { catalog as c } from "../src/catalog";
 import { predict } from "../src/engine/calculations";
@@ -37,6 +38,12 @@ it("persists recipes and returns actionable validation errors", async () => {
     ...r,
     description: "Recipe book description",
     notes: "Brew notes",
+    additives: [
+      {
+        ...createAdditiveAddition("a-oak-chips", 20, "oak-test"),
+        notes: "Taste weekly; medium toast",
+      },
+    ],
     processNotes: {
       mash: "Test a longer rest",
       fermentation: "Dry hop on day 3",
@@ -61,6 +68,7 @@ it("persists recipes and returns actionable validation errors", async () => {
   expect(list[0].origin).toEqual(described.origin);
   expect(list[0].notes).toBe(described.notes);
   expect(list[0].processNotes).toEqual(described.processNotes);
+  expect(list[0].additives).toEqual(described.additives);
   const bad = await fetch(api + "/api/recipes/" + r.id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

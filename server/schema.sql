@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS vocabulary (id TEXT PRIMARY KEY, parent TEXT NOT NULL
 CREATE TABLE IF NOT EXISTS flavor_descriptors (id TEXT PRIMARY KEY, ingredient_id TEXT NOT NULL REFERENCES ingredients(id), descriptor TEXT NOT NULL REFERENCES vocabulary(id), intensity REAL NOT NULL CHECK(intensity>=0 AND intensity<=5), usage_context TEXT NOT NULL, context TEXT NOT NULL, source_type TEXT NOT NULL, confidence TEXT NOT NULL, note TEXT NOT NULL, source TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS recipes (id TEXT PRIMARY KEY, name TEXT NOT NULL, document TEXT NOT NULL, updated_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS brew_logs (id TEXT PRIMARY KEY, recipe_id TEXT NOT NULL, date TEXT NOT NULL, document TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS additive_specs (ingredient_id TEXT PRIMARY KEY REFERENCES ingredients(id), category TEXT NOT NULL, form TEXT NOT NULL, stages TEXT NOT NULL, usage_guide TEXT NOT NULL);

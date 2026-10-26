@@ -1,0 +1,716 @@
+[
+  {
+    "id": "ad-cocoa-nibs-chocolate",
+    "ingredientId": "a-cocoa-nibs",
+    "descriptor": "chocolate",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cocoa-nibs-coffee",
+    "ingredientId": "a-cocoa-nibs",
+    "descriptor": "coffee",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cocoa-nibs-nutty",
+    "ingredientId": "a-cocoa-nibs",
+    "descriptor": "nutty",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cocoa-powder-chocolate",
+    "ingredientId": "a-cocoa-powder",
+    "descriptor": "chocolate",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cocoa-powder-roast",
+    "ingredientId": "a-cocoa-powder",
+    "descriptor": "roast",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-chips-woody",
+    "ingredientId": "a-oak-chips",
+    "descriptor": "woody",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-chips-toasty",
+    "ingredientId": "a-oak-chips",
+    "descriptor": "toasty",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-chips-spicy",
+    "ingredientId": "a-oak-chips",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-cubes-woody",
+    "ingredientId": "a-oak-cubes",
+    "descriptor": "woody",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-cubes-toasty",
+    "ingredientId": "a-oak-cubes",
+    "descriptor": "toasty",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-oak-cubes-caramel",
+    "ingredientId": "a-oak-cubes",
+    "descriptor": "caramel",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · oak alternatives",
+      "url": "https://morebeer.com/collections/tannins-oak-barrel-alternatives",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-bourbon-woody",
+    "ingredientId": "a-bourbon",
+    "descriptor": "woody",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-bourbon-caramel",
+    "ingredientId": "a-bourbon",
+    "descriptor": "caramel",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-bourbon-spicy",
+    "ingredientId": "a-bourbon",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-rum-caramel",
+    "ingredientId": "a-rum",
+    "descriptor": "caramel",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-rum-toffee",
+    "ingredientId": "a-rum",
+    "descriptor": "toffee",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-rum-spicy",
+    "ingredientId": "a-rum",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-vanilla-beans-sweetness",
+    "ingredientId": "a-vanilla-beans",
+    "descriptor": "sweetness",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-vanilla-beans-spicy",
+    "ingredientId": "a-vanilla-beans",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-vanilla-extract-sweetness",
+    "ingredientId": "a-vanilla-extract",
+    "descriptor": "sweetness",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-vanilla-extract-spicy",
+    "ingredientId": "a-vanilla-extract",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · vanilla beans",
+      "url": "https://morebeer.com/products/vanilla-beans",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coffee-grounds-coffee",
+    "ingredientId": "a-coffee-grounds",
+    "descriptor": "coffee",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coffee-grounds-roast",
+    "ingredientId": "a-coffee-grounds",
+    "descriptor": "roast",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cold-brew-coffee",
+    "ingredientId": "a-cold-brew",
+    "descriptor": "coffee",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cold-brew-roast",
+    "ingredientId": "a-cold-brew",
+    "descriptor": "roast",
+    "intensity": 2.5,
+    "usageContext": "packaging",
+    "context": {},
+    "sourceType": "community",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "AHA community discussion · coffee and bourbon",
+      "url": "https://forum.homebrewersassociation.org/t/coffe-and-bourbon/26111",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coconut-nutty",
+    "ingredientId": "a-coconut",
+    "descriptor": "nutty",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coconut-toasty",
+    "ingredientId": "a-coconut",
+    "descriptor": "toasty",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cinnamon-spicy",
+    "ingredientId": "a-cinnamon",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cinnamon-woody",
+    "ingredientId": "a-cinnamon",
+    "descriptor": "woody",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "Phase Three brewer discussion · adjunct use",
+      "url": "https://www.beerandbrewing.com/video-tip-phase-3-tip-2",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coriander-citrus",
+    "ingredientId": "a-coriander",
+    "descriptor": "citrus",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-coriander-spicy",
+    "ingredientId": "a-coriander",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-orange-peel-orange",
+    "ingredientId": "a-orange-peel",
+    "descriptor": "orange",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-orange-peel-citrus",
+    "ingredientId": "a-orange-peel",
+    "descriptor": "citrus",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-ginger-spicy",
+    "ingredientId": "a-ginger",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-ginger-lemon",
+    "ingredientId": "a-ginger",
+    "descriptor": "lemon",
+    "intensity": 2.5,
+    "usageContext": "boil",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-chili-spicy",
+    "ingredientId": "a-chili",
+    "descriptor": "spicy",
+    "intensity": 2.5,
+    "usageContext": "conditioning",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · special brewing ingredients",
+      "url": "https://morebeer.com/collections/special-beer-making-ingredients-bags",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-raspberry-puree-berry",
+    "ingredientId": "a-raspberry-puree",
+    "descriptor": "berry",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-raspberry-puree-tart",
+    "ingredientId": "a-raspberry-puree",
+    "descriptor": "tart",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cherry-puree-dark-fruit",
+    "ingredientId": "a-cherry-puree",
+    "descriptor": "dark-fruit",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-cherry-puree-tart",
+    "ingredientId": "a-cherry-puree",
+    "descriptor": "tart",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-mango-puree-mango",
+    "ingredientId": "a-mango-puree",
+    "descriptor": "mango",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  },
+  {
+    "id": "ad-mango-puree-tropical",
+    "ingredientId": "a-mango-puree",
+    "descriptor": "tropical",
+    "intensity": 2.5,
+    "usageContext": "fermentation",
+    "context": {},
+    "sourceType": "literature",
+    "confidence": "low",
+    "note": "Editorial sensory association for this addition; actual intensity depends on product, dose, extraction and base beer. Not included in the recipe flavor-score model.",
+    "source": {
+      "title": "MoreBeer · fruit in beer",
+      "url": "https://morebeer.com/blogs/articles/fruit-beer-flavor",
+      "accessed": "2026-10-26",
+      "note": "Usage reference; sample dose and contact time are editorial trials unless explicitly identified as the product’s homebrew instruction. Descriptions are newly written."
+    }
+  }
+]

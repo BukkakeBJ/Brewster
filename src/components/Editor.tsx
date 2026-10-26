@@ -10,6 +10,7 @@ import {
   lToGal,
   L_PER_GAL,
 } from "../engine/calculations";
+import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
 import { Field, Section, Tag } from "./ui";
 export default function Editor({
@@ -331,6 +332,7 @@ export default function Editor({
           Verify POF and diastaticus status with the lab.
         </p>
       </Section>
+      <RecipeAdditives recipe={r} onChange={set} us={us} />
       <Section title="Batch & equipment" eyebrow="YOUR BREWHOUSE">
         <p className="muted">
           Changing volume or efficiency here scales ingredient amounts to

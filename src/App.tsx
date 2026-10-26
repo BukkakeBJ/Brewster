@@ -21,6 +21,7 @@ import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
 import { recipeSchema } from "./validation";
 import RecipeBook from "./components/RecipeBook";
+import { createAdditiveAddition } from "./engine/additives";
 import RecipeNotes from "./components/RecipeNotes";
 import { readDraftBank, copyBookRecipe } from "./engine/recipeBook";
 import { defaultRecipe } from "./defaults";
@@ -365,7 +366,7 @@ export default function App() {
             >
               Adjust targets & get ingredient suggestions
             </button>
-            <RecipeNotes recipe={recipe} onChange={setRecipe} />
+            <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
             {p && (
               <>
                 <div className="metrics">
@@ -563,7 +564,27 @@ export default function App() {
             />
           </div>
           <div hidden={tab !== "Ingredient Library"}>
-            <Library catalog={libraryCatalog} us={us} />
+            <Library
+              catalog={libraryCatalog}
+              us={us}
+              batchL={recipe.batchL}
+              onAddAdditive={(id) => {
+                setRecipe({
+                  ...recipe,
+                  additives: [
+                    ...(recipe.additives ?? []),
+                    createAdditiveAddition(
+                      id,
+                      recipe.batchL,
+                      crypto.randomUUID(),
+                    ),
+                  ],
+                });
+                notify(
+                  "Additive added to the current recipe. Edit its amount, stage and notes in Recipe Editor.",
+                );
+              }}
+            />
           </div>
           <div hidden={tab !== "Design"}>
             <Design

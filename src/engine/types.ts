@@ -127,6 +127,7 @@ export interface RecipeOrigin {
   adaptations?: string;
 }
 export interface Recipe {
+  additives?: import("./additives").AdditiveAddition[];
   processNotes?: ProcessNotes;
   id: string;
   name: string;

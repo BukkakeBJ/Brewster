@@ -1,3 +1,4 @@
+import { additives } from "./additives";
 import seeds from "../../data/recipes.json";
 import nonBeerStyles from "../../data/non-beer-styles.json";
 import type { Catalog, Recipe } from "./types";
@@ -113,6 +114,10 @@ export function filterBook(
       r.description ?? "",
       r.notes ?? "",
       ...Object.values(r.processNotes ?? {}),
+      ...(r.additives ?? []).flatMap((a) => [
+        additives.find((i) => i.id === a.ingredientId)?.name ?? "",
+        a.notes,
+      ]),
       ...(r.tags ?? []),
       c.styles.find((s) => s.id === r.styleId)?.name ?? "",
       ...ingredients,

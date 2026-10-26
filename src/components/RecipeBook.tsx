@@ -26,6 +26,8 @@ import {
   G_PER_OZ,
 } from "../engine/calculations";
 import { Tag } from "./ui";
+import { ReadOnlyAdditives } from "./RecipeAdditives";
+import { additiveModelNote } from "../engine/additives";
 import { SavedProcessNotes } from "./RecipeNotes";
 import FlavorPanel from "./FlavorPanel";
 import { recipeProfile } from "../engine/recipeProfile";
@@ -307,6 +309,11 @@ export default function RecipeBook({
                   effects are outside the calculations.
                 </p>
               )}
+              {!!r.additives?.length && (
+                <p className="additive-model-note" role="note">
+                  {additiveModelNote}
+                </p>
+              )}
               <div className="book-stats">
                 <div>
                   <strong>
@@ -484,6 +491,7 @@ export default function RecipeBook({
                       <p className="book-notes">{r.notes}</p>
                     </>
                   )}
+                  <ReadOnlyAdditives recipe={r} us={us} />
                   <SavedProcessNotes recipe={r} />
                   {r.origin && (
                     <div className="book-source">

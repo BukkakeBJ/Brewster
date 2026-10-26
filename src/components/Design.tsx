@@ -686,6 +686,12 @@ export default function Design({
                             name: fromRecipe.name.slice(0, 180) + " (redesign)",
                             description: fromRecipe.description,
                             notes: fromRecipe.notes,
+                            additives: fromRecipe.additives?.map((a) => ({
+                              ...a,
+                              amount:
+                                (a.amount * b.recipe.batchL) /
+                                fromRecipe.batchL,
+                            })),
                             processNotes: structuredClone(
                               fromRecipe.processNotes,
                             ),

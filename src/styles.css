@@ -2431,3 +2431,15 @@ footer > span:last-child {
 .live-match-cards .suggestion-card a { display: block; margin-top: .75rem; font-size: .75rem; }
 .hop-flavor-detail { padding: 1rem; background: #fafbf6; border: 1px solid #e1e4da; border-radius: 8px; }
 .redesign-button { margin: 0 0 1rem; }
+
+.additive-card, .additive-schedule-row { border: 1px solid #dce1d6; border-radius: 10px; padding: 1rem; background: #fffefa; }
+.additive-card p, .additive-card small { font-size: .8rem; line-height: 1.7; }
+.additive-card h3, .additive-schedule-row h3 { margin-top: 0; }
+.additive-card > a { display: block; margin: .8rem 0; font-size: .75rem; }
+.additive-card .button { width: 100%; }
+.additive-guide-grid { display: grid; gap: 1rem; }
+.additive-schedule-row { margin: 1rem 0; }
+.additive-sensory { padding: .7rem; background: #f5f0e5; border-radius: 8px; }
+.additive-model-note { padding: .8rem; background: #f5f0e5; color: #695a3e; font-size: .8rem; line-height: 1.7; border-radius: 8px; }
+.saved-additive-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media print { .recipe-additives-editor, .redesign-button { display: none !important; } }

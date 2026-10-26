@@ -1,6 +1,7 @@
 import { XMLParser, XMLBuilder, XMLValidator } from "fast-xml-parser";
 import type { Catalog, Recipe } from "./engine/types";
 import { recipeSchema } from "./validation";
+import { additives, contactMinutes } from "./engine/additives";
 import { processNoteEntries } from "./engine/processNotes";
 export function exportBeerXML(r: Recipe, c: Catalog) {
   const y = c.yeasts.find((y) => y.id === r.yeastId)!;
@@ -26,6 +27,7 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
           .filter(Boolean)
           .join("\n\n"),
         BD_GENERAL_NOTES: r.notes ?? "",
+        BD_ADDITIVES: JSON.stringify(r.additives ?? []),
         BD_PROCESS_NOTES: JSON.stringify(r.processNotes ?? {}),
         BD_DESCRIPTION: r.description ?? "",
         BD_TAGS: JSON.stringify(r.tags ?? []),
@@ -34,6 +36,39 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
         BD_LOSS_L: r.lossL,
         BD_WHIRLPOOL_FACTOR: r.whirlpoolFactor,
         BD_PITCH_MULTIPLIER: r.pitchMultiplier,
+        MISCS: {
+          MISC: (r.additives ?? []).map((a) => ({
+            NAME: additives.find((i) => i.id === a.ingredientId)!.name,
+            VERSION: 1,
+            TYPE: additives
+              .find((i) => i.id === a.ingredientId)!
+              .category.includes("finings")
+              ? "Fining"
+              : "Flavor",
+            USE:
+              a.stage === "boil"
+                ? "Boil"
+                : a.stage === "mash" || a.stage === "preparation"
+                  ? "Mash"
+                  : a.stage === "fermentation"
+                    ? "Primary"
+                    : a.stage === "packaging" || a.stage === "tasting"
+                      ? "Bottling"
+                      : "Secondary",
+            TIME: contactMinutes(a),
+            AMOUNT: a.unit === "item" ? 0 : a.amount / 1000,
+            AMOUNT_IS_WEIGHT: a.unit === "g",
+            BD_ID: a.ingredientId,
+            BD_ADDITION_ID: a.id,
+            BD_AMOUNT: a.amount,
+            BD_UNIT: a.unit,
+            BD_STAGE: a.stage,
+            BD_TIME: a.time,
+            BD_TIME_UNIT: a.timeUnit,
+            NOTES: `${a.amount} ${a.unit}; ${a.stage}; ${a.time} ${a.timeUnit}. ${a.notes}${a.unit === "item" ? " Count retained in BD_AMOUNT/BD_UNIT; no tablet mass or volume assumed." : ""}`,
+            BD_NOTES: a.notes,
+          })),
+        },
         FERMENTABLES: {
           FERMENTABLE: r.grains.map((g) => {
             const m = c.malts.find((m) => m.id === g.ingredientId)!;
@@ -149,6 +184,53 @@ export function importRecipe(
     name: x.NAME,
     styleId: x.BD_STYLE_ID ?? "",
     notes: String(x.BD_GENERAL_NOTES ?? x.NOTES ?? ""),
+    additives: x.BD_ADDITIVES
+      ? JSON.parse(String(x.BD_ADDITIVES))
+      : arr(x.MISCS?.MISC).map((a: any) => {
+          const item = additives.find(
+            (i) =>
+              i.id === a.BD_ID ||
+              [i.name, ...i.aliases].some(
+                (name) => name.toLowerCase() === String(a.NAME).toLowerCase(),
+              ),
+          );
+          if (!item)
+            throw new Error(
+              `Unknown additive: ${a.NAME}. Add it to the catalog before importing.`,
+            );
+          const weight =
+            a.AMOUNT_IS_WEIGHT === true ||
+            String(a.AMOUNT_IS_WEIGHT).toLowerCase() === "true";
+          if (
+            !a.BD_UNIT &&
+            (item.guide.unit === "item" || (item.guide.unit === "g") !== weight)
+          )
+            throw new Error(
+              `Cannot infer a compatible amount unit for ${a.NAME}; include the BrewMaster additive fields or convert it explicitly.`,
+            );
+          const stages: Record<string, string> = {
+            mash: "mash",
+            boil: "boil",
+            primary: "fermentation",
+            secondary: "conditioning",
+            bottling: "packaging",
+          };
+          const stage = a.BD_STAGE ?? stages[String(a.USE).toLowerCase()];
+          if (!stage) throw new Error(`Unsupported additive stage: ${a.USE}`);
+          return {
+            id: a.BD_ADDITION_ID || crypto.randomUUID(),
+            ingredientId: item.id,
+            amount:
+              a.BD_AMOUNT !== undefined
+                ? Number(a.BD_AMOUNT)
+                : Number(a.AMOUNT) * 1000,
+            unit: a.BD_UNIT ?? (weight ? "g" : "mL"),
+            stage,
+            time: Number(a.BD_TIME ?? a.TIME ?? 0),
+            timeUnit: a.BD_TIME_UNIT ?? "minutes",
+            notes: String(a.BD_NOTES ?? a.NOTES ?? ""),
+          };
+        }),
     processNotes: x.BD_PROCESS_NOTES
       ? JSON.parse(String(x.BD_PROCESS_NOTES))
       : undefined,
