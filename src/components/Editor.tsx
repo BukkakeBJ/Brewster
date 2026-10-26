@@ -10,6 +10,7 @@ import {
   lToGal,
   L_PER_GAL,
 } from "../engine/calculations";
+import WaterPlanner from "./WaterPlanner";
 import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
 import { Field, Section, Tag } from "./ui";
@@ -30,6 +31,7 @@ export default function Editor({
     fromTemp = (v: number) => (us ? fToC(v) : v);
   return (
     <div className="editor-stack">
+      <WaterPlanner recipe={r} catalog={c} us={us} onChange={set} />
       <Section
         title="Grain bill"
         eyebrow="01 / THE FOUNDATION"
