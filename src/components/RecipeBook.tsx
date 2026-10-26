@@ -27,6 +27,8 @@ import {
 } from "../engine/calculations";
 import { Tag } from "./ui";
 import { SavedProcessNotes } from "./RecipeNotes";
+import FlavorPanel from "./FlavorPanel";
+import { recipeProfile } from "../engine/recipeProfile";
 import { download, exportBeerXML } from "../io";
 export default function RecipeBook({
   saved,
@@ -246,6 +248,7 @@ export default function RecipeBook({
               </article>
             );
           }
+          const profile = recipeProfile(r, c, prediction);
           const expanded = selected === entry.id;
           const y = c.yeasts.find((y) => y.id === r.yeastId)!;
           const total = r.grains.reduce((s, g) => s + g.kg, 0);
@@ -322,6 +325,57 @@ export default function RecipeBook({
                 </div>
                 <Tag tone="objective">CALCULATED</Tag>
               </div>
+              <div className="book-hop-profile">
+                <h3>Hop profile</h3>
+                {profile.hops.length ? (
+                  profile.hops.map((hop) => (
+                    <div key={hop.id}>
+                      <b>{hop.name}</b>
+                      <p>
+                        {hop.additions.map((h, i) => (
+                          <span key={i}>
+                            {i > 0 ? " · " : ""}
+                            {(us ? h.grams / G_PER_OZ : h.grams).toFixed(
+                              us ? 2 : 0,
+                            )}{" "}
+                            {us ? "oz" : "g"} · {h.timing}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No hop additions.</p>
+                )}
+              </div>
+              <div className="book-flavor-profile">
+                <Tag tone="subjective">SUBJECTIVE · FLAVOR ESTIMATE</Tag>
+                <h3>Flavor & aroma</h3>
+                <div className="book-flavor-chips">
+                  {profile.descriptors.map((d) => (
+                    <span key={d.id}>
+                      {d.label} · {d.score.toFixed(1)}/5
+                    </span>
+                  ))}
+                </div>
+                {!profile.descriptors.length && (
+                  <p>
+                    No matching flavor evidence for this recipe’s ingredient
+                    usage.
+                  </p>
+                )}
+                <p>
+                  Body {(profile.flavor.scores.body ?? 0).toFixed(1)}/5 ·
+                  Dryness {(profile.flavor.scores.dryness ?? 0).toFixed(1)}/5 ·
+                  Perceived bitterness{" "}
+                  {(profile.flavor.scores.bitterness ?? 0).toFixed(1)}/5
+                </p>
+                <small>
+                  Brewer-consensus estimate, not a measurement or a verified
+                  commercial beer profile. View recipe for the radar, ingredient
+                  contributions and descriptor sources.
+                </small>
+              </div>
               <div className="book-tags">
                 {r.tags?.map((t) => (
                   <span key={t}>{t}</span>
@@ -362,6 +416,7 @@ export default function RecipeBook({
               </div>
               {expanded && (
                 <div className="book-recipe-details">
+                  <FlavorPanel flavor={profile.flavor} catalog={c} />
                   <div className="book-detail-columns">
                     <div>
                       <h3>Grain bill</h3>

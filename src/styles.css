@@ -2414,3 +2414,12 @@ footer > span:last-child {
   .print-recipe-notes { display: block; }
   .print-recipe-notes h3, .print-recipe-notes h4 { break-after: avoid; }
 }
+
+.book-hop-profile { padding: 1rem 0; border-bottom: 1px solid #e0e4da; }
+.book-hop-profile h3, .book-flavor-profile h3 { font-size: .9rem; margin: .5rem 0; }
+.book-hop-profile b { font-size: .85rem; }
+.book-hop-profile p, .book-flavor-profile p, .book-flavor-profile small { font-size: .75rem; line-height: 1.7; margin: .3rem 0 .65rem; color: #66745a; }
+.book-flavor-profile { margin: 1rem 0; padding: 1rem; background: #f5f0e5; border: 1px solid #e8dfcb; border-radius: 8px; }
+.book-flavor-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.book-flavor-chips span { font-size: .75rem; padding: .3rem .5rem; border-radius: 20px; background: #fffaf0; border: 1px solid #e4dac4; }
+.book-recipe-details .radar { max-width: 100%; height: auto; }
