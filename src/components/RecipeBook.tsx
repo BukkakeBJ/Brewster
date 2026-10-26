@@ -7,6 +7,7 @@ import {
   Download,
   Plus,
 } from "lucide-react";
+import BrandMark from "./BrandMark";
 import type { Catalog, Recipe } from "../engine/types";
 import {
   isCraftRecipe,
@@ -259,6 +260,23 @@ export default function RecipeBook({
               className={"recipe-book-card" + (expanded ? " expanded" : "")}
               key={entry.id}
             >
+              <div className="book-label-art" aria-hidden="true">
+                <span className="label-rule" />
+                <span className="label-kicker">THE BREWMASTER COLLECTION</span>
+                <BrandMark size={72} />
+                <span className="label-title">
+                  {c.styles.find((s) => s.id === r.styleId)?.name ??
+                    "House recipe"}
+                </span>
+                <span className="label-subtitle">
+                  {r.origin?.brewery ?? "YOUR BREWHOUSE"}
+                </span>
+                <span className="label-batch">
+                  {prediction.abv.toFixed(1)}
+                  <small>% ABV · CALCULATED</small>
+                </span>
+                <span className="label-rule" />
+              </div>
               <div className="book-card-heading">
                 <div>
                   <Tag

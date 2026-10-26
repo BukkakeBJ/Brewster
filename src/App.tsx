@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useLayoutEffect, useMemo } from "react";
 import {
-  Wheat,
   SlidersHorizontal,
   NotebookPen,
   BookOpen,
@@ -17,6 +16,8 @@ import {
 } from "lucide-react";
 import { getJson } from "./api";
 import { catalog as baseCatalog } from "./catalog";
+import BrandMark from "./components/BrandMark";
+import StudioHero from "./components/StudioHero";
 import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
 import { recipeSchema } from "./validation";
@@ -172,7 +173,7 @@ export default function App() {
       <aside className="sidebar">
         <a className="brand" href="#" onClick={(e) => e.preventDefault()}>
           <span className="brand-icon">
-            <Wheat size={25} />
+            <BrandMark size={45} />
           </span>
           <span>
             Brew<span className="brand-light">Master</span>
@@ -185,10 +186,11 @@ export default function App() {
             <button
               className={tab === label ? "nav-item active" : "nav-item"}
               key={label}
+              aria-current={tab === label ? "page" : undefined}
               onClick={() => setTab(label)}
             >
               <Icon size={19} />
-              {label}
+              <span className="nav-label">{label}</span>
               {tab === label && <span className="nav-dot" />}
             </button>
           ))}
@@ -222,6 +224,14 @@ export default function App() {
         >
           <Plus size={15} /> New recipe
         </button>
+        <div className="sidebar-botanical" aria-hidden="true">
+          <BrandMark size={190} />
+          <span>
+            BREW SOMETHING
+            <br />
+            <em>worth sharing.</em>
+          </span>
+        </div>
         <div className="sidebar-bottom">
           <span className="tiny-dot" /> Local brewing workspace
           <small>Recipes stay on this Mac.</small>
@@ -262,38 +272,11 @@ export default function App() {
           </div>
         </header>
         <div className="page-content">
-          <div className="page-heading">
-            <div>
-              <div className="eyebrow">
-                A LITTLE SCIENCE. A LOT OF POSSIBILITY.
-              </div>
-              <h1>
-                {tab === "Recipe Editor"
-                  ? "Your next great beer."
-                  : tab === "Design"
-                    ? "What’s your next beer?"
-                    : tab === "Ingredient Library"
-                      ? "Know your ingredients."
-                      : tab === "Recipe Book"
-                        ? "A recipe worth keeping."
-                        : "Learn from every brew."}
-              </h1>
-              <p>
-                {tab === "Recipe Editor"
-                  ? "A recipe is a starting point. Find your balance, one adjustment at a time."
-                  : tab === "Design"
-                    ? "Start with the beer you imagine. Give it a recipe."
-                    : tab === "Ingredient Library"
-                      ? "Measured specifications and sensory opinions, side by side."
-                      : tab === "Recipe Book"
-                        ? "Explore craft brewery recipes and clone-inspired beers. Keep your own experiments alongside them."
-                        : "Connect what you predicted with what ended up in the glass."}
-              </p>
-            </div>
-            <div className="heading-mark">
-              <Wheat size={46} strokeWidth={1} />
-            </div>
-          </div>
+          <StudioHero
+            screen={tab}
+            catalog={catalog}
+            prediction={tab === "Recipe Editor" ? p : undefined}
+          />
           {(error || calculationError) && (
             <div className="alert" role="alert">
               {error || calculationError}
@@ -309,6 +292,9 @@ export default function App() {
           <div hidden={tab !== "Recipe Editor"}>
             <div className="recipe-title-row">
               <div>
+                <div className="recipe-name-label">
+                  YOUR WORKING RECIPE / EDIT & EXPERIMENT
+                </div>
                 <input
                   className="recipe-name"
                   aria-label="Recipe name"
@@ -374,17 +360,6 @@ export default function App() {
                 </button>
               </div>
             </div>
-            <button
-              className="button secondary redesign-button"
-              disabled={!p}
-              onClick={() => {
-                setDesignFromRecipe(structuredClone(recipe));
-                setTab("Design");
-              }}
-            >
-              Adjust targets & get ingredient suggestions
-            </button>
-            <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
             {p && (
               <>
                 <div className="metrics">
@@ -431,6 +406,21 @@ export default function App() {
                     View calculations <ArrowUpRight size={13} />
                   </a>
                 </div>
+              </>
+            )}
+            <button
+              className="button secondary redesign-button"
+              disabled={!p}
+              onClick={() => {
+                setDesignFromRecipe(structuredClone(recipe));
+                setTab("Design");
+              }}
+            >
+              Adjust targets & get ingredient suggestions
+            </button>
+            <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
+            {p && (
+              <>
                 <div className="workbench-grid">
                   <Editor
                     recipe={recipe}
@@ -645,7 +635,7 @@ export default function App() {
             )}
           </div>
           <footer>
-            <Wheat size={16} />
+            <BrandMark size={24} />
             <span>Good beer starts with curiosity.</span>
             <span>BrewMaster / v0.1</span>
           </footer>

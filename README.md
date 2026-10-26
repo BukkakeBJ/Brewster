@@ -192,4 +192,4 @@ Yeast requirement uses the existing ale/lager pitch calculation and recipe pitch
 
 ### Visual design
 
-The BrewMaster interface uses a Canva-developed craft-workbench direction with evergreen navigation, ivory surfaces, amber actions and separate green/amber specification and sensory labels. See [DESIGN.md](DESIGN.md) for the editable Canva concept, palette, responsive behavior and implementation notes. `src/theme.css` applies the visual layer without changing recipe data or brewing calculations.
+The BrewMaster interface uses a Canva-developed brewer’s field-journal direction: an original hop-and-barley vector mark, illustrated editorial headers, beer-label recipe cards, an evergreen numeric panel, oat-paper textures and copper accents. Mobile has a compact brand header and bottom navigation. Explicit green/amber specification and sensory labels remain distinct. See [DESIGN.md](DESIGN.md) for the Canva concepts, artwork, responsive behavior and implementation notes. `src/theme.css` and `src/studio.css` apply the visual layers without changing recipe data or brewing calculations.
