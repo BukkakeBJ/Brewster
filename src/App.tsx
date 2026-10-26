@@ -4,6 +4,8 @@ import {
   SlidersHorizontal,
   NotebookPen,
   BookOpen,
+  BookMarked,
+  Copy,
   FlaskConical,
   Download,
   Save,
@@ -18,6 +20,8 @@ import { catalog as baseCatalog } from "./catalog";
 import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
 import { recipeSchema } from "./validation";
+import RecipeBook from "./components/RecipeBook";
+import { readDraftBank, copyBookRecipe } from "./engine/recipeBook";
 import { defaultRecipe } from "./defaults";
 import type { Recipe, Prediction, BrewLog as Log } from "./engine/types";
 import { beerColor, predict, lToGal } from "./engine/calculations";
@@ -44,6 +48,14 @@ export default function App() {
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
   const [logs, setLogs] = useState<Log[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, Recipe>>(() => {
+    try {
+      return readDraftBank(localStorage.getItem("brew-drafts"));
+    } catch {
+      return {};
+    }
+  });
+  const draftBankRef = useRef(drafts);
   const [prefs, setPrefs] = useState<Preferences>(() => {
     try {
       return {
@@ -89,6 +101,10 @@ export default function App() {
   useLayoutEffect(() => {
     try {
       localStorage.setItem("brew-draft", JSON.stringify(recipe));
+      const next = { ...draftBankRef.current, [recipe.id]: recipe };
+      localStorage.setItem("brew-drafts", JSON.stringify(next));
+      draftBankRef.current = next;
+      setDrafts(next);
     } catch {
       setError(
         "Draft backup unavailable; save the recipe to SQLite before leaving.",
@@ -119,19 +135,24 @@ export default function App() {
   } catch (e) {
     calculationError = String(e);
   }
-  async function save() {
+  async function save(asCopy = false) {
+    const toSave = asCopy
+      ? copyBookRecipe(recipe, crypto.randomUUID())
+      : recipe;
     try {
       const response = await fetch(
-        "/api/recipes/" + encodeURIComponent(recipe.id),
+        "/api/recipes/" + encodeURIComponent(toSave.id),
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(recipe),
+          body: JSON.stringify(toSave),
         },
       );
       if (!response.ok) throw new Error((await response.json()).error);
-      setSaved((s) => [recipe, ...s.filter((r) => r.id !== recipe.id)]);
-      notify("Recipe saved to SQLite");
+      const stored = await response.json();
+      setSaved((s) => [stored, ...s.filter((r) => r.id !== stored.id)]);
+      if (asCopy) setRecipe(stored);
+      notify("Recipe saved to your Recipe Book");
     } catch (e) {
       setError(String(e));
     }
@@ -140,6 +161,7 @@ export default function App() {
     { label: "Design", icon: SlidersHorizontal },
     { label: "Recipe Editor", icon: FlaskConical },
     { label: "Ingredient Library", icon: BookOpen },
+    { label: "Recipe Book", icon: BookMarked },
     { label: "Brew Log", icon: NotebookPen },
   ];
   return (
@@ -171,12 +193,12 @@ export default function App() {
         <div className="sidebar-label saved-label">
           YOUR RECIPES <span>{saved.length}</span>
         </div>
-        {saved.map((r) => (
+        {saved.slice(0, 6).map((r) => (
           <button
             className="saved-recipe"
             key={r.id}
             onClick={() => {
-              setRecipe(r);
+              setRecipe(drafts[r.id] ?? r);
               setTab("Recipe Editor");
             }}
           >
@@ -231,7 +253,9 @@ export default function App() {
                     ? "What’s your next beer?"
                     : tab === "Ingredient Library"
                       ? "Know your ingredients."
-                      : "Learn from every brew."}
+                      : tab === "Recipe Book"
+                        ? "A recipe worth keeping."
+                        : "Learn from every brew."}
               </h1>
               <p>
                 {tab === "Recipe Editor"
@@ -240,7 +264,9 @@ export default function App() {
                     ? "Start with the beer you imagine. Give it a recipe."
                     : tab === "Ingredient Library"
                       ? "Measured specifications and sensory opinions, side by side."
-                      : "Connect what you predicted with what ended up in the glass."}
+                      : tab === "Recipe Book"
+                        ? "Find a starting point. Save your experiments. Build your own brewing collection."
+                        : "Connect what you predicted with what ended up in the glass."}
               </p>
             </div>
             <div className="heading-mark">
@@ -319,11 +345,55 @@ export default function App() {
                     }}
                   />
                 </label>
-                <button className="button primary" onClick={save}>
+                <button className="button secondary" onClick={() => save(true)}>
+                  <Copy size={15} /> Save a copy
+                </button>
+                <button className="button primary" onClick={() => save()}>
                   <Save size={15} /> Save recipe
                 </button>
               </div>
             </div>
+            <details className="recipe-note-editor">
+              <summary>Recipe description, notes & source</summary>
+              <label className="field">
+                <span>Recipe description</span>
+                <textarea
+                  rows={2}
+                  maxLength={1000}
+                  value={recipe.description ?? ""}
+                  placeholder="Describe your beer for the Recipe Book…"
+                  onChange={(e) =>
+                    setRecipe({ ...recipe, description: e.target.value })
+                  }
+                />
+              </label>
+              <label className="field">
+                <span>Brewing notes</span>
+                <textarea
+                  rows={4}
+                  maxLength={20000}
+                  value={recipe.notes ?? ""}
+                  onChange={(e) =>
+                    setRecipe({ ...recipe, notes: e.target.value })
+                  }
+                />
+              </label>
+              {recipe.origin && (
+                <p className="muted">
+                  Source: {recipe.origin.author} · {recipe.origin.title}.{" "}
+                  {recipe.origin.adaptations}{" "}
+                  {recipe.origin.url && (
+                    <a
+                      href={recipe.origin.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Published source ↗
+                    </a>
+                  )}
+                </p>
+              )}
+            </details>
             {p && (
               <>
                 <div className="metrics">
@@ -499,6 +569,26 @@ export default function App() {
                 )}
               </>
             )}
+          </div>
+          <div hidden={tab !== "Recipe Book"}>
+            <RecipeBook
+              saved={saved}
+              drafts={drafts}
+              catalog={baseCatalog}
+              us={us}
+              onOpen={(r) => {
+                setRecipe(r);
+                setTab("Recipe Editor");
+              }}
+              onNew={() => {
+                setRecipe({
+                  ...structuredClone(defaultRecipe),
+                  id: crypto.randomUUID(),
+                  name: "Untitled recipe",
+                });
+                setTab("Recipe Editor");
+              }}
+            />
           </div>
           <div hidden={tab !== "Ingredient Library"}>
             <Library catalog={libraryCatalog} us={us} />

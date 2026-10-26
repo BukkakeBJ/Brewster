@@ -1,0 +1,424 @@
+[
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 66,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "id": "starter-first-light",
+    "name": "First Light Pale Ale",
+    "styleId": "american-pale-ale",
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.2
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.25
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-cascade",
+        "grams": 25,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-citra",
+        "grams": 30,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-citra",
+        "grams": 45,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A simple pale-ale canvas for exploring the balance between malt and late hop additions.",
+    "tags": ["pale ale", "beginner", "citrus"],
+    "notes": "Use this as a first comparison recipe: change one hop or malt at a time and record the difference. Dry hop for a 3-day contact period. Suggested flavor direction is subjective, not a tasting result.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 65,
+    "mashMinutes": 60,
+    "fermentC": 12,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.6,
+    "pitchMultiplier": 1,
+    "id": "starter-garden-pils",
+    "name": "Garden Pils",
+    "styleId": "german-pilsner-pils",
+    "yeastId": "y-fermentis-w-34-70-saflager-w-34-70",
+    "grains": [
+      {
+        "ingredientId": "m-briess-pilsen-malt",
+        "kg": 4.3
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 18,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-saaz-cz",
+        "grams": 25,
+        "use": "boil",
+        "minutes": 10
+      }
+    ],
+    "description": "A pale lager starting point with a short ingredient list and restrained late hops.",
+    "tags": ["lager", "pilsner", "noble hops"],
+    "notes": "Plan for appropriate lager fermentation, a diacetyl assessment and cold conditioning. This app stores one fermentation temperature; any temperature ramp and conditioning schedule must be managed separately.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 67,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 1.8,
+    "pitchMultiplier": 1,
+    "id": "starter-copper-bitter",
+    "name": "Copper Lane Bitter",
+    "styleId": "special-best-premium-bitter",
+    "yeastId": "y-fermentis-s-04-safale-s-04",
+    "grains": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "kg": 3.5
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.2
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-east-kent-goldings",
+        "grams": 30,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-fuggle",
+        "grams": 15,
+        "use": "boil",
+        "minutes": 10
+      }
+    ],
+    "description": "An English-ale starter that leaves space to explore a malt-led balance.",
+    "tags": ["English ale", "bitter", "malt-led"],
+    "notes": "Keep changes small while comparing base malt, caramel percentage and carbonation. The flavor description is a formulation intention, not measured sensory evidence.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 67,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "id": "starter-nightfall-porter",
+    "name": "Nightfall Porter",
+    "styleId": "robust-porter",
+    "yeastId": "y-fermentis-s-04-safale-s-04",
+    "grains": [
+      {
+        "ingredientId": "m-simpsons-maris-otter",
+        "kg": 4.1
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.3
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "kg": 0.25
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 20,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-east-kent-goldings",
+        "grams": 20,
+        "use": "boil",
+        "minutes": 10
+      }
+    ],
+    "description": "A dark-ale framework for learning how small roast additions affect color and balance.",
+    "tags": ["porter", "dark", "roast"],
+    "notes": "Roast is influential even at a modest grist percentage. Check the calculated color and the contextual roast/burnt descriptors after any adjustment.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 68,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2,
+    "pitchMultiplier": 1,
+    "id": "starter-oat-stout",
+    "name": "Fireside Oat Stout",
+    "styleId": "oatmeal-stout",
+    "yeastId": "y-fermentis-s-04-safale-s-04",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 3.8
+      },
+      {
+        "ingredientId": "m-briess-oat-flakes",
+        "kg": 0.45
+      },
+      {
+        "ingredientId": "m-briess-2-row-chocolate-malt",
+        "kg": 0.2
+      },
+      {
+        "ingredientId": "m-briess-roasted-barley",
+        "kg": 0.2
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-east-kent-goldings",
+        "grams": 35,
+        "use": "boil",
+        "minutes": 60
+      }
+    ],
+    "description": "A stout starting point that pairs a small oat addition with a measured approach to dark grains.",
+    "tags": ["stout", "oats", "dark"],
+    "notes": "Keep enough enzymatic base malt to convert the adjunct portion. Water, mash pH and actual fermentation can change the perceived roast and texture beyond this model.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 65,
+    "mashMinutes": 60,
+    "fermentC": 20,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.8,
+    "pitchMultiplier": 1,
+    "id": "starter-wheat-field",
+    "name": "Wheat Field Ale",
+    "styleId": "weizen-weissbier",
+    "yeastId": "y-fermentis-wb-06-safale-wb-06",
+    "grains": [
+      {
+        "ingredientId": "m-briess-wheat-malt-white",
+        "kg": 2.4
+      },
+      {
+        "ingredientId": "m-briess-pilsen-malt",
+        "kg": 2
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-hallertau-mittelfr-h",
+        "grams": 20,
+        "use": "boil",
+        "minutes": 60
+      }
+    ],
+    "description": "A wheat-beer canvas for exploring fermentation-driven flavor with a simple hop schedule.",
+    "tags": ["wheat beer", "fermentation", "light"],
+    "notes": "Wheat-heavy mashes may need lautering support. The recipe uses one mash rest and one fermentation set point; it is not a complete traditional multi-step wheat-beer process.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 20,
+    "efficiency": 72,
+    "mashC": 66,
+    "mashMinutes": 60,
+    "fermentC": 19,
+    "boilMinutes": 60,
+    "boilOffLPerHour": 3,
+    "lossL": 1,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "id": "starter-westward-ipa",
+    "name": "Westward IPA",
+    "styleId": "american-ipa",
+    "yeastId": "y-fermentis-us-05-safale-us-05",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 5
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-40l",
+        "kg": 0.2
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-magnum-gr",
+        "grams": 25,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-centennial",
+        "grams": 35,
+        "use": "whirlpool",
+        "minutes": 20
+      },
+      {
+        "ingredientId": "h-simcoe",
+        "grams": 60,
+        "use": "dry hop",
+        "minutes": 4320
+      }
+    ],
+    "description": "A hop-forward recipe to explore kettle bitterness, whirlpool flavor and dry-hop aroma separately.",
+    "tags": ["IPA", "hoppy", "pine"],
+    "notes": "Check your lot alpha acids and equipment utilization. Start with the written dry-hop trial and compare against your tasting notes before increasing dose.",
+    "origin": {
+      "kind": "original-starter",
+      "title": "Brew Designer starter collection",
+      "author": "Brew Designer",
+      "adaptations": "Original educational formulation. Not a brewery recipe, competition winner or validated brew trial. Calculated values depend on your equipment and ingredient lot."
+    }
+  },
+  {
+    "batchL": 18.92705892,
+    "efficiency": 72,
+    "mashC": 68.33333333333333,
+    "mashMinutes": 60,
+    "fermentC": 20,
+    "boilMinutes": 90,
+    "boilOffLPerHour": 3,
+    "lossL": 0,
+    "whirlpoolFactor": 0.15,
+    "carbonation": 2.4,
+    "pitchMultiplier": 1,
+    "id": "starter-sierra-cascade",
+    "name": "Cascade Pale Ale \u00b7 Sierra Nevada adaptation",
+    "styleId": "american-pale-ale",
+    "yeastId": "y-white-labs-wlp001-california-ale",
+    "grains": [
+      {
+        "ingredientId": "m-briess-2-row-brewers-malt",
+        "kg": 4.140000000000001
+      },
+      {
+        "ingredientId": "m-briess-2-row-caramel-malt-60l",
+        "kg": 0.36
+      }
+    ],
+    "hops": [
+      {
+        "ingredientId": "h-cascade",
+        "grams": 14.1747615625,
+        "use": "boil",
+        "minutes": 90
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 21.26214234375,
+        "use": "boil",
+        "minutes": 60
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 56.69904625,
+        "use": "boil",
+        "minutes": 30
+      },
+      {
+        "ingredientId": "h-cascade",
+        "grams": 56.69904625,
+        "use": "boil",
+        "minutes": 0
+      }
+    ],
+    "description": "An attributed adaptation of the brewery\u2019s published homebrew recipe, with its grain ratios and Cascade addition schedule retained.",
+    "tags": ["published adaptation", "pale ale", "single hop"],
+    "notes": "Source specifies 92% two-row and 8% caramel 60L rather than a total grain weight; this adaptation assumes 4.5 kg total and 72% efficiency. The source\u2019s 5 US gallon batch is represented as post-boil kettle volume, with zero transfer loss for this template. Uses catalog Briess malts and WLP001 for the source\u2019s generic two-row, caramel and California ale yeast. Cascade weights and 90/60/30/0-minute timings follow the source; the zero-minute addition is flameout, with no assumed hop-stand duration. Source calls for whole cones; this engine has no pellet/cone adjustment. A 170\u00b0F (76.7\u00b0C), 5-minute mash-out is written here for manual use because the model stores one mash rest. Boil-off, carbonation and pitch settings are app assumptions. Calculated values are this app\u2019s predictions, not the brewery\u2019s specifications.",
+    "origin": {
+      "kind": "published-adaptation",
+      "title": "Sierra Nevada \u00b7 Pale Ale Homebrew Recipe",
+      "author": "Sierra Nevada Brewing Co.",
+      "url": "https://sierranevada.com/blog/our-beer/pale-ale-homebrew-recipe",
+      "accessed": "2026-10-25",
+      "adaptations": "Grain ratios and hop masses/timings retained. Total grist, catalog ingredient mapping, efficiency, volume interpretation and equipment settings are app assumptions. Mash-out retained in notes. No brewery validation or sensory equivalence is claimed."
+    }
+  }
+]

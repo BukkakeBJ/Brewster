@@ -33,14 +33,27 @@ afterAll(async () => {
     } catch {}
 });
 it("persists recipes and returns actionable validation errors", async () => {
+  const described = {
+    ...r,
+    description: "Recipe book description",
+    notes: "Brew notes",
+    tags: ["test"],
+    origin: {
+      kind: "original-starter",
+      title: "Test source",
+      author: "Brew Designer",
+    },
+  };
   const good = await fetch(api + "/api/recipes/" + r.id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(r),
+    body: JSON.stringify(described),
   });
   expect(good.status).toBe(200);
   const list = await (await fetch(api + "/api/recipes")).json();
   expect(list[0].grains).toEqual(r.grains);
+  expect(list[0].description).toBe(described.description);
+  expect(list[0].origin).toEqual(described.origin);
   const bad = await fetch(api + "/api/recipes/" + r.id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

@@ -5,6 +5,23 @@ export const recipeSchema = z
     id: z.string().min(1).max(160),
     name: z.string().min(1).max(200),
     styleId: z.string(),
+    description: z.string().max(1000).optional(),
+    notes: z.string().max(20000).optional(),
+    tags: z.array(z.string().max(60)).max(20).optional(),
+    origin: z
+      .object({
+        kind: z.enum(["original-starter", "published-adaptation"]),
+        title: z.string().max(500),
+        author: z.string().max(300),
+        url: z
+          .string()
+          .url()
+          .regex(/^https?:\/\//)
+          .optional(),
+        accessed: z.string().optional(),
+        adaptations: z.string().max(10000).optional(),
+      })
+      .optional(),
     batchL: n(0.5, 10000),
     efficiency: n(1, 100),
     mashC: n(40, 85),

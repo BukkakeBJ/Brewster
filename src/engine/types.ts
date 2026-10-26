@@ -103,10 +103,22 @@ export interface HopAddition {
   minutes: number;
   alpha?: number;
 }
+export interface RecipeOrigin {
+  kind: "original-starter" | "published-adaptation";
+  title: string;
+  author: string;
+  url?: string;
+  accessed?: string;
+  adaptations?: string;
+}
 export interface Recipe {
   id: string;
   name: string;
   styleId: string;
+  description?: string;
+  notes?: string;
+  tags?: string[];
+  origin?: RecipeOrigin;
   batchL: number;
   efficiency: number;
   mashC: number;
