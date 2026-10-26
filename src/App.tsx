@@ -232,16 +232,34 @@ export default function App() {
           <span>
             YOUR BREWING WORKBENCH <span className="breadcrumb">/ {tab}</span>
           </span>
-          <button
+          <div
             className="unit-toggle"
-            onClick={() => {
-              setUs(!us);
-              localStorage.setItem("brew-units", us ? "metric" : "us");
-            }}
+            role="group"
+            aria-label="Measurement units"
           >
-            <span className={!us ? "selected" : ""}>Metric</span>
-            <span className={us ? "selected" : ""}>US</span>
-          </button>
+            {([false, true] as const).map((imperial) => (
+              <button
+                type="button"
+                key={String(imperial)}
+                aria-pressed={us === imperial}
+                className={us === imperial ? "selected" : ""}
+                title={
+                  imperial
+                    ? "US gallons, pounds, ounces and °F"
+                    : "Liters, kilograms, grams and °C"
+                }
+                onClick={() => {
+                  setUs(imperial);
+                  localStorage.setItem(
+                    "brew-units",
+                    imperial ? "us" : "metric",
+                  );
+                }}
+              >
+                {imperial ? "Imperial" : "Metric"}
+              </button>
+            ))}
+          </div>
         </header>
         <div className="page-content">
           <div className="page-heading">

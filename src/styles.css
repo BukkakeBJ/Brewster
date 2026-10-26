@@ -234,7 +234,7 @@ main {
   font-size: 10px;
   letter-spacing: 0;
 }
-.unit-toggle span {
+.unit-toggle button {
   padding: 6px 11px;
 }
 .unit-toggle .selected {
@@ -2463,3 +2463,13 @@ footer > span:last-child {
 .flavor-slider-row .field-label > label { display: block; font-size: inherit; }
 @media (pointer: coarse) { .info-tip-trigger { width: 30px; height: 30px; } }
 @media print { .info-tip-anchor, .info-tip-panel { display: none !important; } }
+
+.unit-toggle { flex-shrink: 0; background: #f7f8f1; }
+.unit-toggle button { min-height: 32px; }
+.unit-toggle button:focus-visible { outline: 2px solid #476346; outline-offset: 2px; }
+@media (max-width: 600px) {
+  .unit-toggle { position: fixed; top: 16px; right: 16px; z-index: 30; font-size: 10px; }
+  .unit-toggle button { padding: 6px 8px; }
+  .brand { font-size: 16px; gap: 6px; }
+  .brand small { font-size: 6px; letter-spacing: 1px; }
+}
