@@ -1,7 +1,22 @@
 import seeds from "../../data/recipes.json";
+import nonBeerStyles from "../../data/non-beer-styles.json";
 import type { Catalog, Recipe } from "./types";
 import { recipeSchema } from "../validation";
 export const starterRecipes: Recipe[] = seeds.map((r) => recipeSchema.parse(r));
+/** Coverage is based on shipped recipes, independent of drafts or active UI filters.
+ * New catalog entries count as beer unless explicitly classified as non-beer. */
+export function beerStyleCoverage(
+  c: Catalog,
+  recipes: Recipe[] = starterRecipes,
+) {
+  return c.styles
+    .filter((s) => !nonBeerStyles.includes(s.id))
+    .map((style) => ({
+      style,
+      recipes: recipes.filter((r) => r.styleId === style.id),
+    }))
+    .sort((a, b) => a.style.name.localeCompare(b.style.name));
+}
 export interface BookEntry {
   id: string;
   recipe: Recipe;

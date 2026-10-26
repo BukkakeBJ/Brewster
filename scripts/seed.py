@@ -77,5 +77,8 @@ for group,items in [('malts',malts),('hops',hops),('yeasts',yeasts)]:
  for item in items:item.update(overrides.get(group,{}).get(item['id'],{}))
 for ingredient_id,replacements in overrides.get('descriptorReplacements',{}).items():
  des=[d for d in des if d['ingredientId']!=ingredient_id]+replacements
+# Correct legacy display-name encoding while preserving stable IDs.
+style_names = {'bi-re-de-garde': 'Bière de Garde', 'd-sseldorf-altbier': 'Düsseldorf Altbier', 'k-lsch': 'Kölsch', 'oktoberfest-m-rzen': 'Oktoberfest/Märzen'}
+for style in styles: style['name'] = style_names.get(style['id'], style['name'])
 for name,value in [('malts',malts),('hops',hops),('yeasts',yeasts),('descriptors',des),('vocabulary',vocab),('styles',styles)]:
  (D/(name+'.json')).write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\n');print(name,len(value))

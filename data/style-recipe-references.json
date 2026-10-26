@@ -1,0 +1,317 @@
+{
+  "american-barleywine": {
+    "code": "19C",
+    "brewery": "Sierra Nevada",
+    "beer": "Bigfoot"
+  },
+  "american-brown-ale": {
+    "code": "10C",
+    "brewery": "Big Sky",
+    "beer": "Moose Drool Brown Ale"
+  },
+  "american-stout": {
+    "code": "13E",
+    "brewery": "Deschutes",
+    "beer": "Obsidian Stout"
+  },
+  "american-wheat-or-rye-beer": {
+    "code": "6D",
+    "brewery": "Bell’s",
+    "beer": "Oberon"
+  },
+  "baltic-porter": {
+    "code": "12C",
+    "brewery": "Southampton",
+    "beer": "Imperial Baltic Porter"
+  },
+  "belgian-blond-ale": {
+    "code": "18A",
+    "brewery": "La Trappe",
+    "beer": "Blond"
+  },
+  "belgian-dark-strong-ale": {
+    "code": "18E",
+    "brewery": "St. Bernardus",
+    "beer": "Abt 12"
+  },
+  "belgian-dubbel": {
+    "code": "18B",
+    "brewery": "New Belgium",
+    "beer": "Abbey Belgian Style Ale"
+  },
+  "belgian-golden-strong-ale": {
+    "code": "18D",
+    "brewery": "Russian River",
+    "beer": "Damnation"
+  },
+  "belgian-pale-ale": {
+    "code": "16B",
+    "brewery": "Russian River",
+    "beer": "Perdition"
+  },
+  "belgian-tripel": {
+    "code": "18C",
+    "brewery": "Victory",
+    "beer": "Golden Monkey"
+  },
+  "berliner-weisse": {
+    "code": "17A",
+    "brewery": "Southampton",
+    "beer": "Berliner Weisse"
+  },
+  "bi-re-de-garde": {
+    "code": "16D",
+    "brewery": "Southampton",
+    "beer": "Bière de Garde"
+  },
+  "blonde-ale": {
+    "code": "6B",
+    "brewery": "Russian River",
+    "beer": "Aud Blonde"
+  },
+  "bohemian-pilsener": {
+    "code": "2B",
+    "brewery": "Dock Street",
+    "beer": "Bohemian Pilsner"
+  },
+  "brown-porter": {
+    "code": "12A",
+    "brewery": "Fuller’s",
+    "beer": "London Porter"
+  },
+  "california-common-beer": {
+    "code": "7B",
+    "brewery": "Anchor",
+    "beer": "Steam"
+  },
+  "classic-rauchbier": {
+    "code": "22A",
+    "brewery": "Schlenkerla",
+    "beer": "Rauchbier Märzen"
+  },
+  "cream-ale": {
+    "code": "6A",
+    "brewery": "New Glarus",
+    "beer": "Spotted Cow"
+  },
+  "dark-american-lager": {
+    "code": "4A",
+    "brewery": "Shiner",
+    "beer": "Bock"
+  },
+  "doppelbock": {
+    "code": "5C",
+    "brewery": "Bell’s",
+    "beer": "Consecrator"
+  },
+  "dortmunder-export": {
+    "code": "1E",
+    "brewery": "Great Lakes",
+    "beer": "Dortmunder Gold"
+  },
+  "dry-stout": {
+    "code": "13A",
+    "brewery": "O’Hara’s",
+    "beer": "Celtic Stout"
+  },
+  "dunkelweizen": {
+    "code": "15B",
+    "brewery": "Ayinger",
+    "beer": "Ur-Weisse"
+  },
+  "d-sseldorf-altbier": {
+    "code": "7C",
+    "brewery": "Zum Uerige",
+    "beer": "Altbier"
+  },
+  "eisbock": {
+    "code": "5D",
+    "brewery": "Capital",
+    "beer": "Eisphyre"
+  },
+  "english-barleywine": {
+    "code": "19B",
+    "brewery": "North Coast",
+    "beer": "Old Stock Ale (aged)"
+  },
+  "english-ipa": {
+    "code": "14A",
+    "brewery": "Brooklyn",
+    "beer": "East India Pale Ale"
+  },
+  "extra-special-strong-bitter-english-pale-ale": {
+    "code": "8C",
+    "brewery": "Fuller’s",
+    "beer": "ESB"
+  },
+  "flanders-brown-ale-oud-bruin": {
+    "code": "17C",
+    "brewery": "Liefmans",
+    "beer": "Goudenband"
+  },
+  "flanders-red-ale": {
+    "code": "17B",
+    "brewery": "New Belgium",
+    "beer": "La Folie"
+  },
+  "foreign-extra-stout": {
+    "code": "13D",
+    "brewery": "Guinness",
+    "beer": "Foreign Extra Stout"
+  },
+  "fruit-lambic": {
+    "code": "17F",
+    "brewery": "Cantillon",
+    "beer": "Kriek"
+  },
+  "gueuze": {
+    "code": "17E",
+    "brewery": "Boon",
+    "beer": "Oude Gueuze"
+  },
+  "irish-red-ale": {
+    "code": "9D",
+    "brewery": "Boulevard",
+    "beer": "Irish Ale"
+  },
+  "k-lsch": {
+    "code": "6C",
+    "brewery": "Saint Arnold",
+    "beer": "Fancy Lawnmower"
+  },
+  "lite-american-lager": {
+    "code": "1A",
+    "brewery": "Samuel Adams",
+    "beer": "Light"
+  },
+  "maibock-helles-bock": {
+    "code": "5A",
+    "brewery": "Smuttynose",
+    "beer": "Maibock"
+  },
+  "mild": {
+    "code": "11A",
+    "brewery": "Motor City Brewing Works",
+    "beer": "Ghettoblaster"
+  },
+  "munich-dunkel": {
+    "code": "4B",
+    "brewery": "Penn",
+    "beer": "Dark Lager"
+  },
+  "munich-helles": {
+    "code": "1D",
+    "brewery": "Stoudt’s",
+    "beer": "Gold Lager"
+  },
+  "northern-english-brown-ale": {
+    "code": "11C",
+    "brewery": "Avery",
+    "beer": "Ellie’s Brown Ale"
+  },
+  "northern-german-altbier": {
+    "code": "7A",
+    "brewery": "Alaskan",
+    "beer": "Amber"
+  },
+  "oktoberfest-m-rzen": {
+    "code": "3B",
+    "brewery": "Great Lakes",
+    "beer": "Oktoberfest"
+  },
+  "old-ale": {
+    "code": "19A",
+    "brewery": "Founders",
+    "beer": "Curmudgeon"
+  },
+  "other-smoked-beer": {
+    "code": "22B",
+    "brewery": "Alaskan",
+    "beer": "Smoked Porter"
+  },
+  "premium-american-lager": {
+    "code": "1C",
+    "brewery": "Full Sail",
+    "beer": "Session Premium Lager"
+  },
+  "roggenbier-german-rye-beer": {
+    "code": "15D",
+    "brewery": "Bürgerbräu Wolznacher",
+    "beer": "Roggenbier"
+  },
+  "russian-imperial-stout": {
+    "code": "13F",
+    "brewery": "North Coast",
+    "beer": "Old Rasputin Imperial Stout"
+  },
+  "saison": {
+    "code": "16C",
+    "brewery": "Ommegang",
+    "beer": "Hennepin"
+  },
+  "schwarzbier-black-beer": {
+    "code": "4C",
+    "brewery": "Sprecher",
+    "beer": "Black Bavarian"
+  },
+  "scottish-export-80": {
+    "code": "9C",
+    "brewery": "Orkney",
+    "beer": "Dark Island"
+  },
+  "scottish-heavy-70": {
+    "code": "9B",
+    "brewery": "Orkney",
+    "beer": "Raven Ale"
+  },
+  "scottish-light-60": {
+    "code": "9A",
+    "brewery": "Belhaven",
+    "beer": "60/-"
+  },
+  "southern-english-brown": {
+    "code": "11B",
+    "brewery": "Harvey’s",
+    "beer": "Nut Brown Ale"
+  },
+  "standard-american-lager": {
+    "code": "1B",
+    "brewery": "Pabst",
+    "beer": "Blue Ribbon"
+  },
+  "standard-ordinary-bitter": {
+    "code": "8A",
+    "brewery": "Fuller’s",
+    "beer": "Chiswick Bitter"
+  },
+  "straight-unblended-lambic": {
+    "code": "17D",
+    "brewery": "Cantillon",
+    "beer": "Grand Cru Bruocsella"
+  },
+  "strong-scotch-ale": {
+    "code": "9E",
+    "brewery": "Founders",
+    "beer": "Dirty Bastard"
+  },
+  "traditional-bock": {
+    "code": "5B",
+    "brewery": "Great Lakes",
+    "beer": "Rockefeller Bock"
+  },
+  "vienna-lager": {
+    "code": "3A",
+    "brewery": "Great Lakes",
+    "beer": "Eliot Ness"
+  },
+  "weizenbock": {
+    "code": "15C",
+    "brewery": "Victory",
+    "beer": "Moonglow Weizenbock"
+  },
+  "witbier": {
+    "code": "16A",
+    "brewery": "Allagash",
+    "beer": "White"
+  }
+}

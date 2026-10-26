@@ -10,6 +10,7 @@ import {
 import type { Catalog, Recipe } from "../engine/types";
 import {
   isCraftRecipe,
+  beerStyleCoverage,
   recipeOriginLabel,
   recipeBookEntries,
   filterBook,
@@ -42,7 +43,7 @@ export default function RecipeBook({
   onNew: () => void;
 }) {
   const [query, setQuery] = useState(""),
-    [collection, setCollection] = useState("craft"),
+    [collection, setCollection] = useState("starter"),
     [brewery, setBrewery] = useState(""),
     [originKind, setOriginKind] = useState(""),
     [styleId, setStyleId] = useState(""),
@@ -77,7 +78,21 @@ export default function RecipeBook({
         .filter((s): s is string => !!s),
     ),
   ].sort();
-  const styleIds = [...new Set(entries.map((e) => e.recipe.styleId))];
+  const coverage = beerStyleCoverage(c);
+  const covered = coverage.filter((s) => s.recipes.length > 0).length;
+  const styleIds = [...new Set(entries.map((e) => e.recipe.styleId))].sort(
+    (a, b) =>
+      (c.styles.find((s) => s.id === a)?.name ?? a).localeCompare(
+        c.styles.find((s) => s.id === b)?.name ?? b,
+      ),
+  );
+  const browseStyle = (id = "") => {
+    setCollection("starter");
+    setStyleId(id);
+    setBrewery("");
+    setOriginKind("");
+    setQuery("");
+  };
   const open = (e: BookEntry, copy = false) =>
     onOpen(copy ? copyBookRecipe(e.recipe, crypto.randomUUID()) : e.recipe);
   return (
@@ -89,7 +104,9 @@ export default function RecipeBook({
             Explore familiar brewery beers, published clone recipes and
             independent house approximations. Source badges tell you which is
             which. Your own saved recipes and drafts remain in their
-            collections.
+            collections. Every beer style in the catalog has a starting recipe;
+            historical brewery inspirations are labeled separately from
+            published formulas.
           </p>
         </div>
         <button className="button primary" onClick={onNew}>
@@ -99,6 +116,7 @@ export default function RecipeBook({
       <div className="book-tabs" role="group" aria-label="Recipe collections">
         {[
           ["all", "All recipes"],
+          ["starter", "Style collection"],
           ["craft", "Craft & clones"],
           ["mine", "My recipes"],
           ["draft", "Drafts"],
@@ -113,6 +131,32 @@ export default function RecipeBook({
           </button>
         ))}
       </div>
+      <details className="panel book-coverage">
+        <summary>
+          {covered} of {coverage.length} beer styles covered · Browse by style
+        </summary>
+        <p className="muted">
+          Coverage includes all beer styles in this app’s legacy reference
+          catalog. Cider, mead, perry and honey hybrids are separate. Known
+          brewery examples are historical inspirations; original house starters
+          fill gaps without claiming a brewery formula.
+        </p>
+        <button className="text-button" onClick={() => browseStyle()}>
+          Show all style recipes
+        </button>
+        <div className="book-style-list">
+          {coverage.map(({ style, recipes }) => (
+            <button
+              className="text-button"
+              key={style.id}
+              onClick={() => browseStyle(style.id)}
+            >
+              {style.name} · {recipes.length} recipe
+              {recipes.length === 1 ? "" : "s"}
+            </button>
+          ))}
+        </div>
+      </details>
       <div className="book-search">
         <Search size={17} />
         <input
@@ -252,6 +296,13 @@ export default function RecipeBook({
                 r.origin.kind !== "original-starter" && (
                   <Tag>{recipeOriginLabel(r)}</Tag>
                 )}
+              {r.tags?.includes("special process") && (
+                <p className="muted" role="note">
+                  Base beer estimates only. Follow the brewing notes for
+                  additions, souring, aging, blending or concentration; those
+                  effects are outside the calculations.
+                </p>
+              )}
               <div className="book-stats">
                 <div>
                   <strong>
@@ -418,7 +469,7 @@ export default function RecipeBook({
                       {r.origin.url && (
                         <a href={r.origin.url} target="_blank" rel="noreferrer">
                           {r.origin.kind === "clone-inspired"
-                            ? "Read brewery product reference ↗"
+                            ? "Read source reference ↗"
                             : "Read published recipe ↗"}
                         </a>
                       )}
