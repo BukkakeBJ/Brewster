@@ -20,7 +20,7 @@ export default function WaterPlanner({
   us: boolean;
   onChange: (r: Recipe) => void;
 }) {
-  const [waterL, setWaterL] = useState(30),
+  const [waterL, setWaterL] = useState(5 * L_PER_GAL),
     [absorption, setAbsorption] = useState(0.8),
     [packLossL, setPackLossL] = useState(0.5),
     [bottleMl, setBottleMl] = useState(330),
