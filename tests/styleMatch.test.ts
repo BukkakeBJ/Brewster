@@ -2,6 +2,7 @@ import { it, expect } from "vitest";
 import { catalog as c } from "../src/catalog";
 import { defaultTarget as t } from "../src/defaults";
 import {
+  selectDesignStyle,
   closestStyles,
   hasComparableStyleRanges,
   matchStyleToTargets,
@@ -93,4 +94,25 @@ it("provides explanations for the full vocabulary and numeric design controls", 
     expect(
       (help.fields as Record<string, string>)[key]?.length,
     ).toBeGreaterThan(40);
+});
+
+it("keeps ingredient choices and the complete design brief when overriding an automatic style", () => {
+  const brief = {
+    ...t,
+    abv: 10,
+    ibu: 75,
+    srm: 35,
+    hopChoices: ["h-citra", "h-mosaic"],
+    baseMaltChoice: "chosen-malt",
+    yeastChoice: "chosen-yeast",
+  };
+  const automatic = matchStyleToTargets(brief, c);
+  expect(automatic.styleId).toBe("russian-imperial-stout");
+  const before = structuredClone(automatic);
+  for (const styleId of ["american-ipa", "saison", ""]) {
+    const manual = selectDesignStyle(automatic, styleId);
+    expect(manual.styleId).toBe(styleId);
+    expect({ ...manual, styleId: automatic.styleId }).toEqual(before);
+  }
+  expect(automatic).toEqual(before);
 });

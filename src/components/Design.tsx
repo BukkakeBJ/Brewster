@@ -7,7 +7,11 @@ import { Field, Section, Tag, HelpLabel, InfoTip } from "./ui";
 import { Radar } from "./FlavorPanel";
 import { L_PER_GAL, lToGal, predict } from "../engine/calculations";
 import designHelp from "../../data/design-help.json";
-import { closestStyles, matchStyleToTargets } from "../engine/styleMatch";
+import {
+  closestStyles,
+  matchStyleToTargets,
+  selectDesignStyle,
+} from "../engine/styleMatch";
 import IngredientMatches from "./IngredientMatches";
 import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
@@ -70,12 +74,12 @@ export default function Design({
     setBusy(false);
     setStale(true);
   }, [c, userWeight]);
-  const update = (patch: Partial<Target>) => {
+  const update = (patch: Partial<Target>, matchAutomatically = autoStyle) => {
     worker.current?.terminate();
     setBusy(false);
     setT((current) => {
       const next = { ...current, ...patch };
-      return autoStyle &&
+      return matchAutomatically &&
         ["abv", "ibu", "srm", "og", "fg"].some((key) => key in patch)
         ? matchStyleToTargets(next, c)
         : next;
@@ -163,20 +167,7 @@ export default function Design({
                 value={t.styleId}
                 onChange={(e) => {
                   setAutoStyle(false);
-                  const s = c.styles.find((s) => s.id === e.target.value);
-                  update({
-                    styleId: e.target.value,
-                    hopChoices: [],
-                    baseMaltChoice: undefined,
-                    yeastChoice: undefined,
-                    ...(s
-                      ? {
-                          abv: (s.abv[0] + s.abv[1]) / 2,
-                          ibu: (s.ibu[0] + s.ibu[1]) / 2,
-                          srm: (s.srm[0] + s.srm[1]) / 2,
-                        }
-                      : {}),
-                  });
+                  update(selectDesignStyle(t, e.target.value), false);
                 }}
               >
                 <option value="">Freeform / no style penalty</option>

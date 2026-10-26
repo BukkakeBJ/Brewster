@@ -79,3 +79,11 @@ export function matchStyleToTargets<
   const best = closestStyles(target, c)[0];
   return best ? { ...target, styleId: best.style.id } : { ...target };
 }
+
+/** A manual style change sets a reference, never replaces the brewer's brief. */
+export function selectDesignStyle<T extends { styleId: string }>(
+  target: T,
+  styleId: string,
+): T {
+  return { ...target, styleId };
+}
