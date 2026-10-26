@@ -1387,3 +1387,8 @@ summary:focus-visible {
     margin-top: 20px;
   }
 }
+
+/* Preserve the natural green/gold artwork against the evergreen navigation. */
+.sidebar-botanical svg {
+  opacity: 0.85;
+}

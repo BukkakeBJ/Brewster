@@ -4,7 +4,9 @@ The second visual direction was developed in [Canva's mobile concept](https://ca
 
 ## Identity and artwork
 
-The original mark combines a plump, slanted hop cone built from pointed overlapping bracts with a separate awned barley ear, joined by intertwined stems. The hop silhouette was revised using the user’s supplied cone photograph as a shape reference; the photograph itself is not included in the app. `src/components/BrandMark.tsx` is the inline vector mark used in the header, sidebar, Recipe Book artwork and footer. `public/brewmaster-mark.svg` is its standalone icon version and the app favicon. This is authored SVG artwork; it remains crisp at any size and needs no external images or fonts.
+The logo is now a botanical illustration based on the user's supplied hop photograph: a full green cone with tightly overlapping pointed bracts, a curved stem, and a separate golden barley ear. It replaces the earlier simplified leaf glyph. The built-in image generation tool created the transparent PNG; the original photo is not included in the app. `data/branding.json` records the prompt and generation mode.
+
+`public/brand/hop-barley-botanical.png` is the canonical logo image. `BrandMark.tsx` frames it inside an inline SVG so all existing header, card, illustration and footer placements use the same asset. `public/brewmaster-mark.svg` is a self-contained SVG **wrapper with an embedded bitmap**, retained for existing logo links; it is not vector artwork. The favicon uses the canonical PNG. The image retains its generated alpha, with no filters, background removal or pixel edits after generation. No external image host is required at runtime.
 
 `BrewArtwork.tsx` contains original botanical and brewing illustrations: an amber pint with foam and a circular stamp, the hop/barley study, and a brewer's recipe journal. `StudioHero.tsx` gives each screen its own editorial headline, illustration and caption. The recipe illustration's beer color responds to calculated SRM, but it remains decorative; use the explicitly labeled SRM swatch for the numeric color estimate.
 

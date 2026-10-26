@@ -1,0 +1,17 @@
+{
+  "asset": "/brand/hop-barley-botanical.png",
+  "generation_mode": "built-in image_gen",
+  "reference": "User-supplied photograph of a fresh hop cone; used only for botanical shape.",
+  "prompt": "Use the supplied photograph ONLY as a reference for the anatomy, silhouette and layered bracts of the hop. Create one finished botanical logo symbol for BrewMaster, no wording or letters. A large recognizable fresh green hop cone is the dominant subject, with a slim golden barley ear alongside it. The hop must look like the reference: plump elongated ovoid, broad at the stem end, tapered rounded point, dense tightly overlapping pointed papery bracts arranged in staggered rows, softly cupped surfaces and subtle veins, and a short curved green stem. Preserve the reference's natural botanical shape, tilted gently down-left. It must NOT look like seven disconnected leaves, a wheat ear, a generic leaf, an artichoke, a pineapple, or a thin outline doodle. Style: refined hand-painted botanical emblem with clean graphic edges and controlled subtle shading, an appealing premium craft brewery logo, not a photograph or a mockup. The single barley stalk is slimmer than the hop and identifiable by elongated golden kernels and fine awns; it sits slightly behind and to the right and does not obscure the cone. Tight balanced compact composition, the hop takes about 75% of the visual weight. Keep the lower stem ends tidy. Use natural mid/light olive and fresh hop greens with warm pale highlights, rich green shadows, and muted gold barley, readable on ivory and dark evergreen backgrounds. No circle, no border, no badge, no background, no cast shadow, no surface, no text, no watermark, no extra leaves or flourishes. The final image is a single clean cutout logo on a truly transparent background with only a small transparent margin.",
+  "original_dimensions": [
+    1536,
+    1024
+  ],
+  "presentation_viewbox": [
+    225,
+    20,
+    1200,
+    950
+  ],
+  "postprocessing": "None. Original generated RGBA PNG copied without pixel edits; framing is handled by SVG viewBox."
+}
