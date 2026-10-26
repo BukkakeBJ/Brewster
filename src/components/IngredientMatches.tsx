@@ -4,7 +4,8 @@ import {
   ingredientMatches,
   type IngredientMatch,
 } from "../engine/recommendations";
-import { Section, Tag } from "./ui";
+import designHelp from "../../data/design-help.json";
+import { Section, Tag, InfoTip } from "./ui";
 import { cToF } from "../engine/calculations";
 export default function IngredientMatches({
   target: t,
@@ -52,7 +53,16 @@ export default function IngredientMatches({
       update({ yeastChoice: t.yeastChoice === m.id ? undefined : m.id });
   };
   return (
-    <Section title="Ingredient matches" eyebrow="LIVE / STYLE & TARGETS">
+    <Section
+      title="Ingredient matches"
+      eyebrow="LIVE / STYLE & TARGETS"
+      action={
+        <InfoTip
+          label="Ingredient matches"
+          content={designHelp.fields["Ingredient matches"]}
+        />
+      }
+    >
       <p className="muted" aria-live="polite">
         {matches.hops.length} hop options · {matches.malts.length} malts ·{" "}
         {matches.yeasts.length} yeast strains match your current evidence and

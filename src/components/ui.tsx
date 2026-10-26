@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef, type ReactNode } from "react";
+import InfoTip from "./InfoTip";
+export { InfoTip };
+import { useState, useEffect, useRef, useId, type ReactNode } from "react";
 export function Field({
   label,
   value,
@@ -7,6 +9,7 @@ export function Field({
   max,
   step = 0.1,
   suffix,
+  help,
 }: {
   label: string;
   value: number;
@@ -15,7 +18,10 @@ export function Field({
   max?: number;
   step?: number;
   suffix?: string;
+  help?: string;
 }) {
+  const id = useId();
+  const Container = help ? "div" : "label";
   const fmt = (v: number) => String(Number(v.toFixed(3)));
   const [draft, setDraft] = useState(() => fmt(value));
   const focused = useRef(false);
@@ -25,11 +31,16 @@ export function Field({
   const bounded = (n: number) =>
     Math.max(min ?? -Infinity, Math.min(max ?? Infinity, n));
   return (
-    <label className="field">
-      <span>{label}</span>
+    <Container className="field">
+      {help ? (
+        <HelpLabel label={label} help={help} htmlFor={id} />
+      ) : (
+        <span>{label}</span>
+      )}
       <div className="number-wrap">
         <input
           type="number"
+          id={id}
           aria-label={label}
           value={draft}
           min={min}
@@ -59,7 +70,23 @@ export function Field({
         />
         {suffix && <small>{suffix}</small>}
       </div>
-    </label>
+    </Container>
+  );
+}
+export function HelpLabel({
+  label,
+  help,
+  htmlFor,
+}: {
+  label: string;
+  help: string;
+  htmlFor: string;
+}) {
+  return (
+    <div className="field-label">
+      <label htmlFor={htmlFor}>{label}</label>
+      <InfoTip label={label} content={help} />
+    </div>
   );
 }
 export function Section({

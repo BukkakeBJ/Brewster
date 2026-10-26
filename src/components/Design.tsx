@@ -3,9 +3,11 @@ import { Sparkles, ArrowUpRight } from "lucide-react";
 import type { Catalog, Recipe, Target } from "../engine/types";
 import type { Candidate } from "../engine/solver";
 import { defaultTarget } from "../defaults";
-import { Field, Section, Tag } from "./ui";
+import { Field, Section, Tag, HelpLabel, InfoTip } from "./ui";
 import { Radar } from "./FlavorPanel";
 import { L_PER_GAL, lToGal, predict } from "../engine/calculations";
+import designHelp from "../../data/design-help.json";
+import { closestStyles, matchStyleToTargets } from "../engine/styleMatch";
 import IngredientMatches from "./IngredientMatches";
 import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
@@ -24,7 +26,13 @@ export default function Design({
   userWeight?: number;
   fromRecipe?: Recipe;
 }) {
-  const [t, setT] = useState<Target>(defaultTarget),
+  const [autoStyle, setAutoStyle] = useState(true);
+  const help = designHelp.fields as Record<string, string>;
+  const flavorHelp = (id: string, label: string) =>
+    `${(designHelp.flavors as Record<string, string>)[id] ?? `${label} is a sensory descriptor.`} ${help["Flavor intensity"]}`;
+  const [t, setT] = useState<Target>(() =>
+      matchStyleToTargets(defaultTarget, c),
+    ),
     [results, setResults] = useState<Candidate[]>([]),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -47,7 +55,13 @@ export default function Design({
     setBusy(false);
     setResults([]);
     setError("");
-    setT(recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight));
+    setAutoStyle(true);
+    setT(
+      matchStyleToTargets(
+        recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight),
+        c,
+      ),
+    );
     setStale(true);
   }, [fromRecipe]);
   useEffect(() => () => worker.current?.terminate(), []);
@@ -59,9 +73,18 @@ export default function Design({
   const update = (patch: Partial<Target>) => {
     worker.current?.terminate();
     setBusy(false);
-    setT({ ...t, ...patch });
+    setT((current) => {
+      const next = { ...current, ...patch };
+      return autoStyle &&
+        ["abv", "ibu", "srm", "og", "fg"].some((key) => key in patch)
+        ? matchStyleToTargets(next, c)
+        : next;
+    });
     setStale(true);
   };
+  const styleMatches = closestStyles(t, c);
+  const selectedStyle = c.styles.find((s) => s.id === t.styleId);
+  const bestStyle = styleMatches[0];
   const toggle = (key: "must" | "avoid" | "onHand" | "exclude", id: string) =>
     update({
       [key]: t[key].includes(id)
@@ -101,6 +124,25 @@ export default function Design({
       <div className="design-grid">
         <div className="design-inputs">
           <Section title="Define your beer" eyebrow="01 / MEASURABLE TARGETS">
+            <div className="help-option">
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  aria-label="Automatic style matching"
+                  checked={autoStyle}
+                  onChange={(e) => {
+                    setAutoStyle(e.target.checked);
+                    if (e.target.checked)
+                      update({ styleId: bestStyle?.style.id ?? t.styleId });
+                  }}
+                />{" "}
+                Automatically match style to numeric targets
+              </label>
+              <InfoTip
+                label="Automatic style matching"
+                content={help["Automatic style matching"]}
+              />
+            </div>
             {fromRecipe && (
               <p className="muted">
                 Starting from {fromRecipe.name}. Change targets to explore a
@@ -109,12 +151,18 @@ export default function Design({
                 use different ingredients.
               </p>
             )}
-            <label className="field">
-              <span>Base style · legacy numeric ranges</span>
+            <div className="field">
+              <HelpLabel
+                label="Base style · legacy numeric ranges"
+                help={help["Base style · legacy numeric ranges"]}
+                htmlFor="design-option-0"
+              />
               <select
+                id="design-option-0"
                 aria-label="Design beer style"
                 value={t.styleId}
                 onChange={(e) => {
+                  setAutoStyle(false);
                   const s = c.styles.find((s) => s.id === e.target.value);
                   update({
                     styleId: e.target.value,
@@ -138,10 +186,41 @@ export default function Design({
                   </option>
                 ))}
               </select>
-            </label>
+            </div>
+            <div className="design-style-match">
+              <p role="status">
+                {autoStyle
+                  ? `Closest numeric match: ${bestStyle?.style.name ?? "No comparable style"}`
+                  : `Manual style: ${selectedStyle?.name ?? "Freeform"}`}
+              </p>
+              {selectedStyle && (
+                <p>
+                  {selectedStyle.abv.join("–")}% ABV ·{" "}
+                  {selectedStyle.ibu.join("–")} IBU ·{" "}
+                  {selectedStyle.srm.join("–")} SRM
+                </p>
+              )}
+              <p className="muted">
+                {autoStyle
+                  ? bestStyle?.withinRanges
+                    ? "Targets fit the compared ranges. Flavor and process may differ."
+                    : "Closest available style; some targets fall outside its ranges. Flavor and process may differ."
+                  : "Style locked. Enable automatic matching to follow target edits."}
+              </p>
+              {selectedStyle && (
+                <a
+                  href={selectedStyle.source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Legacy numeric reference ↗
+                </a>
+              )}
+            </div>
             <div className="field-grid">
               <Field
                 label="Target ABV"
+                help={help["Target ABV"]}
                 suffix="%"
                 value={t.abv}
                 min={0.5}
@@ -150,6 +229,7 @@ export default function Design({
               />
               <Field
                 label="Target bitterness"
+                help={help["Target bitterness"]}
                 suffix="IBU"
                 value={t.ibu}
                 min={0}
@@ -159,6 +239,7 @@ export default function Design({
               />
               <Field
                 label="Target color"
+                help={help["Target color"]}
                 suffix="SRM"
                 value={t.srm}
                 min={1}
@@ -167,6 +248,7 @@ export default function Design({
               />
               <Field
                 label="Post-boil batch"
+                help={help["Post-boil batch"]}
                 suffix={us ? "gal" : "L"}
                 value={us ? lToGal(t.batchL) : t.batchL}
                 min={us ? 0.3 : 1}
@@ -174,6 +256,7 @@ export default function Design({
               />
               <Field
                 label="Efficiency"
+                help={help["Efficiency"]}
                 suffix="%"
                 value={t.efficiency}
                 min={1}
@@ -184,23 +267,30 @@ export default function Design({
             </div>
             <details className="advanced">
               <summary>Gravity ranges & equipment</summary>
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={!!t.og}
-                  onChange={(e) =>
-                    update({
-                      og: e.target.checked ? [1.045, 1.06] : undefined,
-                      fg: e.target.checked ? [1.008, 1.015] : undefined,
-                    })
-                  }
-                />{" "}
-                Add OG / FG constraints
-              </label>
+              <div className="help-option">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={!!t.og}
+                    onChange={(e) =>
+                      update({
+                        og: e.target.checked ? [1.045, 1.06] : undefined,
+                        fg: e.target.checked ? [1.008, 1.015] : undefined,
+                      })
+                    }
+                  />{" "}
+                  Add OG / FG constraints
+                </label>
+                <InfoTip
+                  label="Add OG / FG constraints"
+                  content={help["Add OG / FG constraints"]}
+                />
+              </div>
               {t.og && t.fg && (
                 <div className="field-grid">
                   <Field
                     label="OG minimum"
+                    help={help["OG minimum"]}
                     value={t.og[0]}
                     min={1.001}
                     max={t.og[1]}
@@ -209,6 +299,7 @@ export default function Design({
                   />
                   <Field
                     label="OG maximum"
+                    help={help["OG maximum"]}
                     value={t.og[1]}
                     min={t.og[0]}
                     max={1.2}
@@ -217,6 +308,7 @@ export default function Design({
                   />
                   <Field
                     label="FG minimum"
+                    help={help["FG minimum"]}
                     value={t.fg[0]}
                     min={1}
                     max={t.fg[1]}
@@ -225,6 +317,7 @@ export default function Design({
                   />
                   <Field
                     label="FG maximum"
+                    help={help["FG maximum"]}
                     value={t.fg[1]}
                     min={t.fg[0]}
                     max={1.08}
@@ -236,6 +329,7 @@ export default function Design({
               <div className="field-grid">
                 <Field
                   label="Boil time"
+                  help={help["Boil time"]}
                   suffix="min"
                   value={t.equipment.boilMinutes}
                   min={0}
@@ -247,6 +341,7 @@ export default function Design({
                 />
                 <Field
                   label="Boil-off"
+                  help={help["Boil-off"]}
                   suffix={us ? "gal/h" : "L/h"}
                   value={
                     us
@@ -265,6 +360,7 @@ export default function Design({
                 />
                 <Field
                   label="Transfer loss"
+                  help={help["Transfer loss"]}
                   suffix={us ? "gal" : "L"}
                   value={us ? lToGal(t.equipment.lossL) : t.equipment.lossL}
                   min={0}
@@ -280,23 +376,44 @@ export default function Design({
               </div>
             </details>
           </Section>
-          <Section title="Find your flavor" eyebrow="02 / SUBJECTIVE TARGETS">
+          <Section
+            title="Find your flavor"
+            eyebrow="02 / SUBJECTIVE TARGETS"
+            action={
+              <InfoTip
+                label="Flavor intensity"
+                content={help["Flavor intensity"]}
+              />
+            }
+          >
             <Tag>ESTIMATED SENSORY INTENSITY · 0–5</Tag>
             <p className="muted">
-              Choose a hop direction or set individual flavors below. Style
-              changes update numeric ranges; your custom flavor targets stay
-              until you choose a new starting point.
+              Choose a hop direction or set individual flavors below. Automatic
+              style matching keeps your numeric and flavor targets. Choose the
+              style starting-point button only when you want to replace flavor
+              targets.
             </p>
-            <button
-              className="button secondary"
-              disabled={!starterRecipes.some((r) => r.styleId === t.styleId)}
-              onClick={() => applyStyleFlavor()}
-            >
-              Use style flavor starting point
-            </button>
-            <label className="field">
-              <span>Hop flavor direction</span>
+            <div className="help-action">
+              <InfoTip
+                label="Use style flavor starting point"
+                content={help["Use style flavor starting point"]}
+              />
+              <button
+                className="button secondary"
+                disabled={!starterRecipes.some((r) => r.styleId === t.styleId)}
+                onClick={() => applyStyleFlavor()}
+              >
+                Use style flavor starting point
+              </button>
+            </div>
+            <div className="field">
+              <HelpLabel
+                label="Hop flavor direction"
+                help={help["Hop flavor direction"]}
+                htmlFor="design-option-1"
+              />
               <select
+                id="design-option-1"
                 aria-label="Hop flavor direction"
                 value=""
                 onChange={(e) => {
@@ -330,10 +447,15 @@ export default function Design({
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="field">
-              <span>Evaluate hop character for</span>
+            </div>
+            <div className="field">
+              <HelpLabel
+                label="Evaluate hop character for"
+                help={help["Evaluate hop character for"]}
+                htmlFor="design-option-2"
+              />
               <select
+                id="design-option-2"
                 aria-label="Hop recommendation use"
                 value={t.hopFocus ?? "aroma"}
                 onChange={(e) =>
@@ -348,25 +470,36 @@ export default function Design({
                 <option value="aroma">Whirlpool aroma</option>
                 <option value="dry hop">Dry hopping</option>
               </select>
-            </label>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={t.matchHopFlavor ?? false}
-                onChange={(e) =>
-                  update({ matchHopFlavor: e.target.checked, hopChoices: [] })
-                }
-              />{" "}
-              Only suggest hops with evidence for at least one positive
-              hop-flavor target
-            </label>
+            </div>
+            <div className="help-option">
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  checked={t.matchHopFlavor ?? false}
+                  onChange={(e) =>
+                    update({ matchHopFlavor: e.target.checked, hopChoices: [] })
+                  }
+                />{" "}
+                Only suggest hops with evidence for at least one positive
+                hop-flavor target
+              </label>
+              <InfoTip
+                label="Hop evidence filter"
+                content={help["Hop evidence filter"]}
+              />
+            </div>
             <div className="flavor-sliders">
               {c.vocabulary
                 .filter((v) => v.axis)
                 .map((v) => (
-                  <label key={v.id}>
-                    <span>{v.label}</span>
+                  <div className="flavor-slider-row" key={v.id}>
+                    <HelpLabel
+                      label={v.label}
+                      help={flavorHelp(v.id, v.label)}
+                      htmlFor={`design-flavor-${v.id}`}
+                    />
                     <input
+                      id={`design-flavor-${v.id}`}
                       aria-label={`Target flavor ${v.label}`}
                       type="range"
                       min="0"
@@ -383,13 +516,19 @@ export default function Design({
                       }
                     />
                     <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
-                  </label>
+                  </div>
                 ))}
             </div>
             <div className="descriptor-constraints">
-              <label className="field">
-                <span>Must include descriptor</span>
+              <div className="field">
+                <HelpLabel
+                  label="Must include descriptor"
+                  help={help["Must include descriptor"]}
+                  htmlFor="design-option-3"
+                />
                 <select
+                  id="design-option-3"
+                  aria-label="Must include descriptor"
                   value=""
                   onChange={(e) => toggle("must", e.target.value)}
                 >
@@ -400,10 +539,16 @@ export default function Design({
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="field">
-                <span>Avoid descriptor</span>
+              </div>
+              <div className="field">
+                <HelpLabel
+                  label="Avoid descriptor"
+                  help={help["Avoid descriptor"]}
+                  htmlFor="design-option-4"
+                />
                 <select
+                  id="design-option-4"
+                  aria-label="Avoid descriptor"
                   value=""
                   onChange={(e) => toggle("avoid", e.target.value)}
                 >
@@ -414,7 +559,7 @@ export default function Design({
                     </option>
                   ))}
                 </select>
-              </label>
+              </div>
             </div>
             <div className="filter-chips">
               {t.must.map((a) => (
@@ -435,9 +580,14 @@ export default function Design({
               {c.vocabulary
                 .filter((v) => v.parent === "hops" && !v.axis)
                 .map((v) => (
-                  <label key={v.id}>
-                    <span>{v.label}</span>
+                  <div className="flavor-slider-row" key={v.id}>
+                    <HelpLabel
+                      label={v.label}
+                      help={flavorHelp(v.id, v.label)}
+                      htmlFor={`design-flavor-${v.id}`}
+                    />
                     <input
+                      id={`design-flavor-${v.id}`}
                       aria-label={`Target hop flavor ${v.label}`}
                       type="range"
                       min="0"
@@ -454,7 +604,7 @@ export default function Design({
                       }
                     />
                     <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
-                  </label>
+                  </div>
                 ))}
             </div>
           </details>
@@ -465,11 +615,26 @@ export default function Design({
             update={update}
             userWeight={userWeight}
           />
-          <Section title="Your constraints" eyebrow="03 / WHAT YOU HAVE">
+          <Section
+            title="Your constraints"
+            eyebrow="03 / WHAT YOU HAVE"
+            action={
+              <InfoTip
+                label="On hand & excluded ingredients"
+                content={help["On hand & excluded ingredients"]}
+              />
+            }
+          >
             <div className="field-grid">
-              <label className="field">
-                <span>Yeast form</span>
+              <div className="field">
+                <HelpLabel
+                  label="Yeast form"
+                  help={help["Yeast form"]}
+                  htmlFor="design-option-5"
+                />
                 <select
+                  id="design-option-5"
+                  aria-label="Yeast form"
                   value={t.yeastForm}
                   onChange={(e) =>
                     update({ yeastForm: e.target.value as Target["yeastForm"] })
@@ -479,10 +644,16 @@ export default function Design({
                   <option value="dry">Dry only</option>
                   <option value="liquid">Liquid only</option>
                 </select>
-              </label>
-              <label className="field">
-                <span>Budget approach</span>
+              </div>
+              <div className="field">
+                <HelpLabel
+                  label="Budget approach"
+                  help={help["Budget approach"]}
+                  htmlFor="design-option-6"
+                />
                 <select
+                  id="design-option-6"
+                  aria-label="Budget approach"
                   value={t.budget}
                   onChange={(e) =>
                     update({ budget: e.target.value as Target["budget"] })
@@ -491,7 +662,7 @@ export default function Design({
                   <option value="any">Unrestricted</option>
                   <option value="economy">Economy · dry yeast, hop cap</option>
                 </select>
-              </label>
+              </div>
             </div>
             <details className="advanced">
               <summary>On hand & excluded ingredients</summary>
@@ -561,6 +732,7 @@ export default function Design({
                   <Field
                     key={k}
                     label={k + " weight"}
+                    help={help[k + " weight"]}
                     value={t.weights[k]}
                     min={0}
                     max={10}
@@ -574,7 +746,16 @@ export default function Design({
           </Section>
         </div>
         <aside className="design-preview">
-          <Section title="Your flavor brief" eyebrow="THE BEER YOU IMAGINE">
+          <Section
+            title="Your flavor brief"
+            eyebrow="THE BEER YOU IMAGINE"
+            action={
+              <InfoTip
+                label="Find my recipes"
+                content={help["Find my recipes"]}
+              />
+            }
+          >
             <Radar scores={t.flavors} />
             <p className="muted">
               Numeric targets are calculated with brewing formulas. Flavor
