@@ -1,7 +1,12 @@
 import { XMLParser, XMLBuilder, XMLValidator } from "fast-xml-parser";
 import type { Catalog, Recipe } from "./engine/types";
 import { recipeSchema } from "./validation";
-import { additives, contactMinutes } from "./engine/additives";
+import {
+  additives,
+  contactMinutes,
+  additiveName,
+  CUSTOM_ADDITIVE_ID,
+} from "./engine/additives";
 import { processNoteEntries } from "./engine/processNotes";
 export function exportBeerXML(r: Recipe, c: Catalog) {
   const y = c.yeasts.find((y) => y.id === r.yeastId)!;
@@ -38,11 +43,11 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
         BD_PITCH_MULTIPLIER: r.pitchMultiplier,
         MISCS: {
           MISC: (r.additives ?? []).map((a) => ({
-            NAME: additives.find((i) => i.id === a.ingredientId)!.name,
+            NAME: additiveName(a),
             VERSION: 1,
             TYPE: additives
-              .find((i) => i.id === a.ingredientId)!
-              .category.includes("finings")
+              .find((i) => i.id === a.ingredientId)
+              ?.category.includes("finings")
               ? "Fining"
               : "Flavor",
             USE:
@@ -154,7 +159,11 @@ export function importRecipe(
   if (/<!DOCTYPE|<!ENTITY/i.test(text))
     throw new Error("DTD and entity declarations are not supported.");
   if (XMLValidator.validate(text) !== true) throw new Error("Invalid XML.");
-  const parsed = new XMLParser({ ignoreAttributes: true }).parse(text);
+  const parsed = new XMLParser({
+    ignoreAttributes: true,
+    parseTagValue: false,
+    trimValues: false,
+  }).parse(text);
   let x = parsed.RECIPES?.RECIPE ?? parsed.RECIPE;
   if (Array.isArray(x)) throw new Error("Import one recipe at a time.");
   if (!x) throw new Error("No BeerXML recipe found.");
@@ -187,22 +196,28 @@ export function importRecipe(
     additives: x.BD_ADDITIVES
       ? JSON.parse(String(x.BD_ADDITIVES))
       : arr(x.MISCS?.MISC).map((a: any) => {
-          const item = additives.find(
-            (i) =>
-              i.id === a.BD_ID ||
-              [i.name, ...i.aliases].some(
-                (name) => name.toLowerCase() === String(a.NAME).toLowerCase(),
-              ),
-          );
-          if (!item)
-            throw new Error(
-              `Unknown additive: ${a.NAME}. Add it to the catalog before importing.`,
-            );
+          const item =
+            a.BD_ID === CUSTOM_ADDITIVE_ID
+              ? undefined
+              : additives.find(
+                  (i) =>
+                    i.id === a.BD_ID ||
+                    [i.name, ...i.aliases].some(
+                      (name) =>
+                        name.toLowerCase() === String(a.NAME).toLowerCase(),
+                    ),
+                );
+          const customName = !item ? String(a.NAME ?? "").trim() : undefined;
+          if (!item && !customName)
+            throw new Error("An unlisted additive needs a name.");
+          if (!a.BD_UNIT && a.AMOUNT_IS_WEIGHT === undefined)
+            throw new Error(`Missing amount unit for additive: ${a.NAME}`);
           const weight =
             a.AMOUNT_IS_WEIGHT === true ||
             String(a.AMOUNT_IS_WEIGHT).toLowerCase() === "true";
           if (
             !a.BD_UNIT &&
+            item &&
             (item.guide.unit === "item" || (item.guide.unit === "g") !== weight)
           )
             throw new Error(
@@ -219,7 +234,8 @@ export function importRecipe(
           if (!stage) throw new Error(`Unsupported additive stage: ${a.USE}`);
           return {
             id: a.BD_ADDITION_ID || crypto.randomUUID(),
-            ingredientId: item.id,
+            ingredientId: item?.id ?? CUSTOM_ADDITIVE_ID,
+            ...(customName ? { customName } : {}),
             amount:
               a.BD_AMOUNT !== undefined
                 ? Number(a.BD_AMOUNT)

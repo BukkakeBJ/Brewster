@@ -1,7 +1,10 @@
 import { beforeAll, afterAll, it, expect } from "vitest";
 import { spawn, type ChildProcess } from "node:child_process";
 import { unlinkSync } from "node:fs";
-import { createAdditiveAddition } from "../src/engine/additives";
+import {
+  createAdditiveAddition,
+  createCustomAdditive,
+} from "../src/engine/additives";
 import { defaultRecipe as r } from "../src/defaults";
 import { catalog as c } from "../src/catalog";
 import { predict } from "../src/engine/calculations";
@@ -42,6 +45,12 @@ it("persists recipes and returns actionable validation errors", async () => {
       {
         ...createAdditiveAddition("a-oak-chips", 20, "oak-test"),
         notes: "Taste weekly; medium toast",
+      },
+      {
+        ...createCustomAdditive("Homemade tea tincture", "custom-api"),
+        unit: "mL",
+        amount: 25,
+        notes: "Blend after fermentation",
       },
     ],
     processNotes: {

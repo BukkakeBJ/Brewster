@@ -1,3 +1,5 @@
+import CustomAdditiveForm from "./CustomAdditiveForm";
+import type { AdditiveAddition } from "../engine/additives";
 import { lToGal } from "../engine/calculations";
 import { useState } from "react";
 import {
@@ -13,11 +15,13 @@ export default function AdditiveLibrary({
   batchL = 20,
   onAdd,
   compact = false,
+  onAddCustom,
 }: {
   us?: boolean;
   batchL?: number;
   onAdd?: (id: string) => void;
   compact?: boolean;
+  onAddCustom?: (addition: AdditiveAddition) => void;
 }) {
   const [query, setQuery] = useState(""),
     [category, setCategory] = useState(""),
@@ -31,6 +35,7 @@ export default function AdditiveLibrary({
         Guides are starting points; use your product label and record trials.
         Additions join the current recipe’s schedule.
       </p>
+      {onAddCustom && <CustomAdditiveForm us={us} onAdd={onAddCustom} />}
       <div className="field-grid">
         <label className="field">
           <span>Search additives</span>

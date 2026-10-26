@@ -25,6 +25,7 @@ export interface Additive {
 export interface AdditiveAddition {
   id: string;
   ingredientId: string;
+  customName?: string;
   amount: number;
   unit: AdditiveUnit;
   stage: ProcessStage;
@@ -105,4 +106,31 @@ export function contactMinutes(addition: AdditiveAddition) {
         ? 60
         : 1)
   );
+}
+
+export const CUSTOM_ADDITIVE_ID = "custom";
+export function additiveName(row: AdditiveAddition) {
+  return row.ingredientId === CUSTOM_ADDITIVE_ID
+    ? row.customName?.trim() || "Custom additive"
+    : (additives.find((a) => a.id === row.ingredientId)?.name ??
+        row.ingredientId);
+}
+export function createCustomAdditive(
+  name: string,
+  id: string,
+): AdditiveAddition {
+  const customName = name.trim();
+  if (!customName || customName.length > 200)
+    throw new Error("Enter an additive name between 1 and 200 characters.");
+  return {
+    id,
+    ingredientId: CUSTOM_ADDITIVE_ID,
+    customName,
+    amount: 0,
+    unit: "g",
+    stage: "conditioning",
+    time: 0,
+    timeUnit: "days",
+    notes: "",
+  };
 }

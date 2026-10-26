@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
+import CustomAdditiveForm from "./CustomAdditiveForm";
 import type { Recipe } from "../engine/types";
 import {
-  additives,
+  type AdditiveAddition,
+  additiveName,
+  CUSTOM_ADDITIVE_ID,
   additiveModelNote,
   createAdditiveAddition,
   displayAdditiveAmount,
@@ -22,11 +26,13 @@ export function ReadOnlyAdditives({
       <h3>Optional additives & process aids</h3>
       <p className="muted">{additiveModelNote}</p>
       {recipe.additives.map((row) => {
-        const item = additives.find((a) => a.id === row.ingredientId),
-          amount = displayAdditiveAmount(row.amount, row.unit, us);
+        const amount = displayAdditiveAmount(row.amount, row.unit, us);
         return (
           <div key={row.id}>
-            <h4>{item?.name ?? row.ingredientId}</h4>
+            <h4>{additiveName(row)}</h4>
+            {row.ingredientId === CUSTOM_ADDITIVE_ID && (
+              <Tag tone="neutral">CUSTOM · USER-DEFINED</Tag>
+            )}
             <p>
               {amount.amount.toFixed(2)} {amount.unit} ·{" "}
               {processStages.find((s) => s.id === row.stage)?.label} ·{" "}
@@ -69,7 +75,7 @@ export default function RecipeAdditives({
           </p>
         )}
         {rows.map((row) => {
-          const item = additives.find((a) => a.id === row.ingredientId),
+          const name = additiveName(row),
             amount = displayAdditiveAmount(row.amount, row.unit, us);
           const update = (patch: Partial<typeof row>) =>
             onChange({
@@ -80,13 +86,46 @@ export default function RecipeAdditives({
             });
           return (
             <article className="additive-schedule-row" key={row.id}>
-              <h3>{item?.name ?? row.ingredientId}</h3>
+              <h3>{additiveName(row)}</h3>
               <Tag tone="objective">
                 RECORDED ADDITION · EFFECTS NOT MODELED
               </Tag>
+              {row.ingredientId === CUSTOM_ADDITIVE_ID && (
+                <>
+                  <Tag tone="neutral">CUSTOM ADDITIVE · USER-DEFINED</Tag>
+                  <CustomName
+                    row={row}
+                    onChange={(customName) => update({ customName })}
+                  />
+                  <label className="field">
+                    <span>Amount unit for {name}</span>
+                    <select
+                      value={row.unit}
+                      onChange={(e) =>
+                        update({
+                          unit: e.target.value as typeof row.unit,
+                          amount: 0,
+                        })
+                      }
+                    >
+                      <option value="g">
+                        {us ? "Weight · oz" : "Weight · g"}
+                      </option>
+                      <option value="mL">
+                        {us ? "Liquid · US fl oz" : "Liquid · mL"}
+                      </option>
+                      <option value="item">Item / count</option>
+                    </select>
+                  </label>
+                  <p className="muted">
+                    Changing units resets the amount; weight and volume need
+                    separate measurements.
+                  </p>
+                </>
+              )}
               <div className="field-grid">
                 <Field
-                  label={`${item?.name} amount`}
+                  label={`${name} amount`}
                   value={amount.amount}
                   suffix={amount.unit}
                   min={0}
@@ -96,7 +135,7 @@ export default function RecipeAdditives({
                   }
                 />
                 <label className="field">
-                  <span>Addition stage for {item?.name}</span>
+                  <span>Addition stage for {name}</span>
                   <select
                     value={row.stage}
                     onChange={(e) =>
@@ -111,14 +150,14 @@ export default function RecipeAdditives({
                   </select>
                 </label>
                 <Field
-                  label={`${item?.name} ${row.stage === "boil" ? "time before boil end" : "contact time"}`}
+                  label={`${name} ${row.stage === "boil" ? "time before boil end" : "contact time"}`}
                   value={row.time}
                   min={0}
                   step={1}
                   onChange={(n) => update({ time: n })}
                 />
                 <label className="field">
-                  <span>Time unit for {item?.name}</span>
+                  <span>Time unit for {name}</span>
                   <select
                     value={row.timeUnit}
                     onChange={(e) =>
@@ -140,7 +179,7 @@ export default function RecipeAdditives({
                 </p>
               )}
               <label className="field">
-                <span>{item?.name} experiment notes</span>
+                <span>{name} experiment notes</span>
                 <textarea
                   rows={3}
                   maxLength={10000}
@@ -158,11 +197,17 @@ export default function RecipeAdditives({
                   })
                 }
               >
-                Remove {item?.name} addition
+                Remove {name} addition
               </button>
             </article>
           );
         })}
+        <CustomAdditiveForm
+          us={us}
+          onAdd={(addition) =>
+            onChange({ ...r, additives: [...rows, addition] })
+          }
+        />
         <details className="advanced">
           <summary>Browse additives & add to this recipe</summary>
           <AdditiveLibrary
@@ -182,5 +227,33 @@ export default function RecipeAdditives({
         </details>
       </Section>
     </div>
+  );
+}
+
+function CustomName({
+  row,
+  onChange,
+}: {
+  row: AdditiveAddition;
+  onChange: (name: string) => void;
+}) {
+  const [draft, setDraft] = useState(row.customName ?? "");
+  useEffect(() => setDraft(row.customName ?? ""), [row.customName]);
+  return (
+    <label className="field">
+      <span>Edit custom additive name</span>
+      <input
+        value={draft}
+        maxLength={200}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={() => {
+          const value = draft.trim();
+          if (value) {
+            onChange(value);
+            setDraft(value);
+          } else setDraft(row.customName ?? "");
+        }}
+      />
+    </label>
   );
 }

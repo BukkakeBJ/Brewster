@@ -1,4 +1,9 @@
-import { additives, additiveModelNote } from "./additives";
+import {
+  additives,
+  additiveModelNote,
+  additiveName,
+  CUSTOM_ADDITIVE_ID,
+} from "./additives";
 import type {
   Catalog,
   Grain,
@@ -257,15 +262,18 @@ export function predict(
     for (const row of recipe.additives) {
       const item = additives.find((a) => a.id === row.ingredientId);
       if (
-        !item ||
-        row.unit !== item.guide.unit ||
+        (row.ingredientId === CUSTOM_ADDITIVE_ID
+          ? !row.customName?.trim() ||
+            row.customName.trim().length > 200 ||
+            !["g", "mL", "item"].includes(row.unit)
+          : !item || row.unit !== item.guide.unit) ||
         !Number.isFinite(row.amount) ||
         row.amount < 0
       )
         throw new Error("Invalid additive reference, unit or amount.");
       if (row.amount === 0)
         warnings.push(
-          `${item.name}: set an amount from your product label or trial before brewing.`,
+          `${additiveName(row)}: set an amount from your product label or trial before brewing.`,
         );
     }
     warnings.push(additiveModelNote);

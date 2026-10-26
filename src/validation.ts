@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { additives } from "./engine/additives";
+import { additives, CUSTOM_ADDITIVE_ID } from "./engine/additives";
 import { processStages } from "./engine/processNotes";
 const n = (min: number, max: number) => z.number().finite().min(min).max(max);
 export const additiveAdditionSchema = z
@@ -7,7 +7,11 @@ export const additiveAdditionSchema = z
     id: z.string().min(1).max(160),
     ingredientId: z
       .string()
-      .refine((id) => additives.some((a) => a.id === id), "Unknown additive"),
+      .refine(
+        (id) => id === CUSTOM_ADDITIVE_ID || additives.some((a) => a.id === id),
+        "Unknown additive",
+      ),
+    customName: z.string().trim().max(200).optional(),
     amount: n(0, 10000000),
     unit: z.enum(["g", "mL", "item"]),
     stage: z.enum(processStages.map((s) => s.id)),
@@ -17,8 +21,14 @@ export const additiveAdditionSchema = z
   })
   .refine(
     (row) =>
+      row.ingredientId === CUSTOM_ADDITIVE_ID ||
       additives.find((a) => a.id === row.ingredientId)?.guide.unit === row.unit,
     "Additive unit must match its catalog form",
+  )
+  .refine(
+    (row) =>
+      row.ingredientId !== CUSTOM_ADDITIVE_ID || !!row.customName?.trim(),
+    { message: "Enter a name for the custom additive", path: ["customName"] },
   );
 export const recipeSchema = z
   .object({

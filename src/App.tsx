@@ -568,6 +568,13 @@ export default function App() {
               catalog={libraryCatalog}
               us={us}
               batchL={recipe.batchL}
+              onAddCustomAdditive={(addition) => {
+                setRecipe({
+                  ...recipe,
+                  additives: [...(recipe.additives ?? []), addition],
+                });
+                notify("Custom additive added to the current recipe.");
+              }}
               onAddAdditive={(id) => {
                 setRecipe({
                   ...recipe,

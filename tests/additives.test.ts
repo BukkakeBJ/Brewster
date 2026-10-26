@@ -136,3 +136,83 @@ it("keeps additive effects outside base-beer predictions and reports missing dos
     }),
   ).toThrow();
 });
+it("preserves custom names, doses and notes through saving, search, scaling, copies and all export paths", async () => {
+  const { createCustomAdditive, additiveName } =
+    await import("../src/engine/additives");
+  const custom = {
+    ...createCustomAdditive(
+      "  Homemade tea & citrus tincture  ",
+      "custom-test",
+    ),
+    amount: 45,
+    unit: "mL" as const,
+    time: 2,
+    timeUnit: "days" as const,
+    notes: "Bench blend; 001 trial\nCompare a control.",
+  };
+  const count = {
+    ...createCustomAdditive("Dried tea sachets", "custom-count"),
+    unit: "item" as const,
+    amount: 2.5,
+  };
+  const recipe = { ...r, additives: [custom, count] };
+  expect(additiveName(custom)).toBe("Homemade tea & citrus tincture");
+  expect(recipeSchema.parse(recipe).additives).toEqual(recipe.additives);
+  expect(
+    readDraftBank(JSON.stringify({ draft: recipe }))[r.id].additives,
+  ).toEqual(recipe.additives);
+  expect(
+    filterBook(recipeBookEntries([recipe], {}), c, {
+      query: "homemade citrus tincture",
+    }),
+  ).toHaveLength(1);
+  expect(
+    scaleRecipe(recipe, 40, 60, c).additives?.map((a) => a.amount),
+  ).toEqual([90, 5]);
+  const copy = copyBookRecipe(recipe, "custom-copy");
+  copy.additives![0].customName = "Different experiment";
+  expect(custom.customName).toBe("Homemade tea & citrus tincture");
+  expect(predict(recipe, c).abv).toBe(predict(r, c).abv);
+  const xml = exportBeerXML(recipe, c);
+  for (const text of [
+    JSON.stringify(recipe),
+    xml,
+    xml.replace(/<BD_ADDITIVES>.*?<\/BD_ADDITIVES>/s, ""),
+  ]) {
+    expect(importRecipe(text, c, r).additives).toEqual(recipe.additives);
+  }
+  const standard = exportBeerXML({ ...recipe, additives: [custom] }, c)
+    .replace(/<BD_ADDITIVES>.*?<\/BD_ADDITIVES>/s, "")
+    .replace(/<BD_[A-Z_]+>.*?<\/BD_[A-Z_]+>/gs, "");
+  const imported = importRecipe(standard, c, r);
+  expect(imported.additives?.[0]).toMatchObject({
+    ingredientId: "custom",
+    customName: custom.customName,
+    amount: 45,
+    unit: "mL",
+    stage: "conditioning",
+    time: 2880,
+    timeUnit: "minutes",
+  });
+});
+it("requires a real name for custom entries while keeping catalog validation and numeric bounds", async () => {
+  const { createCustomAdditive } = await import("../src/engine/additives");
+  expect(() => createCustomAdditive("   ", "x")).toThrow(/name/);
+  const row = createCustomAdditive("Tea", "custom");
+  for (const invalid of [
+    { customName: "" },
+    { customName: "   " },
+    { customName: "x".repeat(201) },
+    { unit: "cups" },
+    { amount: -1 },
+  ])
+    expect(() =>
+      recipeSchema.parse({ ...r, additives: [{ ...row, ...invalid }] }),
+    ).toThrow();
+  expect(() =>
+    recipeSchema.parse({
+      ...r,
+      additives: [{ ...row, ingredientId: "invented-catalog-id" }],
+    }),
+  ).toThrow();
+});

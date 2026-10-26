@@ -1,5 +1,5 @@
 import AdditiveLibrary from "./AdditiveLibrary";
-import { additives } from "../engine/additives";
+import { additives, type AdditiveAddition } from "../engine/additives";
 import { useMemo, useState } from "react";
 import { Search, ArrowUpRight, BookOpen } from "lucide-react";
 import type { Catalog, Ingredient, Malt, Hop, Yeast } from "../engine/types";
@@ -19,11 +19,13 @@ export default function Library({
   us,
   batchL = 20,
   onAddAdditive,
+  onAddCustomAdditive,
 }: {
   catalog: Catalog;
   us: boolean;
   batchL?: number;
   onAddAdditive?: (id: string) => void;
+  onAddCustomAdditive?: (addition: AdditiveAddition) => void;
 }) {
   const [kind, setKind] = useState("hop"),
     [q, setQ] = useState(""),
@@ -117,7 +119,12 @@ export default function Library({
         ))}
       </div>
       {kind === "additive" ? (
-        <AdditiveLibrary us={us} batchL={batchL} onAdd={onAddAdditive} />
+        <AdditiveLibrary
+          us={us}
+          batchL={batchL}
+          onAdd={onAddAdditive}
+          onAddCustom={onAddCustomAdditive}
+        />
       ) : (
         <>
           {kind !== "yeast" && (
