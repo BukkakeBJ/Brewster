@@ -1,11 +1,11 @@
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import { additives, additiveDescriptors } from "../src/engine/additives";
 import { catalog as c } from "../src/catalog";
-mkdirSync(".runtime", { recursive: true });
-export const db = new DatabaseSync(
-  process.env.BREW_DB ?? ".runtime/brew.sqlite",
-);
+const filename = process.env.BREW_DB ?? ".runtime/brew.sqlite";
+mkdirSync(dirname(filename), { recursive: true });
+export const db = new DatabaseSync(filename);
 db.exec("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;");
 db.exec(readFileSync(new URL("./schema.sql", import.meta.url), "utf8"));
 const insert = (table: string, values: Record<string, unknown>) => {

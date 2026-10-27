@@ -6,12 +6,16 @@ import { recipeSchema, logSchema } from "../src/validation";
 import { predict } from "../src/engine/calculations";
 import { catalog } from "../src/catalog";
 const app = express();
+// Railway terminates HTTPS at its reverse proxy. Trust its nearest proxy so
+// same-origin saves use the public HTTPS URL rather than the internal HTTP URL.
+app.set("trust proxy", 1);
 app.use((req, res, next) => {
   const origin = req.get("origin");
-  if (
-    origin &&
-    !/^http:\/\/(127\.0\.0\.1|localhost):(5173|3001|3002)$/.test(origin)
-  )
+  const sameOrigin = `${req.protocol}://${req.get("host")}`;
+  const localDevOrigin =
+    process.env.NODE_ENV !== "production" &&
+    /^http:\/\/(127\.0\.0\.1|localhost):(5173|3001|3002)$/.test(origin ?? "");
+  if (origin && origin !== sameOrigin && !localDevOrigin)
     return res.status(403).json({ error: "Origin not allowed" });
   next();
 });
@@ -127,6 +131,20 @@ app.use(
     res.status(400).json({ error: err.message });
   },
 );
-app.listen(Number(process.env.PORT ?? 3001), "127.0.0.1", () =>
-  console.log("Brew Designer API: http://127.0.0.1:3001"),
-);
+const host =
+  process.env.HOST ??
+  (process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
+const server = app.listen(Number(process.env.PORT ?? 3001), host, () => {
+  const address = server.address();
+  console.log(
+    `BrewMaster API: http://${host}:${typeof address === "object" ? address?.port : process.env.PORT}`,
+  );
+});
+for (const signal of ["SIGTERM", "SIGINT"] as const) {
+  process.on(signal, () => {
+    server.close(() => {
+      db.close();
+      process.exit(0);
+    });
+  });
+}

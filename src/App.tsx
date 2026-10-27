@@ -36,6 +36,9 @@ import FlavorPanel from "./components/FlavorPanel";
 import { flavorPredict } from "./engine/flavor";
 import { Section, Tag } from "./components/ui";
 export default function App() {
+  const sharedWorkspace = !["localhost", "127.0.0.1", "[::1]"].includes(
+    window.location.hostname,
+  );
   const [tab, setActiveTab] = useState("Recipe Editor"),
     [recipe, setRecipe] = useState<Recipe>(() => {
       try {
@@ -233,8 +236,15 @@ export default function App() {
           </span>
         </div>
         <div className="sidebar-bottom">
-          <span className="tiny-dot" /> Local brewing workspace
-          <small>Recipes stay on this Mac.</small>
+          <span className="tiny-dot" />{" "}
+          {sharedWorkspace
+            ? "Public brewing workspace"
+            : "Local brewing workspace"}
+          <small>
+            {sharedWorkspace
+              ? "Saved recipes & brew logs are shared."
+              : "Recipes stay on this Mac."}
+          </small>
         </div>
       </aside>
       <main>
@@ -272,6 +282,12 @@ export default function App() {
           </div>
         </header>
         <div className="page-content">
+          {sharedWorkspace && (
+            <p className="shared-workspace-note">
+              Public workspace · Saved recipes and brew logs are shared with
+              everyone. Unsaved drafts stay in this browser.
+            </p>
+          )}
           <StudioHero
             screen={tab}
             catalog={catalog}

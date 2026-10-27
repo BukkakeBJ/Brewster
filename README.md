@@ -1,6 +1,6 @@
-# Brew Designer
+# BrewMaster
 
-A local recipe workbench with two visibly distinct layers: deterministic brewing calculations and subjective flavor estimates. Built in six committed stages.
+A recipe workbench with two visibly distinct layers: deterministic brewing calculations and subjective flavor estimates. Built in six committed stages.
 
 ## Run
 
@@ -10,7 +10,19 @@ Node 22.13+ required; Node 24+ recommended (Node's built-in SQLite avoids native
 npm install && npm run dev
 ```
 
-Open http://127.0.0.1:5173. React/TypeScript/Vite + Tailwind frontend, Express/TypeScript API, SQLite in `.runtime/brew.sqlite`. No accounts or external AI services. Data stays on this machine. `npm test` runs the framework-free engine tests; `npm run build` checks TypeScript and builds the frontend. `npm start` serves the built app on port 3001.
+Open http://127.0.0.1:5173. React/TypeScript/Vite + Tailwind frontend, Express/TypeScript API, SQLite in `.runtime/brew.sqlite`. No accounts or external AI services. Local development stores data on this machine; the hosted app is a public shared workspace. `npm test` runs engine and API tests; `npm run build` checks TypeScript and builds the frontend. `npm start` serves the built app on port 3001.
+
+## Railway deployment
+
+Deploy the `main` branch of `BukkakeBJ/Brewster` as its own Railway service. The included Dockerfile builds with Node 24, installs production runtime dependencies, and serves the frontend and API together. Railway's injected `PORT` is respected and the production server binds to `0.0.0.0`. `railway.json` configures a startup health check at `/api/health` and restarts after failures.
+
+Attach a persistent Railway volume to the service at `/data`. The Docker image sets `BREW_DB=/data/brew.sqlite`; the database and SQLite WAL files must stay on this volume. Use one service replica with SQLite. Without this volume, saved data is lost when the container is replaced. Catalog records are refreshed on startup while saved recipes and logs remain intact. The local `.runtime` database is excluded from Git and Docker uploads.
+
+This deployment is intentionally public, with no sign-in: visitors can view and change shared saved recipes and brew logs. Browser drafts and display preferences remain local to that browser; pressing Save publishes to the shared database. Tasting personalization and calibration use the shared logs, not a private account history. The sidebar identifies hosted workspaces as public. Do not enter private notes in shared saved records.
+
+The API accepts same-origin browser saves, including HTTPS through Railway's nearest reverse proxy, and rejects other browser origins. This is not access control for a public API. Local Vite origins are additionally accepted outside production. `HOST`, `PORT`, and `BREW_DB` can be overridden for another host. For production locally, run `npm run build` then `NODE_ENV=production npm start`.
+
+Hosting references: [Railway volumes](https://docs.railway.com/volumes), [health checks](https://docs.railway.com/deployments/healthchecks), and [configuration reference](https://docs.railway.com/config-as-code/reference).
 
 ## Architecture decision
 

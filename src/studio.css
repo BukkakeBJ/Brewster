@@ -1396,3 +1396,13 @@ summary:focus-visible {
 .sidebar-botanical svg {
   opacity: 0.85;
 }
+
+.shared-workspace-note {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-left: 3px solid #7f9561;
+  background: #edf0e7;
+  color: #355746;
+  font-size: 12px;
+  line-height: 1.6;
+}
