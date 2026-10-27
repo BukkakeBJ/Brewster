@@ -2396,14 +2396,13 @@ input[type="range"]::-moz-range-thumb {
 }
 .descriptor-meter {
   display: grid;
-  grid-template-columns: 1fr 80px;
+  grid-template-columns: minmax(0, 1fr) 80px auto;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
   margin: 0.25rem 0;
 }
-.descriptor-meter i,
-.descriptor-meter span:last-child {
+.descriptor-meter i {
   display: block;
   height: 6px;
   border-radius: 999px;
@@ -2824,3 +2823,5 @@ input[type="range"]::-moz-range-thumb {
     display: block;
   }
 }
+
+.descriptor-meter > span:last-child { grid-column: 2 / -1; color: var(--ink-2); font-size: 0.85rem; }

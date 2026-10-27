@@ -5,7 +5,11 @@ import { useMemo, useState } from "react";
 import { Search, ArrowUpRight, BookOpen } from "lucide-react";
 import type { Catalog, Ingredient, Malt, Hop, Yeast } from "../engine/types";
 import { alcohol, midpoint, cToF } from "../engine/calculations";
-import { consensus, hopSimilarity } from "../engine/flavor";
+import {
+  consensus,
+  isEditorialIntensity,
+  hopSimilarity,
+} from "../engine/flavor";
 import {
   describeIngredient,
   hopRoles,
@@ -492,25 +496,44 @@ export default function Library({
                             : (yeastGuide(y)?.context ??
                               "Beer context · at midpoint temperature")}
                       </small>
-                      {agreed.slice(0, 5).map((a) => (
-                        <div className="descriptor-meter" key={a.descriptor}>
-                          <span>{a.descriptor.replace("-", " ")}</span>
-                          <div>
-                            <i
-                              style={{ width: (a.intensity / 5) * 100 + "%" }}
-                            />
+                      {agreed.slice(0, 5).map((a) => {
+                        const rated = consensus(
+                          a.rows.filter((row) => !isEditorialIntensity(row)),
+                          usage,
+                        )[0];
+                        return (
+                          <div className="descriptor-meter" key={a.descriptor}>
+                            <span>{a.descriptor.replace("-", " ")}</span>
+                            {rated ? (
+                              <>
+                                <div>
+                                  <i
+                                    style={{
+                                      width: (rated.intensity / 5) * 100 + "%",
+                                    }}
+                                  />
+                                </div>
+                                <b>{rated.intensity.toFixed(1)}/5</b>
+                              </>
+                            ) : (
+                              <span>Intensity unknown</span>
+                            )}
                           </div>
-                          <b>{a.intensity.toFixed(1)}</b>
-                        </div>
-                      ))}
+                        );
+                      })}
                       {!agreed.length && (
                         <p className="muted">
                           No descriptors available for this context.
                         </p>
                       )}
+                      <p className="muted">
+                        Generic model weights are not ingredient ratings.
+                        Intensity is unknown unless a source provides an
+                        individual rating.
+                      </p>
                       <small>
                         <HelpTerm
-                          label="Confidence-weighted consensus · 0–5"
+                          label="Source-based flavor descriptions"
                           helpKey="Consensus"
                         />
                       </small>
@@ -575,12 +598,21 @@ export default function Library({
                         rows.map((row) => (
                           <details className="source-record" key={row.id}>
                             <summary>
-                              {row.descriptor} · {row.intensity}/5{" "}
-                              <Tag>{row.sourceType}</Tag> {row.confidence}{" "}
-                              confidence
+                              {row.descriptor} ·{" "}
+                              {isEditorialIntensity(row)
+                                ? "Intensity unknown"
+                                : `${row.intensity}/5`}{" "}
+                              <Tag>
+                                {isEditorialIntensity(row)
+                                  ? "Editorial assumption"
+                                  : row.sourceType}
+                              </Tag>{" "}
+                              {row.confidence} confidence
                             </summary>
                             <p>
                               Context: {row.usageContext}. {row.note}
+                              {isEditorialIntensity(row) &&
+                                ` Calculation weight: ${row.intensity}/5, assigned by the model rather than reported by the source.`}
                             </p>
                             <a
                               href={row.source.url}

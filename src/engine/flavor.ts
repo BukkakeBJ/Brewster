@@ -24,6 +24,13 @@ export function contextMatches(d: Descriptor, u: Usage) {
     (x.maxTempC === undefined || (u.tempC ?? Infinity) <= x.maxTempC)
   );
 }
+/** Legacy seed weights describe the model, not source-reported sensory ratings. */
+export function isEditorialIntensity(row: Descriptor): boolean {
+  return row.note.startsWith(
+    "Editorial intensity estimate from reference associations",
+  );
+}
+
 export function consensus(
   rows: Descriptor[],
   usage: Usage = {},
