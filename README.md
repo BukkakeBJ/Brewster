@@ -14,7 +14,11 @@ Open http://127.0.0.1:5173. React/TypeScript/Vite + Tailwind frontend, Express/T
 
 ## Railway deployment
 
-Deploy the `main` branch of `BukkakeBJ/Brewster` as its own Railway service. The included Dockerfile builds with Node 24, installs production runtime dependencies, and serves the frontend and API together. Railway's injected `PORT` is respected and the production server binds to `0.0.0.0`. `railway.json` configures a startup health check at `/api/health` and restarts after failures.
+Live app: [BrewMaster](https://brewster-production.up.railway.app). Railway project: [BrewMaster](https://railway.com/project/8a94e80f-0451-4ee6-8459-464a9ca2e14a), service `Brewster`, environment `production`. Only this project hosts this app.
+
+Deploy the `main` branch of `BukkakeBJ/Brewster` as its own Railway service. GitHub pushes to `main` trigger deployments. The included Dockerfile builds with Node 24, installs production runtime dependencies, and serves the frontend and API together. Railway detects this Dockerfile automatically. Configure service settings in the dashboard: health check `/api/health`, restart policy **On Failure** with 10 retries, and one replica. New Railway services cannot use the deprecated `railway.json` configuration format; these settings are stored in Railway.
+
+Set service variables `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=3001`, and `BREW_DB=/data/brew.sqlite`. Generate a public HTTP domain targeting port **3001**. The server also respects another host's injected `PORT` if these settings change.
 
 Attach a persistent Railway volume to the service at `/data`. The Docker image sets `BREW_DB=/data/brew.sqlite`; the database and SQLite WAL files must stay on this volume. Use one service replica with SQLite. Without this volume, saved data is lost when the container is replaced. Catalog records are refreshed on startup while saved recipes and logs remain intact. The local `.runtime` database is excluded from Git and Docker uploads.
 
@@ -22,7 +26,7 @@ This deployment is intentionally public, with no sign-in: visitors can view and 
 
 The API accepts same-origin browser saves, including HTTPS through Railway's nearest reverse proxy, and rejects other browser origins. This is not access control for a public API. Local Vite origins are additionally accepted outside production. `HOST`, `PORT`, and `BREW_DB` can be overridden for another host. For production locally, run `npm run build` then `NODE_ENV=production npm start`.
 
-Hosting references: [Railway volumes](https://docs.railway.com/volumes), [health checks](https://docs.railway.com/deployments/healthchecks), and [configuration reference](https://docs.railway.com/config-as-code/reference).
+Hosting references: [Railway volumes](https://docs.railway.com/volumes), [health checks](https://docs.railway.com/deployments/healthchecks), and [Infrastructure as Code and legacy configuration status](https://docs.railway.com/infrastructure-as-code).
 
 ## Architecture decision
 
