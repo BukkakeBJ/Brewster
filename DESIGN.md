@@ -24,6 +24,8 @@ Calculated specifications and subjective flavor estimates retain their explicit 
 
 `src/styles.css` remains the structural foundation, `src/theme.css` supplies common control colors/readability, and `src/studio.css` supplies this edition's layout and artwork styling.
 
+`src/desktop.css` adds reading sizes only for screens at least 901 px wide: 16 px form values and reading text, 14 px labels and supporting text, and 12 px captions. Navigation is 15 px and recipe metrics are 38 px. These use rem units to respect the browser's text-size preference. The desktop sidebar is wider, dense ingredient columns have more room, and smaller desktop windows stack working panels and recipe/library cards to keep the text usable. Phone/tablet typography and printed brew sheets retain their existing sizes.
+
 ## Mobile and working layout
 
 The phone layout has a compact sticky brand header, top-right Metric/Imperial switch and a floating five-screen bottom navigation with safe-area spacing. Page content reserves bottom space so the navigation cannot cover the last controls. Active navigation uses `aria-current="page"`. The narrow layout was checked at a 409 px content viewport; desktop at 1265 px. All five screens fit without horizontal overflow at those widths.

@@ -1,0 +1,318 @@
+/* Reading sizes for desktop screens. Phone/tablet and print styles stay in
+   styles.css, theme.css and studio.css. */
+@media screen and (min-width: 901px) {
+  :root {
+    --desktop-copy: 1rem;
+    --desktop-label: 0.875rem;
+    --desktop-caption: 0.75rem;
+  }
+
+  body {
+    font-size: var(--desktop-copy);
+    line-height: 1.6;
+  }
+
+  /* Give the larger navigation and recipe controls real space to fit. */
+  .sidebar {
+    width: 264px;
+  }
+  main {
+    margin-left: 264px;
+    width: calc(100% - 264px);
+  }
+  .nav-item,
+  .saved-recipe,
+  .library-types button,
+  .book-tabs button {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .nav-item svg {
+    flex-shrink: 0;
+  }
+  .sidebar-label,
+  .sidebar-bottom,
+  .sidebar-bottom small,
+  .sidebar-botanical span,
+  .topbar,
+  .eyebrow,
+  .section-head .eyebrow,
+  .studio-kicker,
+  .studio-footnote,
+  .recipe-name-label,
+  .metric > span:first-child,
+  .metric-foot,
+  .legend-line,
+  .tag,
+  .neutral,
+  .ingredient-header,
+  .library-types span,
+  .library-count,
+  .library-count span,
+  .sensory-side > small,
+  .flavor-explanation details,
+  .source-reference-specs dt,
+  .solver-note,
+  .design-tip > span,
+  .candidate-numbers small,
+  .calibration-number span,
+  .calibration-yeast span,
+  .log-archive-item span,
+  .suggestions-toggle small,
+  .suggestion-disclaimer,
+  .suggestion-spec,
+  .suggestion-impact > span:last-child,
+  .suggestion-card > a,
+  .book-tabs span,
+  .book-count,
+  .book-stats > div > span,
+  .book-tags span,
+  .book-source small,
+  .book-recipe-details .book-warning,
+  footer {
+    font-size: var(--desktop-caption);
+    line-height: 1.6;
+  }
+  .topbar,
+  .studio-kicker,
+  .studio-footnote,
+  .recipe-name-label,
+  .section-head .eyebrow,
+  .ingredient-header {
+    letter-spacing: 0.08em;
+  }
+
+  .field,
+  .field-label,
+  .field > span,
+  .hop-row .field > span,
+  .number-wrap small,
+  .recipe-meta,
+  .recipe-meta select,
+  .button,
+  .book-card-actions .button,
+  .suggestion-card .button,
+  .text-button,
+  .unit-toggle button,
+  .grain-row small,
+  .percent,
+  .metric small,
+  .style-row > div:first-child,
+  .style-row small,
+  .details > div,
+  .export-buttons button,
+  .notice,
+  .alert,
+  .toast,
+  .radar-legend,
+  .flavor-explanation > div,
+  .flavor-explanation b,
+  .filter-chips button,
+  .library-note,
+  .library-card-head small,
+  .spec-side dl > div,
+  .descriptor-meter,
+  .library-expand,
+  .ingredient-guide a,
+  .complete-specs div,
+  .source-record,
+  .source-reference-specs dl > div,
+  .yeast-filters .muted,
+  .advanced,
+  .advanced p,
+  .advanced > summary,
+  .ingredient-search,
+  .constraint-row,
+  .constraint-row small,
+  .flavor-sliders label,
+  .flavor-sliders .flavor-slider-row,
+  .candidate-reasons p,
+  .tasting-list label,
+  .tasting-list b,
+  .log-status,
+  .calibration-yeast,
+  .log-archive-item b,
+  .comparison-grid table,
+  .tasting-errors > div,
+  .tasting-errors small,
+  .log-aside .checkbox,
+  .suggestions-toggle,
+  .suggestion-modes button,
+  .suggestion-card p,
+  .suggested-dose,
+  .suggestion-problem,
+  .suggestion-status,
+  .popular-library > span,
+  .book-card-heading p,
+  .book-stats strong small,
+  .book-detail-columns span,
+  .book-source a,
+  .recipe-note-editor,
+  .book-hop-profile b,
+  .book-hop-profile p,
+  .book-flavor-profile p,
+  .book-flavor-profile small,
+  .book-flavor-chips span,
+  .live-match-cards .suggestion-card a,
+  .additive-card > a,
+  .additive-model-note,
+  .design-style-match,
+  .design-style-match a,
+  .shared-workspace-note,
+  .water-planner > summary small {
+    font-size: var(--desktop-label);
+    line-height: 1.65;
+  }
+
+  small,
+  .field input,
+  .field select,
+  select,
+  textarea,
+  .grain-row select,
+  .hop-row > select,
+  .hop-row .number-wrap input,
+  .library-search input,
+  .book-search > input,
+  .studio-hero p,
+  .page-heading p,
+  .muted,
+  .ingredient-intro,
+  .ingredient-guide,
+  .empty-state,
+  .design-tip p,
+  .tasting-heading,
+  .book-intro p,
+  .book-description,
+  .book-recipe-details p,
+  .additive-card p,
+  .additive-card small,
+  .info-tip-panel,
+  .info-tip-panel strong,
+  .water-planner ul,
+  .water-planner [role="status"] {
+    font-size: var(--desktop-copy);
+    line-height: 1.7;
+  }
+  .ingredient-guide h4,
+  .suggestion-card h3,
+  .book-recipe-details h3,
+  .book-hop-profile h3,
+  .book-flavor-profile h3 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+  .recipe-name {
+    font-size: 2rem;
+  }
+  .metric strong {
+    font-size: 2.375rem;
+  }
+  .studio-hero p {
+    max-width: 440px;
+  }
+  .section-head h2 {
+    line-height: 1.25;
+  }
+  .field input,
+  .field select,
+  select,
+  textarea {
+    min-height: 46px;
+  }
+  .recipe-meta select {
+    max-width: 300px;
+    min-height: 32px;
+  }
+  .button {
+    white-space: normal;
+    text-align: left;
+  }
+  .recipe-title-row,
+  .recipe-meta,
+  .book-tabs,
+  .library-types,
+  .legend-line {
+    flex-wrap: wrap;
+  }
+  .recipe-title-row > div:first-child {
+    min-width: min(100%, 320px);
+  }
+  .grain-row {
+    grid-template-columns: minmax(0, 1fr) 100px 60px 24px;
+  }
+  .ingredient-header {
+    grid-template-columns: minmax(0, 1fr) 100px 60px;
+  }
+  .hop-row {
+    grid-template-columns: minmax(160px, 1fr) 82px 128px 82px 72px 24px;
+    gap: 12px;
+  }
+  .hop-row > select {
+    height: auto;
+  }
+  .hop-row .number-wrap input {
+    padding: 10px 30px 10px 7px;
+  }
+  .flavor-sliders .flavor-slider-row {
+    grid-template-columns: 135px minmax(0, 1fr) 32px;
+  }
+  .number-wrap input {
+    padding-right: 32px;
+  }
+  .number-wrap small {
+    right: 8px;
+  }
+  .radar text {
+    font-size: 12px;
+  }
+  .book-detail-columns p,
+  .spec-side dl > div {
+    flex-wrap: wrap;
+  }
+  .source-record,
+  .book-source,
+  .ingredient-guide a {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media screen and (min-width: 1351px) {
+  .workbench-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1350px) {
+  .workbench-grid,
+  .design-grid,
+  .log-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .recipe-aside,
+  .log-aside {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  .library-grid,
+  .book-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1150px) {
+  .metrics {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .metric {
+    grid-column: span 2;
+  }
+  .metric:nth-child(n + 4) {
+    grid-column: span 3;
+    border-top: 1px solid #6a81594d;
+  }
+  .hop-row {
+    grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  }
+}
