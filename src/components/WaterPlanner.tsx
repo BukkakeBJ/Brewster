@@ -1,5 +1,5 @@
 import { Droplets, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Catalog, Recipe } from "../engine/types";
 import {
   G_PER_OZ,
@@ -8,7 +8,7 @@ import {
   lToGal,
   L_PER_GAL,
 } from "../engine/calculations";
-import { planFromWater } from "../engine/waterPlan";
+import { planFromWater, waterForRecipe } from "../engine/waterPlan";
 import { Field, Section, Tag } from "./ui";
 export default function WaterPlanner({
   recipe,
@@ -21,13 +21,16 @@ export default function WaterPlanner({
   us: boolean;
   onChange: (r: Recipe) => void;
 }) {
-  const [waterL, setWaterL] = useState(5 * L_PER_GAL),
+  const [waterL, setWaterL] = useState(() => waterForRecipe(recipe, catalog)),
     [absorption, setAbsorption] = useState(0.8),
     [packLossL, setPackLossL] = useState(0.5),
     [bottleMl, setBottleMl] = useState(330),
     [dryCells, setDryCells] = useState(10),
     [liquidCells, setLiquidCells] = useState(100),
     [packGrams, setPackGrams] = useState(11.5);
+  useEffect(() => {
+    setWaterL(waterForRecipe(recipe, catalog, absorption));
+  }, [recipe, catalog, absorption]);
   const yeast = catalog.yeasts.find((y) => y.id === recipe.yeastId)!;
   const dry = yeast.form === "dry";
   let plan: ReturnType<typeof planFromWater> | undefined,
@@ -65,8 +68,6 @@ export default function WaterPlanner({
     }
     onChange(next);
   };
-  const matchesWater =
-    plan && Math.abs(plan.recipe.batchL - recipe.batchL) < 0.000001;
   const vol = (l: number) =>
     `${(us ? lToGal(l) : l).toFixed(2)} ${us ? "gal" : "L"}`;
   return (
@@ -201,24 +202,14 @@ export default function WaterPlanner({
                 : `≈ ${Math.ceil(plan.yeastUnits)} liquid packs, rounded up`}
               . Verify with the supplier; a starter may be needed.
             </p>
-            {matchesWater ? (
-              <p className="water-scale-status" role="status">
-                Recipe amounts are scaled to this water.
-              </p>
-            ) : (
-              <button
-                className="button secondary"
-                onClick={() => onChange(plan!.recipe)}
-              >
-                Scale current recipe to this water
-              </button>
-            )}
+            <p className="water-scale-status" role="status">
+              Ingredient amounts match this water plan.
+            </p>
             <p className="muted">
               Water and absorption edits update your draft ingredient amounts
-              and batch size immediately. Use the button to apply the prefilled
-              water amount. Save your recipe to keep the scaled amounts. Yeast
-              dosage and bottle count are planning estimates; bottle count does
-              not calculate priming sugar.
+              and batch size immediately. Save your recipe to keep the scaled
+              amounts. Yeast dosage and bottle count are planning estimates;
+              bottle count does not calculate priming sugar.
             </p>
           </>
         )}

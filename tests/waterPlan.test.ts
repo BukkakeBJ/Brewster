@@ -1,8 +1,8 @@
 import { expect, it } from "vitest";
 import { catalog } from "../src/catalog";
-import { defaultRecipe } from "../src/defaults";
-import { planFromWater } from "../src/engine/waterPlan";
-import { predict } from "../src/engine/calculations";
+import { defaultRecipe, defaultRecipeForWater } from "../src/defaults";
+import { planFromWater, waterForRecipe } from "../src/engine/waterPlan";
+import { predict, L_PER_GAL } from "../src/engine/calculations";
 it("balances starting water, absorption and evaporation while preserving recipe composition", () => {
   const before = structuredClone(defaultRecipe);
   const plan = planFromWater(defaultRecipe, catalog, 30);
@@ -51,6 +51,48 @@ it("rejects insufficient water and invalid planning assumptions", () => {
   expect(() =>
     planFromWater(defaultRecipe, catalog, 30, 0.8, 0.5, 330, 0),
   ).toThrow();
+});
+it("keeps loaded recipe water consistent and initializes new manual drafts at five gallons", () => {
+  expect(waterForRecipe(defaultRecipe, catalog)).toBeCloseTo(26.56, 8);
+  const planned = planFromWater(defaultRecipe, catalog, 40);
+  expect(waterForRecipe(planned.recipe, catalog)).toBeCloseTo(40, 8);
+  const fresh = defaultRecipeForWater();
+  expect(fresh.id).not.toBe(defaultRecipeForWater().id);
+  expect(waterForRecipe(fresh, catalog)).toBeCloseTo(5 * L_PER_GAL, 8);
+  expect(defaultRecipe.batchL).toBe(20);
+  const nonMash = catalog.malts.find((m) => !m.requiresMash)!;
+  expect(
+    waterForRecipe(
+      {
+        ...defaultRecipe,
+        grains: [...defaultRecipe.grains, { ingredientId: nonMash.id, kg: 3 }],
+      },
+      catalog,
+    ),
+  ).toBeCloseTo(26.56, 8);
+});
+it("rejects invalid recipes when deriving their starting water", () => {
+  expect(() =>
+    waterForRecipe({ ...defaultRecipe, batchL: 0 }, catalog),
+  ).toThrow();
+  expect(() =>
+    waterForRecipe(
+      { ...defaultRecipe, grains: [{ ingredientId: "missing", kg: 1 }] },
+      catalog,
+    ),
+  ).toThrow();
+  expect(() =>
+    waterForRecipe(
+      {
+        ...defaultRecipe,
+        grains: [
+          { ingredientId: defaultRecipe.grains[0].ingredientId, kg: -1 },
+        ],
+      },
+      catalog,
+    ),
+  ).toThrow();
+  expect(() => waterForRecipe(defaultRecipe, catalog, -1)).toThrow();
 });
 it("rescales every hop on repeated water changes without compounding or losing manual ratios", () => {
   const small = planFromWater(defaultRecipe, catalog, 20);

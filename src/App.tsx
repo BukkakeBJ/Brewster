@@ -27,7 +27,7 @@ import RecipeBook from "./components/RecipeBook";
 import { createAdditiveAddition } from "./engine/additives";
 import RecipeNotes from "./components/RecipeNotes";
 import { readDraftBank, copyBookRecipe } from "./engine/recipeBook";
-import { defaultRecipe } from "./defaults";
+import { defaultRecipe, defaultRecipeForWater } from "./defaults";
 import type { Recipe, Prediction, BrewLog as Log } from "./engine/types";
 import { beerColor, predict, lToGal } from "./engine/calculations";
 import { download, exportBeerXML, importRecipe } from "./io";
@@ -65,7 +65,7 @@ export default function App() {
           JSON.parse(localStorage.getItem("brew-draft") ?? "null"),
         );
       } catch {
-        return defaultRecipe;
+        return defaultRecipeForWater();
       }
     }),
     [saved, setSaved] = useState<SavedRecipe[]>([]),
@@ -308,8 +308,7 @@ export default function App() {
           className="text-button new-recipe"
           onClick={() => {
             setRecipe({
-              ...defaultRecipe,
-              id: crypto.randomUUID(),
+              ...defaultRecipeForWater(),
               name: "Untitled recipe",
             });
             setTab("Recipe Editor");

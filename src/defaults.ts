@@ -1,5 +1,7 @@
 import { catalog as c } from "./catalog";
 import type { Recipe, Target } from "./engine/types";
+import { planFromWater } from "./engine/waterPlan";
+import { L_PER_GAL } from "./engine/calculations";
 export const defaultRecipe: Recipe = {
   id: "first-light",
   name: "First Light Pale Ale",
@@ -49,6 +51,13 @@ export const defaultRecipe: Recipe = {
     },
   ],
 };
+/** New manual drafts start with five US gallons of total brewing water. */
+export function defaultRecipeForWater(): Recipe {
+  return {
+    ...planFromWater(defaultRecipe, c, 5 * L_PER_GAL).recipe,
+    id: crypto.randomUUID(),
+  };
+}
 export const defaultTarget: Target = {
   abv: 5.5,
   ibu: 35,

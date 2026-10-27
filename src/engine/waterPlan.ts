@@ -1,5 +1,28 @@
 import type { Catalog, Recipe } from "./types";
-import { predict, scaleRecipe } from "./calculations";
+import { predict, scaleRecipe, volumes } from "./calculations";
+/** Starting mash + sparge water required by an existing recipe's current amounts. */
+export function waterForRecipe(
+  recipe: Recipe,
+  catalog: Catalog,
+  absorptionLPerKg = 0.8,
+) {
+  if (!Number.isFinite(absorptionLPerKg) || absorptionLPerKg < 0)
+    throw new Error("Invalid grain absorption");
+  const volume = volumes(
+    recipe.batchL,
+    recipe.boilMinutes,
+    recipe.boilOffLPerHour,
+    recipe.lossL,
+  );
+  const mashKg = recipe.grains.reduce((sum, g) => {
+    if (!Number.isFinite(g.kg) || g.kg < 0)
+      throw new Error("Invalid fermentable weight");
+    const malt = catalog.malts.find((m) => m.id === g.ingredientId);
+    if (!malt) throw new Error("Unknown fermentable");
+    return sum + (malt.requiresMash ? g.kg : 0);
+  }, 0);
+  return volume.preBoilL + mashKg * absorptionLPerKg;
+}
 /** Water budget ignores water supplied by ingredients and assumes no top-up or shrinkage. */
 export function planFromWater(
   recipe: Recipe,
