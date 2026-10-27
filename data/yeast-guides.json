@@ -1,0 +1,67 @@
+{
+  "y-lalvin-ec1118": {
+    "flavor": "Restrained fermentation character in wine, allowing the fruit base to lead. This is a wine-context association, not a measured beer profile.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-lalvin-d47": {
+    "flavor": "A rounder palate and fruit expression in wine; citrus, tropical and spice associations are particularly connected to lees contact. Effects in malt wort are unverified.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-lalvin-71b": {
+    "flavor": "A fruit-led wine fermentation impression associated with ester production. The grape-wine description does not establish the character of a beer fermented with this strain.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-lalvin-k1-v1116": {
+    "flavor": "Floral and fruit-like ester associations in wine. Temperature and nutrition affect the expression; a malt-wort flavor outcome has not been established here.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-lalvin-qa23": {
+    "flavor": "Wine-context associations favor tropical fruit, particularly passionfruit and pineapple. These descriptions depend on the fermentation medium and are not automatically applied to a beer prediction.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-lalvin-rc212": {
+    "flavor": "In red wine, this culture is associated with the expression of the fruit base and a structured palate. No specific malt-wort aroma score is supported by the source.",
+    "use": "Selected for wine, fruit or honey fermentations. Check the supplier guidance for the actual medium; beer-wort attenuation is not published here.",
+    "context": "Wine fermentation; beer transfer is unverified"
+  },
+  "y-fleischmann-active-dry": {
+    "flavor": "No supplier-validated beer flavor profile is available here. Bread-making performance does not justify assigning a bready beer flavor or a clean score. Record an experimental batch and your own tasting notes.",
+    "use": "Listed for deliberate small-batch experiments. Alcohol production and malt-sugar fermentation performance are unknown for this product; it is not treated as a substitute recommendation for a brewing strain.",
+    "context": "Baking product; beer flavor is unknown"
+  },
+  "y-fleischmann-rapidrise": {
+    "flavor": "No supplier-validated beer flavor profile is available here. Bread-making performance does not justify assigning a bready beer flavor or a clean score. Record an experimental batch and your own tasting notes.",
+    "use": "Listed for deliberate small-batch experiments. Alcohol production and malt-sugar fermentation performance are unknown for this product; it is not treated as a substitute recommendation for a brewing strain.",
+    "context": "Baking product; beer flavor is unknown"
+  },
+  "y-red-star-active-dry": {
+    "flavor": "No supplier-validated beer flavor profile is available here. Bread-making performance does not justify assigning a bready beer flavor or a clean score. Record an experimental batch and your own tasting notes.",
+    "use": "Listed for deliberate small-batch experiments. Alcohol production and malt-sugar fermentation performance are unknown for this product; it is not treated as a substitute recommendation for a brewing strain.",
+    "context": "Baking product; beer flavor is unknown"
+  },
+  "y-white-labs-wlp005-british-ale": {
+    "flavor": "Malt-led and lightly fruity in English-style beer. The source associates this culture with a bread-like malt impression; this is not a measured ingredient intensity.",
+    "use": "A starting option for bitters, brown ales, porters and other malt-led recipes. Confirm the current product instructions and manage settling during fermentation.",
+    "context": "Beer fermentation; gravity and process dependent"
+  },
+  "y-white-labs-wlp090-san-diego-super-ale": {
+    "flavor": "A restrained ester profile that lets hops and malt lead. Its relatively high attenuation can support a dry finish; it is different from WLP099 Super High Gravity.",
+    "use": "Use the strain-specific supplier instructions. Super in the product name does not establish the same fermentation behavior or alcohol limit as another super strain.",
+    "context": "Beer fermentation; gravity and process dependent"
+  },
+  "y-white-labs-wlp099-super-high-gravity-ale": {
+    "flavor": "More pronounced fruity ester character can develop as starting gravity rises. At lower gravity the malt base can remain more prominent. This is a process-dependent description, not a guarantee of extreme alcohol production.",
+    "use": "Use the strain-specific supplier instructions. Super in the product name does not establish the same fermentation behavior or alcohol limit as another super strain.",
+    "context": "Beer fermentation; gravity and process dependent"
+  },
+  "y-lallemand-voss-kveik": {
+    "flavor": "A restrained fermentation impression with light orange and citrus associations across the supplier’s listed temperature range. This is an estimated sensory description, not a measured aroma level.",
+    "use": "A warm-fermentation brewing option. Follow the Voss-specific temperature and pitching guidance rather than applying a conventional cool ale process.",
+    "context": "Beer fermentation within the published Voss range"
+  }
+}

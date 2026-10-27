@@ -5,6 +5,7 @@ import { consensus } from "./flavor";
 import { recipeFamily } from "./suggestions";
 import { midpoint, predict } from "./calculations";
 import { flavorPredict } from "./flavor";
+import { hasBrewingSpecs } from "./yeast";
 export type HopFocus = "bittering" | "flavor" | "aroma" | "dry hop";
 export interface IngredientMatch {
   id: string;
@@ -66,7 +67,7 @@ export function ingredientMatches(t: Target, c: Catalog, userWeight = 1) {
         ? hopUsage(t.hopFocus)
         : i.kind === "malt"
           ? { percent: malt?.type === "base" ? 90 : 5 }
-          : { tempC: midpoint(yeast!.tempC) };
+          : { tempC: yeast!.tempC ? midpoint(yeast!.tempC) : undefined };
     const ds = consensus(descriptorIndex.get(i.id) ?? [], usage, userWeight);
     const descriptors = ds.map((d) => ({
       id: d.descriptor,
@@ -188,15 +189,17 @@ export function ingredientMatches(t: Target, c: Catalog, userWeight = 1) {
       ),
   );
   const yeasts = sorted(
-    c.yeasts.filter(
-      (y) =>
-        ["ale", "lager", "wheat", "belgian", "kveik"].includes(
-          y.type.toLowerCase(),
-        ) &&
-        (t.yeastForm === "any" || y.form === t.yeastForm) &&
-        (t.budget !== "economy" || y.form === "dry") &&
-        (y.alcoholTolerance === null || y.alcoholTolerance >= t.abv),
-    ),
+    c.yeasts
+      .filter(hasBrewingSpecs)
+      .filter(
+        (y) =>
+          ["ale", "lager", "wheat", "belgian", "kveik"].includes(
+            y.type.toLowerCase(),
+          ) &&
+          (t.yeastForm === "any" || y.form === t.yeastForm) &&
+          (t.budget !== "economy" || y.form === "dry") &&
+          (y.alcoholTolerance === null || y.alcoholTolerance >= t.abv),
+      ),
   );
   return { malts, hops, yeasts, profile };
 }

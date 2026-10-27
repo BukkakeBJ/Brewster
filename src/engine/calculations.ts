@@ -13,6 +13,11 @@ import type {
   Recipe,
   Yeast,
 } from "./types";
+import {
+  yeastModelAttenuation,
+  UNKNOWN_YEAST_ATTENUATION,
+  yeastGroups,
+} from "./yeast";
 export const KG_PER_LB = 0.45359237,
   L_PER_GAL = 3.785411784,
   G_PER_OZ = 28.349523125;
@@ -62,7 +67,7 @@ export function apparentAttenuation(
   if (!total) return 0;
   const baseline =
     clamp(
-      (calibrated ?? midpoint(yeast.attenuation)) + (65 - mashC) * 0.75,
+      (calibrated ?? yeastModelAttenuation(yeast)) + (65 - mashC) * 0.75,
       40,
       95,
     ) / 100;
@@ -283,7 +288,19 @@ export function predict(
     if (total && (100 * g.kg) / total > m.maxPercent + 0.01)
       warnings.push(`${m.name} exceeds ${m.maxPercent}% of grist.`);
   });
-  if (recipe.fermentC < y.tempC[0] || recipe.fermentC > y.tempC[1])
+  if (!y.attenuation)
+    warnings.push(
+      `Beer-wort attenuation for ${y.name} is unknown. FG and ABV use ${calibratedAttenuation === undefined ? `a ${UNKNOWN_YEAST_ATTENUATION}% house baseline` : `a ${calibratedAttenuation.toFixed(1)}% personal calibration baseline`} before mash/grist adjustments. This is not a supplier specification.`,
+    );
+  if (!y.tempC)
+    warnings.push(
+      `A brewing fermentation-temperature range for ${y.name} is not published in this catalog.`,
+    );
+  if (yeastGroups(y).some((f) => ["wine", "baking"].includes(f.id)))
+    warnings.push(
+      "This wine or baking culture is an experimental beer choice. Wine-context aromas are not transferred into the beer flavor prediction; pitch and fermentation calculations remain beer-model assumptions.",
+    );
+  if (y.tempC && (recipe.fermentC < y.tempC[0] || recipe.fermentC > y.tempC[1]))
     warnings.push(
       "Fermentation is outside the reference strain temperature range.",
     );

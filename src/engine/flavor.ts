@@ -8,6 +8,7 @@ import type {
 } from "./types";
 import { clamp } from "./calculations";
 export interface Usage {
+  medium?: "beer" | "wine";
   use?: string;
   percent?: number;
   tempC?: number;
@@ -15,6 +16,7 @@ export interface Usage {
 export function contextMatches(d: Descriptor, u: Usage) {
   const x = d.context;
   return (
+    (!x.medium || x.medium === (u.medium ?? "beer")) &&
     (!x.use || x.use === u.use) &&
     (x.minPercent === undefined || (u.percent ?? -Infinity) >= x.minPercent) &&
     (x.maxPercent === undefined || (u.percent ?? Infinity) <= x.maxPercent) &&
@@ -110,19 +112,25 @@ export function flavorPredict(
       });
   }
   const yeast = c.yeasts.find((y) => y.id === r.yeastId)!;
-  const warm = clamp(
-    (r.fermentC - yeast.tempC[0]) / (yeast.tempC[1] - yeast.tempC[0] || 1),
-    0,
-    1,
-  );
+  const warm = yeast.tempC
+    ? clamp(
+        (r.fermentC - yeast.tempC[0]) / (yeast.tempC[1] - yeast.tempC[0] || 1),
+        0,
+        1,
+      )
+    : 0.5;
   for (const d of consensus(
     indexed.get(yeast.id) ?? [],
     { tempC: r.fermentC },
     userWeight,
   )) {
-    const isEster = ["banana", "pear", "apple", "bubblegum"].includes(
-        d.descriptor,
-      ),
+    const isEster = [
+        "fruity-ester",
+        "banana",
+        "pear",
+        "apple",
+        "bubblegum",
+      ].includes(d.descriptor),
       phenol = ["clove", "pepper"].includes(d.descriptor);
     const factor = isEster
       ? (0.6 + 0.9 * warm) * Math.pow(1 / r.pitchMultiplier, 0.25)

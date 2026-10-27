@@ -1,0 +1,116 @@
+[
+  {
+    "id": "american",
+    "label": "American ale",
+    "terms": [
+      "american",
+      "california",
+      "chico",
+      "san diego",
+      "west coast",
+      "us-05",
+      "pacman"
+    ],
+    "description": "Often chosen when malt and hops should lead. Individual strains range from restrained fermentation character to light fruit; compare the strain-specific evidence below."
+  },
+  {
+    "id": "baking",
+    "label": "Baking / bread yeast",
+    "types": ["baking"],
+    "terms": ["baking yeast", "baker's yeast"],
+    "description": "An experimental brewing choice sold for dough fermentation. A baking rise rate does not establish beer attenuation, alcohol tolerance or beer flavor. Product-specific brewing performance is unknown unless supported by a brewing trial."
+  },
+  {
+    "id": "belgian",
+    "label": "Belgian / saison",
+    "terms": ["belgian", "abbey", "trappist", "saison", "ardennes"],
+    "description": "Often selected for expressive fermentation character. Depending on the strain and temperature, the profile may favor fruit, pepper or clove. Check POF and diastaticus separately; family membership does not establish either status."
+  },
+  {
+    "id": "brett",
+    "label": "Brett / mixed culture",
+    "terms": ["brett", "mixed culture", "lambic", "roeselare", "sour mix"],
+    "description": "Cultures used for evolving fermentation character, sometimes including earthy, tart or funky impressions. Mixed cultures and long aging fall outside the app's simple fermentation model; a single attenuation range cannot describe every outcome."
+  },
+  {
+    "id": "british",
+    "label": "British / Irish ale",
+    "terms": [
+      "british",
+      "english",
+      "london",
+      "burton",
+      "nottingham",
+      "windsor",
+      "scottish",
+      "irish",
+      "whitbread",
+      "thames",
+      "yorkshire",
+      "edinburgh",
+      "dublin",
+      "esb"
+    ],
+    "description": "Common starting points for bitters, brown ales, porters and stouts. Some leave a rounder malt impression and gentle fruit; others ferment drier. The strain's attenuation and sensory records are more useful than assuming every British yeast tastes alike."
+  },
+  {
+    "id": "high-gravity",
+    "label": "High gravity / super strains",
+    "terms": ["super", "high gravity", "high-gravity"],
+    "description": "Includes strains marketed for fast fermentation or strong wort. San Diego Super Ale and Super High Gravity Ale have different attenuation, tolerance and flavor profiles. The word super does not promise a particular ABV or make the strains interchangeable."
+  },
+  {
+    "id": "kveik",
+    "label": "Kveik",
+    "terms": ["kveik", "voss", "hornindal", "lutra"],
+    "description": "A family of brewing cultures with strain-dependent fermentation ranges and fruit character. Use the actual strain's temperature specifications rather than applying one warm fermentation schedule to every kveik."
+  },
+  {
+    "id": "lager",
+    "label": "Lager",
+    "types": ["lager"],
+    "terms": ["lager", "pils", "bock", "helles"],
+    "description": "Often chosen for a restrained fermentation impression and cool fermentation process. Individual cultures differ in sulfur, attenuation and settling. BrewMaster uses the lager pitch-rate baseline for ingredients whose objective type is lager."
+  },
+  {
+    "id": "other",
+    "label": "Other brewing yeast",
+    "terms": [],
+    "description": "Additional brewing cultures that do not fit the named families. Compare their actual strain specs and contextual flavor records; this catch-all category does not imply a shared flavor or fermentation behavior."
+  },
+  {
+    "id": "wheat",
+    "label": "Wheat beer",
+    "types": ["wheat"],
+    "terms": ["weizen", "wheat", "witbier", "weiss"],
+    "description": "Includes wheat-beer cultures ranging from restrained to banana- and clove-associated strains. The strain, fermentation temperature and process determine the impression; wheat in the name does not guarantee either flavor."
+  },
+  {
+    "id": "wine",
+    "label": "Wine / cider / mead",
+    "types": ["wine", "champagne"],
+    "terms": ["wine", "champagne", "cider", "mead", "sake"],
+    "description": "Cultures selected for grape, fruit, honey or other fermentation media. Published alcohol tolerance is useful, but a wine yeast's behavior with grape sugars does not establish its attenuation of malt wort. Wine flavor notes are labeled with their original context."
+  },
+  {
+    "id": "conditioning",
+    "label": "Conditioning / bottling",
+    "terms": ["conditioning", "bottling", "cask & bottle"],
+    "description": "Cultures selected for finishing or conditioning tasks. Their suitability for bottle conditioning does not establish their suitability as the primary fermentation yeast. Check the supplier’s intended use and sugar metabolism."
+  },
+  {
+    "id": "european",
+    "label": "German / European ale",
+    "terms": [
+      "german",
+      "kölsch",
+      "kolsch",
+      "altbier",
+      "düsseldorf",
+      "dusseldorf",
+      "bière de garde",
+      "biere de garde"
+    ],
+    "description": "Ale cultures used in regional European processes. Some support a restrained fermentation impression, while others show more fruit or sulfur. Temperature, maturation and the actual strain matter more than the regional label."
+  }
+]

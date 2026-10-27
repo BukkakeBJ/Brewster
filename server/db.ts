@@ -7,7 +7,30 @@ const filename = process.env.BREW_DB ?? ".runtime/brew.sqlite";
 mkdirSync(dirname(filename), { recursive: true });
 export const db = new DatabaseSync(filename);
 db.exec("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;");
-db.exec(readFileSync(new URL("./schema.sql", import.meta.url), "utf8"));
+const schema = readFileSync(new URL("./schema.sql", import.meta.url), "utf8");
+db.exec(schema);
+// Older catalogs required brewing figures even for non-brewing cultures.
+// Make unknown specs nullable, preserving all rows and recipe/log documents.
+if (
+  db
+    .prepare("PRAGMA table_info(yeast_specs)")
+    .all()
+    .some((column) => column.name === "attenuation_min" && column.notnull === 1)
+) {
+  db.exec("BEGIN");
+  try {
+    db.exec("ALTER TABLE yeast_specs RENAME TO yeast_specs_legacy");
+    db.exec(
+      schema.match(/CREATE TABLE IF NOT EXISTS yeast_specs \([^;]+;/)![0],
+    );
+    db.exec(
+      "INSERT INTO yeast_specs SELECT * FROM yeast_specs_legacy; DROP TABLE yeast_specs_legacy; COMMIT",
+    );
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+}
 // Existing records were deliberately public before optional sharing existed.
 // Preserve them as read-only community records; never assign them to a visitor.
 for (const table of ["recipes", "brew_logs"]) {
@@ -93,11 +116,11 @@ try {
       code: y.code,
       form: y.form,
       type: y.type,
-      attenuation_min: y.attenuation[0],
-      attenuation_max: y.attenuation[1],
+      attenuation_min: y.attenuation?.[0] ?? null,
+      attenuation_max: y.attenuation?.[1] ?? null,
       flocculation: y.flocculation,
-      temp_min_c: y.tempC[0],
-      temp_max_c: y.tempC[1],
+      temp_min_c: y.tempC?.[0] ?? null,
+      temp_max_c: y.tempC?.[1] ?? null,
       alcohol_tolerance: y.alcoholTolerance,
       pof: y.pof,
       diastaticus: y.diastaticus,

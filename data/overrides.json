@@ -1,8 +1,14 @@
 {
   "yeasts": {
     "y-fermentis-us-05-safale-us-05": {
-      "tempC": [18, 26],
-      "attenuation": [78, 82],
+      "tempC": [
+        18,
+        26
+      ],
+      "attenuation": [
+        78,
+        82
+      ],
       "alcoholTolerance": 10,
       "pof": false,
       "source": {
@@ -10,6 +16,216 @@
         "url": "https://fermentis.com/en/product/safale-us-05/",
         "accessed": "2026-10-25",
         "note": "Manufacturer verified: attenuation 78–82%, recommended temperature 18–26°C, tolerance 10%, POF absent. Diastaticus unstated. Other fields retained from Brewtarget reference: https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json"
+      }
+    },
+    "y-white-labs-wlp005-british-ale": {
+      "attenuation": [
+        67,
+        74
+      ],
+      "tempC": [
+        18,
+        21
+      ],
+      "alcoholTolerance": 10,
+      "flocculation": "high",
+      "diastaticus": false,
+      "source": {
+        "title": "White Labs WLP005 manufacturer specifications",
+        "url": "https://www.whitelabs.com/yeast-single?id=105&type=YEAST",
+        "accessed": "2026-10-26",
+        "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+      }
+    },
+    "y-white-labs-wlp090-san-diego-super-ale": {
+      "attenuation": [
+        76,
+        83
+      ],
+      "tempC": [
+        18,
+        20
+      ],
+      "alcoholTolerance": 10,
+      "flocculation": "medium-high",
+      "diastaticus": false,
+      "source": {
+        "title": "White Labs WLP090 manufacturer specifications",
+        "url": "https://www.whitelabs.com/yeast-single?id=144&type=YEAST",
+        "accessed": "2026-10-26",
+        "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+      }
+    },
+    "y-white-labs-wlp099-super-high-gravity-ale": {
+      "attenuation": [
+        80,
+        100
+      ],
+      "tempC": [
+        18,
+        20
+      ],
+      "alcoholTolerance": 25,
+      "flocculation": "medium",
+      "diastaticus": true,
+      "source": {
+        "title": "White Labs WLP099 manufacturer specifications",
+        "url": "https://www.whitelabs.com/yeast-single?id=146&type=YEAST",
+        "accessed": "2026-10-26",
+        "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+      }
+    },
+    "y-white-labs-wlp700-flor-sherry": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp705-sake": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp707-california-pinot-noir": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp709-sake-9": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp715-champagne": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp718-avize-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp720-sweet-mead-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp727-steinberg-geisenheim-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp730-chardonnay-white-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp735-french-white-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp740-merlot-red-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp749-assmanshausen-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp750-french-red-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp760-cabernet-red-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp770-suremain-burgundy-wine": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-white-labs-wlp775-english-cider": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
+      }
+    },
+    "y-mangrove-jack-s-m02-craft-series-cider": {
+      "attenuation": null,
+      "source": {
+        "title": "Brewtarget numeric brewing reference",
+        "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+        "accessed": "2026-10-25",
+        "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
       }
     }
   },
@@ -43,6 +259,790 @@
           "url": "https://brewingwithbriess.com/blog/understanding-carapils/",
           "accessed": "2026-10-26",
           "note": "Briess identifies Carapils as a dextrin malt distinct from caramel. Color, extract, potential and maximum share retained from the pinned Brewtarget numeric reference; body classification and attenuation treatment are model assumptions."
+        }
+      }
+    ],
+    "y-lalvin-ec1118": [
+      {
+        "id": "d-yeast-ec1118-clean",
+        "ingredientId": "y-lalvin-ec1118",
+        "descriptor": "clean",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin EC-1118 manufacturer reference",
+          "url": "https://admin.lallemandbrewing.com/wp-content/uploads/2017/03/EC1118-TDS-ENG-Lalvin.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-lalvin-d47": [
+      {
+        "id": "d-yeast-d47-citrus",
+        "ingredientId": "y-lalvin-d47",
+        "descriptor": "citrus",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin ICV D47 manufacturer reference",
+          "url": "https://www.lallemandbrewing.com/docs/products/tds/TDS_LALVIN_D47_ENG_DIGITAL.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      },
+      {
+        "id": "d-yeast-d47-tropical",
+        "ingredientId": "y-lalvin-d47",
+        "descriptor": "tropical",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin ICV D47 manufacturer reference",
+          "url": "https://www.lallemandbrewing.com/docs/products/tds/TDS_LALVIN_D47_ENG_DIGITAL.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      },
+      {
+        "id": "d-yeast-d47-spicy",
+        "ingredientId": "y-lalvin-d47",
+        "descriptor": "spicy",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin ICV D47 manufacturer reference",
+          "url": "https://www.lallemandbrewing.com/docs/products/tds/TDS_LALVIN_D47_ENG_DIGITAL.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-lalvin-71b": [
+      {
+        "id": "d-yeast-71b-fruity-ester",
+        "ingredientId": "y-lalvin-71b",
+        "descriptor": "fruity-ester",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Broad fruit/ester association from the supplier; no specific fruit or measured 0–5 intensity is asserted. Editorial intensity mapping; fermentation medium matters.",
+        "source": {
+          "title": "Lallemand Lalvin 71B manufacturer reference",
+          "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-71B-DIGITAL-1.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-lalvin-k1-v1116": [
+      {
+        "id": "d-yeast-k1-v1116-floral",
+        "ingredientId": "y-lalvin-k1-v1116",
+        "descriptor": "floral",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin ICV K1-V1116 manufacturer reference",
+          "url": "https://www.lallemandbrewing.com/en/global/products/lalvin-icv-k1-v1116/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      },
+      {
+        "id": "d-yeast-k1-v1116-banana",
+        "ingredientId": "y-lalvin-k1-v1116",
+        "descriptor": "banana",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin ICV K1-V1116 manufacturer reference",
+          "url": "https://www.lallemandbrewing.com/en/global/products/lalvin-icv-k1-v1116/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-lalvin-qa23": [
+      {
+        "id": "d-yeast-qa23-passionfruit",
+        "ingredientId": "y-lalvin-qa23",
+        "descriptor": "passionfruit",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin QA23 manufacturer reference",
+          "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-QA23-DIGITAL-1.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      },
+      {
+        "id": "d-yeast-qa23-pineapple",
+        "ingredientId": "y-lalvin-qa23",
+        "descriptor": "pineapple",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin QA23 manufacturer reference",
+          "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-QA23-DIGITAL-1.pdf",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-lalvin-rc212": [
+      {
+        "id": "d-yeast-rc212-body",
+        "ingredientId": "y-lalvin-rc212",
+        "descriptor": "body",
+        "intensity": 2.5,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "wine fermentation; lees contact for D47; not a beer-wort measurement",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Original wording and editorial intensity mapping from the manufacturer wine description. A 0–5 intensity was not measured by the supplier; not transferred to beer predictions.",
+        "source": {
+          "title": "Lallemand Lalvin Bourgovin RC212 manufacturer reference",
+          "url": "https://www.lallemandwine.com/en/new-zealand/products/wine-yeasts/lalvin-rc212/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+        }
+      }
+    ],
+    "y-white-labs-wlp005-british-ale": [
+      {
+        "id": "d-yeast-wlp005-bready",
+        "ingredientId": "y-white-labs-wlp005-british-ale",
+        "descriptor": "bready",
+        "intensity": 2.5,
+        "context": {
+          "medium": "beer"
+        },
+        "usageContext": "beer fermentation within strain range; intensity varies with wort and gravity",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Paraphrased supplier association. Intensity and mapping to this vocabulary are editorial, not measured specifications.",
+        "source": {
+          "title": "White Labs WLP005 manufacturer specifications",
+          "url": "https://www.whitelabs.com/yeast-single?id=105&type=YEAST",
+          "accessed": "2026-10-26",
+          "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+        }
+      },
+      {
+        "id": "d-yeast-wlp005-grainy",
+        "ingredientId": "y-white-labs-wlp005-british-ale",
+        "descriptor": "grainy",
+        "intensity": 2.5,
+        "context": {
+          "medium": "beer"
+        },
+        "usageContext": "beer fermentation within strain range; intensity varies with wort and gravity",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Paraphrased supplier association. Intensity and mapping to this vocabulary are editorial, not measured specifications.",
+        "source": {
+          "title": "White Labs WLP005 manufacturer specifications",
+          "url": "https://www.whitelabs.com/yeast-single?id=105&type=YEAST",
+          "accessed": "2026-10-26",
+          "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+        }
+      }
+    ],
+    "y-white-labs-wlp090-san-diego-super-ale": [
+      {
+        "id": "d-yeast-wlp090-clean",
+        "ingredientId": "y-white-labs-wlp090-san-diego-super-ale",
+        "descriptor": "clean",
+        "intensity": 2.5,
+        "context": {
+          "medium": "beer"
+        },
+        "usageContext": "beer fermentation within strain range; intensity varies with wort and gravity",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Paraphrased supplier association. Intensity and mapping to this vocabulary are editorial, not measured specifications.",
+        "source": {
+          "title": "White Labs WLP090 manufacturer specifications",
+          "url": "https://www.whitelabs.com/yeast-single?id=144&type=YEAST",
+          "accessed": "2026-10-26",
+          "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+        }
+      }
+    ],
+    "y-white-labs-wlp099-super-high-gravity-ale": [
+      {
+        "id": "d-yeast-wlp099-fruity-ester",
+        "ingredientId": "y-white-labs-wlp099-super-high-gravity-ale",
+        "descriptor": "fruity-ester",
+        "intensity": 2.5,
+        "context": {
+          "medium": "beer"
+        },
+        "usageContext": "beer fermentation within strain range; intensity varies with wort and gravity",
+        "sourceType": "manufacturer",
+        "confidence": "low",
+        "note": "Broad fruit/ester association from the supplier; no specific fruit or measured 0–5 intensity is asserted. Editorial intensity mapping; fermentation medium matters.",
+        "source": {
+          "title": "White Labs WLP099 manufacturer specifications",
+          "url": "https://www.whitelabs.com/yeast-single?id=146&type=YEAST",
+          "accessed": "2026-10-26",
+          "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
+        }
+      }
+    ],
+    "y-white-labs-wlp700-flor-sherry": [
+      {
+        "id": "d-2512",
+        "ingredientId": "y-white-labs-wlp700-flor-sherry",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp705-sake": [
+      {
+        "id": "d-2513",
+        "ingredientId": "y-white-labs-wlp705-sake",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp707-california-pinot-noir": [
+      {
+        "id": "d-2514",
+        "ingredientId": "y-white-labs-wlp707-california-pinot-noir",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp709-sake-9": [
+      {
+        "id": "d-2515",
+        "ingredientId": "y-white-labs-wlp709-sake-9",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp715-champagne": [
+      {
+        "id": "d-2516",
+        "ingredientId": "y-white-labs-wlp715-champagne",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp718-avize-wine": [
+      {
+        "id": "d-2517",
+        "ingredientId": "y-white-labs-wlp718-avize-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp720-sweet-mead-wine": [
+      {
+        "id": "d-2518",
+        "ingredientId": "y-white-labs-wlp720-sweet-mead-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp727-steinberg-geisenheim-wine": [
+      {
+        "id": "d-2519",
+        "ingredientId": "y-white-labs-wlp727-steinberg-geisenheim-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp730-chardonnay-white-wine": [
+      {
+        "id": "d-2520",
+        "ingredientId": "y-white-labs-wlp730-chardonnay-white-wine",
+        "descriptor": "sulfur",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp735-french-white-wine": [
+      {
+        "id": "d-2521",
+        "ingredientId": "y-white-labs-wlp735-french-white-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp740-merlot-red-wine": [
+      {
+        "id": "d-2522",
+        "ingredientId": "y-white-labs-wlp740-merlot-red-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp749-assmanshausen-wine": [
+      {
+        "id": "d-2523",
+        "ingredientId": "y-white-labs-wlp749-assmanshausen-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp750-french-red-wine": [
+      {
+        "id": "d-2524",
+        "ingredientId": "y-white-labs-wlp750-french-red-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp760-cabernet-red-wine": [
+      {
+        "id": "d-2525",
+        "ingredientId": "y-white-labs-wlp760-cabernet-red-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp770-suremain-burgundy-wine": [
+      {
+        "id": "d-2526",
+        "ingredientId": "y-white-labs-wlp770-suremain-burgundy-wine",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-white-labs-wlp775-english-cider": [
+      {
+        "id": "d-2527",
+        "ingredientId": "y-white-labs-wlp775-english-cider",
+        "descriptor": "pear",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      },
+      {
+        "id": "d-2528",
+        "ingredientId": "y-white-labs-wlp775-english-cider",
+        "descriptor": "apple",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      },
+      {
+        "id": "d-2529",
+        "ingredientId": "y-white-labs-wlp775-english-cider",
+        "descriptor": "sulfur",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      },
+      {
+        "id": "d-2530",
+        "ingredientId": "y-white-labs-wlp775-english-cider",
+        "descriptor": "pear",
+        "intensity": 4,
+        "context": {
+          "minTempC": 21.945,
+          "medium": "wine"
+        },
+        "usageContext": "warm half of strain range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      },
+      {
+        "id": "d-2531",
+        "ingredientId": "y-white-labs-wlp775-english-cider",
+        "descriptor": "apple",
+        "intensity": 4,
+        "context": {
+          "minTempC": 21.945,
+          "medium": "wine"
+        },
+        "usageContext": "warm half of strain range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "medium",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-mangrove-jack-s-m02-craft-series-cider": [
+      {
+        "id": "d-2660",
+        "ingredientId": "y-mangrove-jack-s-m02-craft-series-cider",
+        "descriptor": "clean",
+        "intensity": 2.8,
+        "context": {
+          "medium": "wine"
+        },
+        "usageContext": "within strain temperature range; wine/cider context, not validated for beer",
+        "sourceType": "literature",
+        "confidence": "low",
+        "note": "Editorial intensity estimate from reference associations; not an analytical measurement.",
+        "source": {
+          "title": "Brewtarget numeric brewing reference",
+          "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
+          "accessed": "2026-10-25",
+          "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+        }
+      }
+    ],
+    "y-lallemand-voss-kveik": [
+      {
+        "id": "d-yeast-voss-clean",
+        "ingredientId": "y-lallemand-voss-kveik",
+        "descriptor": "clean",
+        "intensity": 3,
+        "context": {
+          "medium": "beer",
+          "minTempC": 25,
+          "maxTempC": 40
+        },
+        "usageContext": "beer fermentation at 25–40°C",
+        "sourceType": "manufacturer",
+        "confidence": "medium",
+        "note": "Paraphrased manufacturer association with an editorial 0–5 mapping; intensity is not an analytical specification.",
+        "source": {
+          "title": "Lallemand LalBrew Voss manufacturer specifications",
+          "url": "https://www.lallemandbrewing.com/en/united-states/products/lalbrew-voss-kveik-ale-yeast/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer: attenuation 76–82%, 25–40°C range, 12% alcohol tolerance and very high flocculation. POF and diastaticus remain unknown here. Sensory intensities are editorial estimates, separate from these specs."
+        }
+      },
+      {
+        "id": "d-yeast-voss-orange",
+        "ingredientId": "y-lallemand-voss-kveik",
+        "descriptor": "orange",
+        "intensity": 2,
+        "context": {
+          "medium": "beer",
+          "minTempC": 25,
+          "maxTempC": 40
+        },
+        "usageContext": "beer fermentation at 25–40°C",
+        "sourceType": "manufacturer",
+        "confidence": "medium",
+        "note": "Paraphrased manufacturer association with an editorial 0–5 mapping; intensity is not an analytical specification.",
+        "source": {
+          "title": "Lallemand LalBrew Voss manufacturer specifications",
+          "url": "https://www.lallemandbrewing.com/en/united-states/products/lalbrew-voss-kveik-ale-yeast/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer: attenuation 76–82%, 25–40°C range, 12% alcohol tolerance and very high flocculation. POF and diastaticus remain unknown here. Sensory intensities are editorial estimates, separate from these specs."
+        }
+      },
+      {
+        "id": "d-yeast-voss-citrus",
+        "ingredientId": "y-lallemand-voss-kveik",
+        "descriptor": "citrus",
+        "intensity": 2,
+        "context": {
+          "medium": "beer",
+          "minTempC": 25,
+          "maxTempC": 40
+        },
+        "usageContext": "beer fermentation at 25–40°C",
+        "sourceType": "manufacturer",
+        "confidence": "medium",
+        "note": "Paraphrased manufacturer association with an editorial 0–5 mapping; intensity is not an analytical specification.",
+        "source": {
+          "title": "Lallemand LalBrew Voss manufacturer specifications",
+          "url": "https://www.lallemandbrewing.com/en/united-states/products/lalbrew-voss-kveik-ale-yeast/",
+          "accessed": "2026-10-26",
+          "note": "Manufacturer: attenuation 76–82%, 25–40°C range, 12% alcohol tolerance and very high flocculation. POF and diastaticus remain unknown here. Sensory intensities are editorial estimates, separate from these specs."
         }
       }
     ]

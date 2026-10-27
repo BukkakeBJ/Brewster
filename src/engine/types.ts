@@ -44,9 +44,9 @@ export interface Yeast extends Ingredient {
   code: string;
   form: string;
   type: string;
-  attenuation: Range;
+  attenuation: Range | null;
   flocculation: string;
-  tempC: Range;
+  tempC: Range | null;
   alcoholTolerance: number | null;
   pof: boolean | null;
   diastaticus: boolean | null;
@@ -63,6 +63,7 @@ export interface Descriptor {
   descriptor: string;
   intensity: number;
   context: {
+    medium?: "beer" | "wine";
     use?: string;
     minPercent?: number;
     maxPercent?: number;

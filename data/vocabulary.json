@@ -310,5 +310,11 @@
     "parent": "structure",
     "label": "Astringency",
     "axis": true
+  },
+  {
+    "id": "fruity-ester",
+    "parent": "yeast",
+    "label": "Fruity ester",
+    "axis": true
   }
 ]

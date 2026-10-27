@@ -94,17 +94,17 @@
     ],
     "flocculation": "high",
     "tempC": [
-      18.33,
-      21.11
+      18,
+      21
     ],
     "alcoholTolerance": 10,
     "pof": null,
-    "diastaticus": null,
+    "diastaticus": false,
     "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "title": "White Labs WLP005 manufacturer specifications",
+      "url": "https://www.whitelabs.com/yeast-single?id=105&type=YEAST",
+      "accessed": "2026-10-26",
+      "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
     }
   },
   {
@@ -848,19 +848,19 @@
       76,
       83
     ],
-    "flocculation": "medium high",
+    "flocculation": "medium-high",
     "tempC": [
-      18.33,
-      20.0
+      18,
+      20
     ],
-    "alcoholTolerance": 15,
+    "alcoholTolerance": 10,
     "pof": null,
-    "diastaticus": null,
+    "diastaticus": false,
     "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "title": "White Labs WLP090 manufacturer specifications",
+      "url": "https://www.whitelabs.com/yeast-single?id=144&type=YEAST",
+      "accessed": "2026-10-26",
+      "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
     }
   },
   {
@@ -877,17 +877,17 @@
     ],
     "flocculation": "medium",
     "tempC": [
-      18.33,
-      20.56
+      18,
+      20
     ],
     "alcoholTolerance": 25,
     "pof": null,
-    "diastaticus": null,
+    "diastaticus": true,
     "source": {
-      "title": "Brewtarget numeric brewing reference",
-      "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
-      "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "title": "White Labs WLP099 manufacturer specifications",
+      "url": "https://www.whitelabs.com/yeast-single?id=146&type=YEAST",
+      "accessed": "2026-10-26",
+      "note": "Attenuation, temperature, flocculation and STA1 checked against current product page. Tolerance uses the upper end of the published 5–10% class for WLP005/WLP090; WLP099 explicitly describes up to 25% under suitable conditions. POF remains unknown. Form retained as liquid from the original reference."
     }
   },
   {
@@ -1627,10 +1627,7 @@
     "code": "WLP700",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "medium",
     "tempC": [
       21.11,
@@ -1643,7 +1640,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1654,10 +1651,7 @@
     "code": "WLP705",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "medium",
     "tempC": [
       21.11,
@@ -1670,7 +1664,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1681,10 +1675,7 @@
     "code": "WLP707",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "medium",
     "tempC": [
       21.11,
@@ -1697,7 +1688,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1708,10 +1699,7 @@
     "code": "WLP709",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      72,
-      78
-    ],
+    "attenuation": null,
     "flocculation": "medium low",
     "tempC": [
       16.67,
@@ -1724,7 +1712,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1735,10 +1723,7 @@
     "code": "WLP715",
     "form": "liquid",
     "type": "champagne",
-    "attenuation": [
-      75,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       21.11,
@@ -1751,7 +1736,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1762,10 +1747,7 @@
     "code": "WLP718",
     "form": "liquid",
     "type": "champagne",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -1778,7 +1760,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1789,10 +1771,7 @@
     "code": "WLP720",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      70,
-      90
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       21.11,
@@ -1805,7 +1784,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1816,10 +1795,7 @@
     "code": "WLP727",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       10.0,
@@ -1832,7 +1808,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1843,10 +1819,7 @@
     "code": "WLP730",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       10.0,
@@ -1859,7 +1832,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1870,10 +1843,7 @@
     "code": "WLP735",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -1886,7 +1856,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1897,10 +1867,7 @@
     "code": "WLP740",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -1913,7 +1880,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1924,10 +1891,7 @@
     "code": "WLP749",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       10.0,
@@ -1940,7 +1904,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1951,10 +1915,7 @@
     "code": "WLP750",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -1967,7 +1928,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -1978,10 +1939,7 @@
     "code": "WLP760",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -1994,7 +1952,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -2005,10 +1963,7 @@
     "code": "WLP770",
     "form": "liquid",
     "type": "wine",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "low",
     "tempC": [
       15.56,
@@ -2021,7 +1976,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -2032,10 +1987,7 @@
     "code": "WLP775",
     "form": "liquid",
     "type": "other",
-    "attenuation": [
-      80,
-      100
-    ],
+    "attenuation": null,
     "flocculation": "medium",
     "tempC": [
       20.0,
@@ -2048,7 +2000,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -4543,10 +4495,7 @@
     "code": "M02",
     "form": "dry",
     "type": "other",
-    "attenuation": [
-      75,
-      80
-    ],
+    "attenuation": null,
     "flocculation": "high",
     "tempC": [
       12.22,
@@ -4559,7 +4508,7 @@
       "title": "Brewtarget numeric brewing reference",
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
-      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+      "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range. Legacy attenuation omitted because beer-wort performance is not established by this wine/cider reference."
     }
   },
   {
@@ -7692,6 +7641,240 @@
       "url": "https://github.com/Brewtarget/brewtarget/blob/531d5e7523f9e72a0054349bd5b14aa1c7bf16ad/data/DefaultContent003-Ingredients-Hops-Yeasts.json",
       "accessed": "2026-10-25",
       "note": "Reference values, not lot certificates. Null means unpublished/unknown. Single-point hop ranges represent a reference typical value, not a measured range."
+    }
+  },
+  {
+    "id": "y-lalvin-ec1118",
+    "kind": "yeast",
+    "name": "Lalvin EC-1118",
+    "lab": "Lallemand / Lalvin",
+    "code": "EC-1118",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      10,
+      30
+    ],
+    "alcoholTolerance": 18,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin EC-1118 manufacturer reference",
+      "url": "https://admin.lallemandbrewing.com/wp-content/uploads/2017/03/EC1118-TDS-ENG-Lalvin.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-d47",
+    "kind": "yeast",
+    "name": "Lalvin ICV D47",
+    "lab": "Lallemand / Lalvin",
+    "code": "D47",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      15,
+      30
+    ],
+    "alcoholTolerance": 15,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin ICV D47 manufacturer reference",
+      "url": "https://www.lallemandbrewing.com/docs/products/tds/TDS_LALVIN_D47_ENG_DIGITAL.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-71b",
+    "kind": "yeast",
+    "name": "Lalvin 71B",
+    "lab": "Lallemand / Lalvin",
+    "code": "71B",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      15,
+      30
+    ],
+    "alcoholTolerance": 14,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin 71B manufacturer reference",
+      "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-71B-DIGITAL-1.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-k1-v1116",
+    "kind": "yeast",
+    "name": "Lalvin ICV K1-V1116",
+    "lab": "Lallemand / Lalvin",
+    "code": "K1-V1116",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      10,
+      35
+    ],
+    "alcoholTolerance": 18,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin ICV K1-V1116 manufacturer reference",
+      "url": "https://www.lallemandbrewing.com/en/global/products/lalvin-icv-k1-v1116/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-qa23",
+    "kind": "yeast",
+    "name": "Lalvin QA23",
+    "lab": "Lallemand / Lalvin",
+    "code": "QA23",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      14,
+      28
+    ],
+    "alcoholTolerance": 16,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin QA23 manufacturer reference",
+      "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-QA23-DIGITAL-1.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-rc212",
+    "kind": "yeast",
+    "name": "Lalvin Bourgovin RC212",
+    "lab": "Lallemand / Lalvin",
+    "code": "RC212",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      18,
+      30
+    ],
+    "alcoholTolerance": 16,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin Bourgovin RC212 manufacturer reference",
+      "url": "https://www.lallemandwine.com/en/new-zealand/products/wine-yeasts/lalvin-rc212/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-fleischmann-active-dry",
+    "kind": "yeast",
+    "name": "Active Dry Baking Yeast",
+    "lab": "Fleischmann’s",
+    "code": "Active Dry",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Fleischmann’s baking yeast product information",
+      "url": "https://www.fleischmannsyeast.com/frequently-asked-questions/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-fleischmann-rapidrise",
+    "kind": "yeast",
+    "name": "RapidRise Instant Baking Yeast",
+    "lab": "Fleischmann’s",
+    "code": "RapidRise",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Fleischmann’s baking yeast product information",
+      "url": "https://www.fleischmannsyeast.com/frequently-asked-questions/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-red-star-active-dry",
+    "kind": "yeast",
+    "name": "All-Natural Active Dry Baking Yeast",
+    "lab": "Red Star",
+    "code": "Active Dry",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Red Star baking yeast product information",
+      "url": "https://redstaryeast.com/product/all-natural-active-dry-yeast-strip/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-lallemand-voss-kveik",
+    "kind": "yeast",
+    "name": "LalBrew Voss Kveik Ale",
+    "lab": "Lallemand",
+    "code": "Voss",
+    "form": "dry",
+    "type": "kveik",
+    "attenuation": [
+      76,
+      82
+    ],
+    "flocculation": "very high",
+    "tempC": [
+      25,
+      40
+    ],
+    "alcoholTolerance": 12,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand LalBrew Voss manufacturer specifications",
+      "url": "https://www.lallemandbrewing.com/en/united-states/products/lalbrew-voss-kveik-ale-yeast/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer: attenuation 76–82%, 25–40°C range, 12% alcohol tolerance and very high flocculation. POF and diastaticus remain unknown here. Sensory intensities are editorial estimates, separate from these specs."
     }
   }
 ]

@@ -1,4 +1,5 @@
 import { Plus, Trash2, Wheat, Flower2, Thermometer } from "lucide-react";
+import { useState } from "react";
 import type { Recipe, Catalog } from "../engine/types";
 import {
   cToF,
@@ -15,6 +16,8 @@ import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
 import { Field, Section, Tag, HelpTerm } from "./ui";
 import { alphabetical } from "../engine/search";
+import { yeastFamilies, yeastGroups, yeastGuide } from "../engine/yeast";
+import { consensus } from "../engine/flavor";
 export default function Editor({
   recipe: r,
   onChange: set,
@@ -27,6 +30,30 @@ export default function Editor({
   us: boolean;
 }) {
   const update = (patch: Partial<Recipe>) => set({ ...r, ...patch });
+  const [yeastType, setYeastType] = useState("");
+  const yeast = c.yeasts.find((y) => y.id === r.yeastId)!;
+  const yeastOptions = c.yeasts.filter(
+    (y) =>
+      y.id === r.yeastId ||
+      !yeastType ||
+      yeastGroups(y).some((g) => g.id === yeastType),
+  );
+  const yeastFlavor =
+    yeastGuide(yeast)?.flavor ??
+    (() => {
+      const traits = consensus(
+        c.descriptors.filter((d) => d.ingredientId === yeast.id),
+        { tempC: r.fermentC },
+      );
+      return traits.length
+        ? `Estimated associations at this temperature: ${traits
+            .slice(0, 5)
+            .map((d) => d.descriptor.replaceAll("-", " "))
+            .join(
+              ", ",
+            )}. Check the ingredient library for source records and confidence.`
+        : "No established beer flavor profile for this context. Record your own tasting observations.";
+    })();
   const total = r.grains.reduce((s, g) => s + g.kg, 0);
   const temp = (v: number) => (us ? cToF(v) : v),
     fromTemp = (v: number) => (us ? fToC(v) : v);
@@ -271,13 +298,31 @@ export default function Editor({
         action={<Thermometer size={22} />}
       >
         <label className="field">
+          <span>Yeast type</span>
+          <select
+            value={yeastType}
+            onChange={(e) => setYeastType(e.target.value)}
+          >
+            <option value="">All yeast types</option>
+            {alphabetical(yeastFamilies, (f) => f.label).map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="muted">
+          Type filters narrow the strain list. Choose a strain to change the
+          recipe; your current strain stays available.
+        </p>
+        <label className="field">
           <span>Yeast strain</span>
           <select
             value={r.yeastId}
             onChange={(e) => update({ yeastId: e.target.value })}
           >
             {alphabetical(
-              c.yeasts,
+              yeastOptions,
               (y) => `${y.lab} ${y.code} · ${y.name}`,
             ).map((y) => (
               <option value={y.id} key={y.id}>
@@ -286,6 +331,30 @@ export default function Editor({
             ))}
           </select>
         </label>
+        <div className="yeast-selection-profile">
+          <h3>{yeast.name}</h3>
+          <p className="muted">
+            {yeast.lab}
+            {yeast.code ? ` · ${yeast.code}` : ""}
+          </p>
+          <p>
+            <Tag tone="objective">REFERENCE SPECS</Tag> Alcohol tolerance:{" "}
+            <strong>
+              {yeast.alcoholTolerance === null
+                ? "Unknown for brewing"
+                : `up to ${yeast.alcoholTolerance}% ABV`}
+            </strong>
+            .{" "}
+            {yeast.attenuation
+              ? `Apparent attenuation ${yeast.attenuation.join("–")}%.`
+              : "Beer-wort attenuation unknown; FG/ABV use a labeled model assumption."}
+          </p>
+          <Tag>FLAVOR PROFILE · SUBJECTIVE</Tag>
+          <p>{yeastFlavor}</p>
+          <a href={yeast.source.url} target="_blank" rel="noreferrer">
+            Strain source & specifications ↗
+          </a>
+        </div>
         <div className="field-grid">
           <Field
             label="Mash temperature"
@@ -340,7 +409,9 @@ export default function Editor({
         <Tag tone="objective">Strain specs</Tag>
         <p className="muted">
           <HelpTerm label="Attenuation" />{" "}
-          {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation.join("–")}% ·
+          {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation?.join("–") ??
+            "Unknown for malt wort"}
+          {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation ? "%" : ""} ·
           Verify <HelpTerm label="POF" /> and <HelpTerm label="diastaticus" />{" "}
           status with the lab.
         </p>

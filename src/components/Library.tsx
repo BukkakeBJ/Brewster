@@ -10,7 +10,9 @@ import {
   hopRoles,
   maltRole,
   yeastFamily,
+  yeastAlcoholRange,
 } from "../engine/library";
+import { yeastGroups, yeastFamilies, yeastGuide } from "../engine/yeast";
 import { startingPoints } from "../engine/suggestions";
 import { defaultRecipe } from "../defaults";
 import { alphabetical, searchByName } from "../engine/search";
@@ -21,12 +23,16 @@ export default function Library({
   batchL = 20,
   onAddAdditive,
   onAddCustomAdditive,
+  onChooseYeast,
+  selectedYeastId,
 }: {
   catalog: Catalog;
   us: boolean;
   batchL?: number;
   onAddAdditive?: (id: string) => void;
   onAddCustomAdditive?: (addition: AdditiveAddition) => void;
+  onChooseYeast?: (id: string) => void;
+  selectedYeastId?: string;
 }) {
   const [kind, setKind] = useState("hop"),
     [q, setQ] = useState(""),
@@ -46,7 +52,11 @@ export default function Library({
       ? ["Aroma", "Bittering", "Dry hopping", "Flavor"]
       : kind === "malt"
         ? Array.from(new Set(c.malts.map(maltRole)))
-        : Array.from(new Set(c.yeasts.map(yeastFamily)));
+        : Array.from(
+            new Set(
+              c.yeasts.flatMap((y) => yeastGroups(y).map((f) => f.label)),
+            ),
+          );
   const byDescriptor = useMemo(
     () =>
       new Set(
@@ -75,22 +85,23 @@ export default function Library({
         ? !hopRoles(i as Hop).includes(role)
         : kind === "malt"
           ? maltRole(i as Malt) !== role
-          : yeastFamily(i as Yeast) !== role)
+          : !yeastGroups(i as Yeast).some((f) => f.label === role))
     )
       return false;
     if (kind === "yeast") {
       const y = i as Yeast;
-      const abv = alcohol(
-        og,
-        og - ((og - 1) * midpoint(y.attenuation)) / 100,
-      ).accurate;
+      const abv = yeastAlcoholRange(y, og);
+      if (minAbv > maxAbv) return false;
       if (form !== "any" && y.form !== form) return false;
       if (
         minTolerance > 0 &&
         (y.alcoholTolerance === null || y.alcoholTolerance < minTolerance)
       )
         return false;
-      if (abv < minAbv || abv > maxAbv) return false;
+      if (
+        abv ? abv[1] < minAbv || abv[0] > maxAbv : minAbv !== 0 || maxAbv !== 20
+      )
+        return false;
     }
     return true;
   });
@@ -98,7 +109,20 @@ export default function Library({
     eligible,
     q,
     (i) => i.name,
-    (i) => JSON.stringify({ ...i, source: undefined }),
+    (i) =>
+      JSON.stringify({ ...i, source: undefined }) +
+      (i.kind === "yeast"
+        ? " " +
+          yeastGroups(i as Yeast)
+            .map((f) => f.label)
+            .join(" ") +
+          " " +
+          JSON.stringify(yeastGuide(i as Yeast) ?? {})
+        : ""),
+    (i) =>
+      i.kind === "yeast"
+        ? [(i as Yeast).code, `${(i as Yeast).lab} ${(i as Yeast).code}`]
+        : [],
   );
   return (
     <>
@@ -114,6 +138,8 @@ export default function Library({
             className={kind === k ? "active" : ""}
             onClick={() => {
               setKind(String(k));
+              setQ("");
+              setDescriptor("");
               setRole("All");
               setLimit(24);
               setExpanded("");
@@ -200,6 +226,42 @@ export default function Library({
             </p>
           )}
           {kind === "yeast" && (
+            <details className="yeast-type-guide advanced">
+              <summary>Yeast types, alcohol & flavor guide</summary>
+              <p className="muted">
+                Browse a family, then compare its strains. Alcohol tolerance is
+                a limit; actual ABV also needs fermentable wort. The
+                descriptions below are editorial guides.
+              </p>
+              <div className="yeast-family-grid">
+                {alphabetical(yeastFamilies, (f) => f.label).map((f) => (
+                  <article key={f.id}>
+                    <button
+                      className="text-button"
+                      aria-pressed={role === f.label}
+                      onClick={() => {
+                        setRole(f.label);
+                        setQ("");
+                        setLimit(24);
+                      }}
+                    >
+                      {f.label}{" "}
+                      <span>
+                        {
+                          c.yeasts.filter((y) =>
+                            yeastGroups(y).some((g) => g.id === f.id),
+                          ).length
+                        }{" "}
+                        options
+                      </span>
+                    </button>
+                    <p>{f.description}</p>
+                  </article>
+                ))}
+              </div>
+            </details>
+          )}
+          {kind === "yeast" && (
             <div className="yeast-filters">
               <Field
                 label="Minimum alcohol tolerance"
@@ -241,8 +303,11 @@ export default function Library({
               </label>
               <p className="muted">
                 Tolerance is a strain limit. Estimated ABV uses the entered OG
-                and midpoint attenuation. Unknown tolerances are excluded when a
-                minimum is set.
+                and the reference attenuation range. Unknown tolerances are
+                excluded when a minimum is set. An ABV filter excludes strains
+                whose beer-wort attenuation is unknown. Wine and baking products
+                can be selected manually in the editor; the beer solver uses
+                supported brewing strains.
               </p>
             </div>
           )}
@@ -263,8 +328,15 @@ export default function Library({
                   ? { use: "dry hop" }
                   : kind === "malt"
                     ? { percent: 5 }
-                    : { tempC: midpoint(y.tempC) };
+                    : {
+                        tempC: y.tempC ? midpoint(y.tempC) : undefined,
+                        medium: yeastGroups(y).some((f) => f.id === "wine")
+                          ? ("wine" as const)
+                          : ("beer" as const),
+                      };
               const agreed = consensus(rows, usage);
+              const alcoholRange =
+                kind === "yeast" ? yeastAlcoholRange(y, og) : null;
               return (
                 <article
                   className={`library-card ${isOpen ? "expanded" : ""}`}
@@ -321,12 +393,21 @@ export default function Library({
                               ]
                             : [
                                 ["Type / form", y.type + " / " + y.form],
-                                ["Attenuation", y.attenuation.join("–") + "%"],
+                                [
+                                  "Attenuation",
+                                  y.attenuation
+                                    ? y.attenuation.join("–") + "%"
+                                    : "Unknown in malt wort",
+                                ],
                                 [
                                   "Temperature",
                                   y.tempC
-                                    .map((t) => (us ? cToF(t) : t).toFixed(1))
-                                    .join("–") + (us ? "°F" : "°C"),
+                                    ? y.tempC
+                                        .map((t) =>
+                                          (us ? cToF(t) : t).toFixed(1),
+                                        )
+                                        .join("–") + (us ? "°F" : "°C")
+                                    : "Unknown for brewing",
                                 ],
                                 [
                                   "Alcohol tolerance",
@@ -336,12 +417,11 @@ export default function Library({
                                 ],
                                 [
                                   "ABV at entered OG",
-                                  alcohol(
-                                    og,
-                                    og -
-                                      ((og - 1) * midpoint(y.attenuation)) /
-                                        100,
-                                  ).accurate.toFixed(1) + "% estimate",
+                                  alcoholRange
+                                    ? alcoholRange
+                                        .map((v) => v.toFixed(1))
+                                        .join("–") + "% estimate"
+                                    : "Unknown · no wort attenuation data",
                                 ],
                               ]
                         ).map(([k, v]) => (
@@ -359,12 +439,31 @@ export default function Library({
                     </div>
                     <div className="sensory-side">
                       <Tag>SUBJECTIVE ESTIMATE</Tag>
+                      {kind === "yeast" && (
+                        <div className="yeast-flavor-summary">
+                          <h4>Flavor profile</h4>
+                          <p>
+                            {yeastGuide(y)?.flavor ??
+                              (agreed.length
+                                ? `Contextual associations: ${agreed
+                                    .slice(0, 5)
+                                    .map((d) =>
+                                      d.descriptor.replaceAll("-", " "),
+                                    )
+                                    .join(
+                                      ", ",
+                                    )}. These estimates depend on the wort, temperature and process; source records appear in the full guide.`
+                                : "No reliable flavor evidence for this context. Add your own tasting notes after an experimental brew.")}
+                          </p>
+                        </div>
+                      )}
                       <small>
                         {kind === "hop"
                           ? "Dry-hop context"
                           : kind === "malt"
                             ? "At 5% grist (context preview)"
-                            : "At midpoint temperature"}
+                            : (yeastGuide(y)?.context ??
+                              "Beer context · at midpoint temperature")}
                       </small>
                       {agreed.slice(0, 5).map((a) => (
                         <div className="descriptor-meter" key={a.descriptor}>
@@ -489,6 +588,17 @@ export default function Library({
                         </>
                       )}
                     </div>
+                  )}
+                  {kind === "yeast" && onChooseYeast && (
+                    <button
+                      className="button secondary library-choose-yeast"
+                      disabled={selectedYeastId === i.id}
+                      onClick={() => onChooseYeast(i.id)}
+                    >
+                      {selectedYeastId === i.id
+                        ? "Using this yeast in your recipe"
+                        : "Use this yeast in recipe"}
+                    </button>
                   )}
                 </article>
               );

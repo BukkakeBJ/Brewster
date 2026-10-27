@@ -115,10 +115,20 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
           YEAST: {
             NAME: y.name,
             VERSION: 1,
-            TYPE: y.type === "lager" ? "Lager" : "Ale",
+            TYPE:
+              (
+                {
+                  lager: "Lager",
+                  wine: "Wine",
+                  champagne: "Champagne",
+                  wheat: "Wheat",
+                } as Record<string, string>
+              )[y.type] ?? "Ale",
             FORM: y.form === "dry" ? "Dry" : "Liquid",
             AMOUNT: 0.011,
-            ATTENUATION: (y.attenuation[0] + y.attenuation[1]) / 2,
+            ...(y.attenuation
+              ? { ATTENUATION: (y.attenuation[0] + y.attenuation[1]) / 2 }
+              : {}),
             LABORATORY: y.lab,
             PRODUCT_ID: y.code,
             BD_ID: y.id,

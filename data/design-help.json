@@ -32,6 +32,7 @@
     "Find my recipes": "Searches 18 starting ingredient combinations and adjusts proportions, hop doses and process settings using deterministic brewing math and the consensus flavor model. Results are ranked starting points with tradeoffs, not guaranteed perfect matches. Open a result to edit and save it."
   },
   "flavors": {
+    "fruity-ester": "A broad fermentation-derived fruit impression. It does not identify a specific fruit or compound; intensity and temperature response are subjective model estimates.",
     "grainy": "Cereal or raw-grain-like character.",
     "bready": "Bread-like malt character.",
     "biscuit": "Dry cracker or biscuit-like malt character.",

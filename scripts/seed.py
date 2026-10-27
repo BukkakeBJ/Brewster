@@ -73,6 +73,8 @@ for item in malts:
   item['maxPercentIsEstimate']=True
   item['source']={**item['source'],'note':item['source']['note']+' Recommended maximum is unspecified; maxPercent=100 is a permissive model cap, not manufacturer advice.'}
 overrides=json.loads((D/'overrides.json').read_text()) if (D/'overrides.json').exists() else {}
+yeasts.extend(json.loads((D/'yeasts-extra.json').read_text()))
+vocab.extend(json.loads((D/'vocabulary-extra.json').read_text()))
 for group,items in [('malts',malts),('hops',hops),('yeasts',yeasts)]:
  for item in items:item.update(overrides.get(group,{}).get(item['id'],{}))
 for ingredient_id,replacements in overrides.get('descriptorReplacements',{}).items():

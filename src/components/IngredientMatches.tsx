@@ -182,7 +182,7 @@ export default function IngredientMatches({
                   ? `${hop.alpha.join("–")}% alpha acids · ${hop.purpose}`
                   : malt
                     ? `${malt.type} · ${malt.lovibond} °L · ${malt.ppg.toFixed(1)} PPG · max ${malt.maxPercent}% grist`
-                    : `${yeast!.lab} ${yeast!.code} · ${yeast!.form} · attenuation ${yeast!.attenuation.join("–")}% · ${yeast!.tempC.map((n) => (us ? cToF(n) : n).toFixed(0)).join("–")}°${us ? "F" : "C"} · tolerance ${yeast!.alcoholTolerance === null ? "unknown" : yeast!.alcoholTolerance + "% ABV"}`}
+                    : `${yeast!.lab} ${yeast!.code} · ${yeast!.form} · attenuation ${yeast!.attenuation?.join("–") ?? "unknown"}% · ${yeast!.tempC?.map((n) => (us ? cToF(n) : n).toFixed(0)).join("–") ?? "unknown"}°${us ? "F" : "C"} · tolerance ${yeast!.alcoholTolerance === null ? "unknown" : yeast!.alcoholTolerance + "% ABV"}`}
               </p>
               <Tag tone="subjective">WHY IT MAY FIT</Tag>
               {m.reasons.map((reason) => (

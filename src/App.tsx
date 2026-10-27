@@ -230,7 +230,12 @@ export default function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#" aria-label="BrewMaster" onClick={(e) => e.preventDefault()}>
+        <a
+          className="brand"
+          href="#"
+          aria-label="BrewMaster"
+          onClick={(e) => e.preventDefault()}
+        >
           <span className="brand-icon">
             <BrandMark size={60} />
           </span>
@@ -505,6 +510,13 @@ export default function App() {
                     View calculations <ArrowUpRight size={13} />
                   </a>
                 </div>
+                {p.warnings
+                  .filter((w) => w.startsWith("Beer-wort attenuation"))
+                  .map((w) => (
+                    <p className="notice" role="note" key={w}>
+                      <strong>Experimental yeast estimate:</strong> {w}
+                    </p>
+                  ))}
               </>
             )}
             <button
@@ -679,6 +691,11 @@ export default function App() {
               catalog={libraryCatalog}
               us={us}
               batchL={recipe.batchL}
+              selectedYeastId={recipe.yeastId}
+              onChooseYeast={(yeastId) => {
+                setRecipe({ ...recipe, yeastId });
+                notify("Yeast updated in the current recipe.");
+              }}
               onAddCustomAdditive={(addition) => {
                 setRecipe({
                   ...recipe,

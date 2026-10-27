@@ -1,0 +1,236 @@
+[
+  {
+    "id": "y-lalvin-ec1118",
+    "kind": "yeast",
+    "name": "Lalvin EC-1118",
+    "lab": "Lallemand / Lalvin",
+    "code": "EC-1118",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      10,
+      30
+    ],
+    "alcoholTolerance": 18,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin EC-1118 manufacturer reference",
+      "url": "https://admin.lallemandbrewing.com/wp-content/uploads/2017/03/EC1118-TDS-ENG-Lalvin.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-d47",
+    "kind": "yeast",
+    "name": "Lalvin ICV D47",
+    "lab": "Lallemand / Lalvin",
+    "code": "D47",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      15,
+      30
+    ],
+    "alcoholTolerance": 15,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin ICV D47 manufacturer reference",
+      "url": "https://www.lallemandbrewing.com/docs/products/tds/TDS_LALVIN_D47_ENG_DIGITAL.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-71b",
+    "kind": "yeast",
+    "name": "Lalvin 71B",
+    "lab": "Lallemand / Lalvin",
+    "code": "71B",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      15,
+      30
+    ],
+    "alcoholTolerance": 14,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin 71B manufacturer reference",
+      "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-71B-DIGITAL-1.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-k1-v1116",
+    "kind": "yeast",
+    "name": "Lalvin ICV K1-V1116",
+    "lab": "Lallemand / Lalvin",
+    "code": "K1-V1116",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      10,
+      35
+    ],
+    "alcoholTolerance": 18,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin ICV K1-V1116 manufacturer reference",
+      "url": "https://www.lallemandbrewing.com/en/global/products/lalvin-icv-k1-v1116/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-qa23",
+    "kind": "yeast",
+    "name": "Lalvin QA23",
+    "lab": "Lallemand / Lalvin",
+    "code": "QA23",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      14,
+      28
+    ],
+    "alcoholTolerance": 16,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin QA23 manufacturer reference",
+      "url": "https://connect.lallemandbrewing.com/wp-content/uploads/2022/05/TDS_Lalvin-QA23-DIGITAL-1.pdf",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-lalvin-rc212",
+    "kind": "yeast",
+    "name": "Lalvin Bourgovin RC212",
+    "lab": "Lallemand / Lalvin",
+    "code": "RC212",
+    "form": "dry",
+    "type": "wine",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": [
+      18,
+      30
+    ],
+    "alcoholTolerance": 16,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand Lalvin Bourgovin RC212 manufacturer reference",
+      "url": "https://www.lallemandwine.com/en/new-zealand/products/wine-yeasts/lalvin-rc212/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer identity, temperature and tolerance where published. Beer-wort attenuation, flocculation, POF and diastaticus remain unknown unless explicitly stated."
+    }
+  },
+  {
+    "id": "y-fleischmann-active-dry",
+    "kind": "yeast",
+    "name": "Active Dry Baking Yeast",
+    "lab": "Fleischmann’s",
+    "code": "Active Dry",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Fleischmann’s baking yeast product information",
+      "url": "https://www.fleischmannsyeast.com/frequently-asked-questions/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-fleischmann-rapidrise",
+    "kind": "yeast",
+    "name": "RapidRise Instant Baking Yeast",
+    "lab": "Fleischmann’s",
+    "code": "RapidRise",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Fleischmann’s baking yeast product information",
+      "url": "https://www.fleischmannsyeast.com/frequently-asked-questions/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-red-star-active-dry",
+    "kind": "yeast",
+    "name": "All-Natural Active Dry Baking Yeast",
+    "lab": "Red Star",
+    "code": "Active Dry",
+    "form": "dry",
+    "type": "baking",
+    "attenuation": null,
+    "flocculation": "unknown",
+    "tempC": null,
+    "alcoholTolerance": null,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Red Star baking yeast product information",
+      "url": "https://redstaryeast.com/product/all-natural-active-dry-yeast-strip/",
+      "accessed": "2026-10-26",
+      "note": "Product identity and baking use only. No beer alcohol tolerance, wort attenuation, brewing fermentation range, settling or phenolic status is asserted. Baking proofing temperatures are not brewing specifications."
+    }
+  },
+  {
+    "id": "y-lallemand-voss-kveik",
+    "kind": "yeast",
+    "name": "LalBrew Voss Kveik Ale",
+    "lab": "Lallemand",
+    "code": "Voss",
+    "form": "dry",
+    "type": "kveik",
+    "attenuation": [
+      76,
+      82
+    ],
+    "flocculation": "very high",
+    "tempC": [
+      25,
+      40
+    ],
+    "alcoholTolerance": 12,
+    "pof": null,
+    "diastaticus": null,
+    "source": {
+      "title": "Lallemand LalBrew Voss manufacturer specifications",
+      "url": "https://www.lallemandbrewing.com/en/united-states/products/lalbrew-voss-kveik-ale-yeast/",
+      "accessed": "2026-10-26",
+      "note": "Manufacturer: attenuation 76–82%, 25–40°C range, 12% alcohol tolerance and very high flocculation. POF and diastaticus remain unknown here. Sensory intensities are editorial estimates, separate from these specs."
+    }
+  }
+]

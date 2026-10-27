@@ -1,0 +1,8 @@
+[
+  {
+    "id": "fruity-ester",
+    "parent": "yeast",
+    "label": "Fruity ester",
+    "axis": true
+  }
+]

@@ -24,6 +24,7 @@ export function searchByName<T>(
   query: string,
   nameOf: (item: T) => string,
   textOf: (item: T) => string,
+  identifiersOf: (item: T) => readonly string[] = () => [],
 ): T[] {
   const q = normalizeSearch(query);
   if (!q) return alphabetical(items, nameOf);
@@ -31,12 +32,17 @@ export function searchByName<T>(
   return items
     .map((item, index) => {
       const name = normalizeSearch(nameOf(item));
-      const text = normalizeSearch(name + " " + textOf(item));
+      const identifiers = identifiersOf(item)
+        .filter(Boolean)
+        .map(normalizeSearch);
+      const text = normalizeSearch(
+        name + " " + identifiers.join(" ") + " " + textOf(item),
+      );
       const nameWords = name.split(" ");
       const rank =
-        name === q
+        name === q || identifiers.includes(q)
           ? 0
-          : name.startsWith(q)
+          : name.startsWith(q) || identifiers.some((id) => id.startsWith(q))
             ? 1
             : ` ${name} `.includes(` ${q} `)
               ? 2

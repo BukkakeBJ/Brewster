@@ -9,6 +9,7 @@ import type {
 import { clamp, midpoint, predict, hopIbu } from "./calculations";
 import { consensus, flavorPredict } from "./flavor";
 import { ingredientMatches } from "./recommendations";
+import { hasBrewingSpecs } from "./yeast";
 export interface Candidate {
   recipe: Recipe;
   prediction: Prediction;
@@ -155,6 +156,7 @@ export function solve(
     ? "lager"
     : "ale";
   const yeasts = c.yeasts
+    .filter(hasBrewingSpecs)
     .filter(
       (y) =>
         allowed(y) &&

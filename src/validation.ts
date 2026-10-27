@@ -127,6 +127,7 @@ export const descriptorSchema = z.object({
   descriptor: z.string(),
   intensity: n(0, 5),
   context: z.object({
+    medium: z.enum(["beer", "wine"]).optional(),
     use: z.string().optional(),
     minPercent: z.number().optional(),
     maxPercent: z.number().optional(),

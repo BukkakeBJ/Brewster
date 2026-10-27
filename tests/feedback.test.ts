@@ -23,7 +23,7 @@ it("recovers known efficiency and strain midpoint without double-counting mash/c
   const cal = calibrate([l], c);
   expect(cal.efficiency).toBeCloseTo(72, 8);
   expect(cal.yeasts[r.yeastId].attenuation).toBeCloseTo(
-    midpoint(c.yeasts.find((y) => y.id === r.yeastId)!.attenuation),
+    midpoint(c.yeasts.find((y) => y.id === r.yeastId)!.attenuation!),
     8,
   );
   expect(cal.efficiencySamples).toBe(1);

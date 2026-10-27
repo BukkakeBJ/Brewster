@@ -1,4 +1,15 @@
 import type { Catalog, Ingredient, Malt, Hop, Yeast } from "./types";
+import { yeastGroups, yeastGuide } from "./yeast";
+import { alcohol } from "./calculations";
+export function yeastAlcoholRange(
+  y: Yeast,
+  og: number,
+): [number, number] | null {
+  if (!y.attenuation) return null;
+  return y.attenuation.map(
+    (a) => alcohol(og, og - ((og - 1) * a) / 100).accurate,
+  ) as [number, number];
+}
 export function hopRoles(h: Hop): string[] {
   const out: string[] = [];
   if (
@@ -27,20 +38,9 @@ export function maltRole(m: Malt) {
   );
 }
 export function yeastFamily(y: Yeast) {
-  const s = (y.name + " " + y.type).toLowerCase();
-  return /brett/.test(s)
-    ? "Brett / mixed"
-    : /kveik|voss|hornindal/.test(s)
-      ? "Kveik"
-      : /belgi|abbey|trappist|saison/.test(s)
-        ? "Belgian / saison"
-        : /weizen|wheat|witbier/.test(s)
-          ? "Wheat"
-          : /lager|pils|bock/.test(s)
-            ? "Lager"
-            : /wine|champagne|cider/.test(s)
-              ? "Wine / cider"
-              : "Ale";
+  return yeastGroups(y)
+    .map((f) => f.label)
+    .join(" · ");
 }
 export function describeIngredient(
   i: Ingredient,
@@ -71,9 +71,9 @@ export function describeIngredient(
   }
   const y = i as Yeast;
   return {
-    intro: `${y.lab} ${y.code} ${y.name} is a ${y.form} culture in the ${yeastFamily(y)} family. Reference apparent attenuation is ${y.attenuation.join("–")}%, with ${y.flocculation} flocculation. Flocculation describes settling behavior, not fermentation completeness.`,
-    use: `Its reference fermentation range is ${y.tempC.map((t) => t.toFixed(1)).join("–")}°C. ${y.alcoholTolerance === null ? "Alcohol tolerance is not published in this record." : `Reference alcohol tolerance is ${y.alcoholTolerance}% ABV, an approximate working limit rather than a promise of alcohol production.`} Gravity and wort fermentability determine how much alcohol can actually be produced.`,
+    intro: `${y.lab} ${y.code} ${y.name} is a ${y.form} culture in ${yeastFamily(y)}. ${y.attenuation ? `Reference apparent attenuation is ${y.attenuation.join("–")}%.` : "Beer-wort attenuation is not published in this record."} Flocculation: ${y.flocculation}. Flocculation describes settling behavior, not fermentation completeness.`,
+    use: `${y.tempC ? `Its reference fermentation range is ${y.tempC.map((t) => t.toFixed(1)).join("–")}°C.` : "A brewing fermentation range is not published here."} ${y.alcoholTolerance === null ? "Alcohol tolerance is not published in this record." : `Reference alcohol tolerance is ${y.alcoholTolerance}% ABV, an approximate working limit rather than a promise of alcohol production.`} Gravity and wort fermentability determine how much alcohol can actually be produced. ${yeastGuide(y)?.use ?? ""}`,
     process: `Choose pitch rate for gravity, volume and yeast family; then manage fermentation temperature. Warmer fermentation can shift esters in susceptible strains, which the flavor panel models as an explicit heuristic. Attenuation ranges do not account for every wort composition or fermentation condition.`,
-    limits: `POF status: ${y.pof === null ? "unknown" : y.pof ? "positive" : "negative"}; diastaticus: ${y.diastaticus === null ? "unknown" : y.diastaticus ? "yes" : "no"}. Check current lab guidance. Unknown is not a negative test result. The library's potential ABV search estimates FG from the attenuation midpoint at the OG you enter, with no mash adjustment; tolerance and estimated ABV are separate filters.`,
+    limits: `POF status: ${y.pof === null ? "unknown" : y.pof ? "positive" : "negative"}; diastaticus: ${y.diastaticus === null ? "unknown" : y.diastaticus ? "yes" : "no"}. Check current lab guidance. Unknown is not a negative test result. The library's ABV interval uses the attenuation range at your entered OG, with no mash adjustment; unknown wort attenuation has no ABV interval. Tolerance and estimated ABV are separate filters.`,
   };
 }
