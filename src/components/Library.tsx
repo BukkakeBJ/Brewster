@@ -205,20 +205,38 @@ export default function Library({
               ))}
             </select>
           </div>
-          <div className="filter-chips">
-            {["All", ...alphabetical(roles, (x) => x)].map((x) => (
-              <button
-                key={x}
-                className={role === x ? "active" : ""}
-                onClick={() => {
-                  setRole(x);
+          {kind === "yeast" ? (
+            <label className="field library-yeast-type">
+              <span>Yeast type</span>
+              <select
+                value={role}
+                onChange={(e) => {
+                  setRole(e.target.value);
                   setLimit(24);
                 }}
               >
-                {x}
-              </button>
-            ))}
-          </div>
+                <option value="All">All yeast types</option>
+                {alphabetical(roles, (x) => x).map((x) => (
+                  <option key={x}>{x}</option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <div className="filter-chips">
+              {["All", ...alphabetical(roles, (x) => x)].map((x) => (
+                <button
+                  key={x}
+                  className={role === x ? "active" : ""}
+                  onClick={() => {
+                    setRole(x);
+                    setLimit(24);
+                  }}
+                >
+                  {x}
+                </button>
+              ))}
+            </div>
+          )}
           {kind === "hop" && (
             <p className="library-note">
               Aroma, flavor and dry-hop roles overlap. They are suitability

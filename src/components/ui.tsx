@@ -4,6 +4,7 @@ export { InfoTip };
 import { useState, useEffect, useRef, useId, type ReactNode } from "react";
 export function Field({
   label,
+  inputLabel,
   value,
   onChange,
   min,
@@ -13,6 +14,7 @@ export function Field({
   help: explicitHelp,
 }: {
   label: string;
+  inputLabel?: string;
   value: number;
   onChange: (n: number) => void;
   min?: number;
@@ -43,7 +45,8 @@ export function Field({
         <input
           type="number"
           id={id}
-          aria-label={label}
+          aria-label={inputLabel ?? label}
+          aria-describedby={suffix ? `${id}-unit` : undefined}
           value={draft}
           min={min}
           max={max}
@@ -70,7 +73,7 @@ export function Field({
               onChange(n);
           }}
         />
-        {suffix && <small>{suffix}</small>}
+        {suffix && <small id={`${id}-unit`}>{suffix}</small>}
       </div>
     </Container>
   );

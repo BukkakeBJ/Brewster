@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useLayoutEffect, useMemo } from "react";
 import {
-  SlidersHorizontal,
   NotebookPen,
   BookOpen,
   BookMarked,
@@ -20,6 +19,7 @@ import type { SavedRecipe, SavedBrewLog, Visibility } from "./sharing";
 import { catalog as baseCatalog } from "./catalog";
 import BrandMark from "./components/BrandMark";
 import StudioHero from "./components/StudioHero";
+import BuilderHeader from "./components/BuilderHeader";
 import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
 import { recipeSchema } from "./validation";
@@ -38,6 +38,22 @@ import FlavorPanel from "./components/FlavorPanel";
 import { flavorPredict } from "./engine/flavor";
 import { Section, Tag, HelpTerm } from "./components/ui";
 import { alphabetical } from "./engine/search";
+function printBrewSheet() {
+  const panels = [
+    ...document.querySelectorAll<HTMLDetailsElement>(
+      "#builder-recipe details.builder-optional:not([open])",
+    ),
+  ];
+  const restore = () =>
+    panels.forEach((panel) => {
+      panel.open = false;
+    });
+  panels.forEach((panel) => {
+    panel.open = true;
+  });
+  window.addEventListener("afterprint", restore, { once: true });
+  window.print();
+}
 export default function App() {
   const sharedWorkspace = !["localhost", "127.0.0.1", "[::1]"].includes(
     window.location.hostname,
@@ -111,8 +127,13 @@ export default function App() {
       .catch(() => setError("Brew log API unavailable."));
   }, []);
   const scrollPositions = useRef<Record<string, number>>({});
+  const lastBuilderStage = useRef("Recipe Editor");
+  const inBuilder = tab === "Design" || tab === "Recipe Editor";
+  const activeNavigation = inBuilder ? "Recipe Builder" : tab;
   const setTab = (next: string) => {
     scrollPositions.current[tab] = window.scrollY;
+    if (next === "Design" || next === "Recipe Editor")
+      lastBuilderStage.current = next;
     setActiveTab(next);
   };
   useLayoutEffect(() => {
@@ -221,8 +242,7 @@ export default function App() {
     }
   }
   const tabs = [
-    { label: "Design", icon: SlidersHorizontal },
-    { label: "Recipe Editor", icon: FlaskConical },
+    { label: "Recipe Builder", icon: FlaskConical },
     { label: "Ingredient Library", icon: BookOpen },
     { label: "Recipe Book", icon: BookMarked },
     { label: "Brew Log", icon: NotebookPen },
@@ -248,15 +268,21 @@ export default function App() {
         <nav>
           {tabs.map(({ label, icon: Icon }) => (
             <button
-              className={tab === label ? "nav-item active" : "nav-item"}
+              className={
+                activeNavigation === label ? "nav-item active" : "nav-item"
+              }
               key={label}
               aria-label={label}
-              aria-current={tab === label ? "page" : undefined}
-              onClick={() => setTab(label)}
+              aria-current={activeNavigation === label ? "page" : undefined}
+              onClick={() =>
+                setTab(
+                  label === "Recipe Builder" ? lastBuilderStage.current : label,
+                )
+              }
             >
               <Icon size={19} />
               <span className="nav-label">{label}</span>
-              {tab === label && <span className="nav-dot" />}
+              {activeNavigation === label && <span className="nav-dot" />}
             </button>
           ))}
         </nav>
@@ -314,7 +340,8 @@ export default function App() {
       <main>
         <header className="topbar">
           <span>
-            YOUR BREWING WORKBENCH <span className="breadcrumb">/ {tab}</span>
+            YOUR BREWING WORKBENCH{" "}
+            <span className="breadcrumb">/ {activeNavigation}</span>
           </span>
           <div
             className="unit-toggle"
@@ -346,18 +373,15 @@ export default function App() {
           </div>
         </header>
         <div className="page-content">
-          {sharedWorkspace && (
-            <p className="shared-workspace-note">
-              Recipes are private by default. Choose Share publicly to add one
-              to the Community collection. New brew logs and tasting notes stay
-              private.
-            </p>
+          {inBuilder ? (
+            <BuilderHeader stage={tab} onStage={setTab} />
+          ) : (
+            <StudioHero
+              screen={tab}
+              catalog={catalog}
+              prediction={tab === "Recipe Editor" ? p : undefined}
+            />
           )}
-          <StudioHero
-            screen={tab}
-            catalog={catalog}
-            prediction={tab === "Recipe Editor" ? p : undefined}
-          />
           {(error || calculationError) && (
             <div className="alert" role="alert">
               {error || calculationError}
@@ -370,12 +394,10 @@ export default function App() {
               {message}
             </div>
           )}
-          <div hidden={tab !== "Recipe Editor"}>
+          <div id="builder-recipe" hidden={tab !== "Recipe Editor"}>
             <div className="recipe-title-row">
               <div>
-                <div className="recipe-name-label">
-                  YOUR WORKING RECIPE / EDIT & EXPERIMENT
-                </div>
+                <div className="recipe-name-label">YOUR WORKING RECIPE</div>
                 <input
                   className="recipe-name"
                   aria-label="Recipe name"
@@ -408,38 +430,43 @@ export default function App() {
                 </div>
               </div>
               <div className="actions">
-                <label className="button secondary">
-                  <Upload size={15} /> Import
-                  <input
-                    type="file"
-                    accept=".json,.xml"
-                    hidden
-                    onChange={async (e) => {
-                      try {
-                        const f = e.target.files?.[0];
-                        if (f)
-                          setRecipe(
-                            importRecipe(
-                              await f.text(),
-                              catalog,
-                              defaultRecipe,
-                            ),
-                          );
-                        notify("Recipe imported");
-                      } catch (err) {
-                        setError(String(err));
-                      }
-                      e.target.value = "";
-                    }}
-                  />
-                </label>
-                <button
-                  className="button secondary"
-                  disabled={saving}
-                  onClick={() => save(true)}
-                >
-                  <Copy size={15} /> Save a copy
-                </button>
+                <details className="recipe-more-actions">
+                  <summary className="button secondary">More actions</summary>
+                  <div className="recipe-extra-actions">
+                    <label className="button secondary">
+                      <Upload size={15} /> Import
+                      <input
+                        type="file"
+                        accept=".json,.xml"
+                        hidden
+                        onChange={async (e) => {
+                          try {
+                            const f = e.target.files?.[0];
+                            if (f)
+                              setRecipe(
+                                importRecipe(
+                                  await f.text(),
+                                  catalog,
+                                  defaultRecipe,
+                                ),
+                              );
+                            notify("Recipe imported");
+                          } catch (err) {
+                            setError(String(err));
+                          }
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                    <button
+                      className="button secondary"
+                      disabled={saving}
+                      onClick={() => save(true)}
+                    >
+                      <Copy size={15} /> Save a copy
+                    </button>
+                  </div>
+                </details>
                 <button
                   className="button primary"
                   disabled={saving}
@@ -527,7 +554,7 @@ export default function App() {
                 setTab("Design");
               }}
             >
-              Adjust targets & get ingredient suggestions
+              Change beer goals & generate alternatives
             </button>
             <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
             {p && (
@@ -648,7 +675,7 @@ export default function App() {
                         >
                           <Download size={16} /> BeerXML
                         </button>
-                        <button onClick={() => window.print()}>
+                        <button onClick={printBrewSheet}>
                           <Printer size={16} /> Print brew sheet
                         </button>
                       </div>
@@ -721,7 +748,7 @@ export default function App() {
               }}
             />
           </div>
-          <div hidden={tab !== "Design"}>
+          <div id="builder-goals" hidden={tab !== "Design"}>
             <Design
               fromRecipe={designFromRecipe}
               catalog={catalog}

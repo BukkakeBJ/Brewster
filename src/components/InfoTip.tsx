@@ -17,6 +17,7 @@ export default function InfoTip({
     [dismissed, setDismissed] = useState(false);
   const [position, setPosition] = useState({ left: 12, top: 12, width: 300 });
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const touchInput = useRef(false);
   const open = !dismissed && (pinned || hover || focus);
   const enter = () => {
     clearTimeout(timer.current);
@@ -49,9 +50,15 @@ export default function InfoTip({
     };
     document.addEventListener("pointerdown", pointer);
     document.addEventListener("keydown", key);
+    const scroll = (e: Event) => {
+      if (touchInput.current && !panel.current?.contains(e.target as Node))
+        close();
+    };
+    window.addEventListener("scroll", scroll, true);
     return () => {
       document.removeEventListener("pointerdown", pointer);
       document.removeEventListener("keydown", key);
+      window.removeEventListener("scroll", scroll, true);
     };
   }, [open]);
   useLayoutEffect(() => {
@@ -89,7 +96,9 @@ export default function InfoTip({
   return (
     <span
       className="info-tip-anchor"
-      onPointerEnter={enter}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") enter();
+      }}
       onPointerLeave={leave}
     >
       <button
@@ -99,6 +108,12 @@ export default function InfoTip({
         aria-label={`About ${label}`}
         aria-expanded={open}
         aria-describedby={open ? id : undefined}
+        onPointerDown={(e) => {
+          touchInput.current = e.pointerType === "touch";
+        }}
+        onKeyDown={() => {
+          touchInput.current = false;
+        }}
         onFocus={() => {
           setFocus(true);
           setDismissed(false);
@@ -124,7 +139,9 @@ export default function InfoTip({
             role="tooltip"
             className="info-tip-panel"
             style={position}
-            onPointerEnter={enter}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") enter();
+            }}
             onPointerLeave={leave}
           >
             <strong>{label}</strong>

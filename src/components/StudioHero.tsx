@@ -71,14 +71,15 @@ export default function StudioHero({
   return (
     <section
       className={`studio-hero studio-hero-${screen.toLowerCase().replaceAll(" ", "-")}`}
-      aria-labelledby="studio-heading"
+      aria-label={screen}
     >
       <div className="studio-hero-copy">
         <div className="studio-kicker">
           <span />
           {copy.kicker}
         </div>
-        <h1 id="studio-heading">
+        <h1 className="mobile-screen-title">{screen}</h1>
+        <h1 id="studio-heading" className="studio-editorial-title">
           {copy.line} <em>{copy.emphasis}</em>
         </h1>
         <p>{copy.description}</p>

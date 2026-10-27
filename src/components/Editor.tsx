@@ -10,7 +10,9 @@ import {
   scaleRecipe,
   lToGal,
   L_PER_GAL,
+  midpoint,
 } from "../engine/calculations";
+import { brewingHelp } from "../brewingHelp";
 import WaterPlanner from "./WaterPlanner";
 import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
@@ -103,7 +105,9 @@ export default function Editor({
                 </small>
               </div>
               <Field
-                label={`Grain ${i + 1} amount`}
+                label="Amount"
+                inputLabel={`${m.name} amount, fermentable ${i + 1}`}
+                suffix={us ? "lb" : "kg"}
                 value={us ? kgToLb(g.kg) : g.kg}
                 min={0}
                 step={0.05}
@@ -174,104 +178,146 @@ export default function Editor({
         eyebrow="02 / BITTERNESS & AROMA"
         action={<Flower2 size={22} />}
       >
-        {r.hops.map((h, i) => (
-          <div className="hop-row" key={i}>
-            <select
-              aria-label={`Hop ${i + 1}`}
-              value={h.ingredientId}
-              onChange={(e) =>
-                update({
-                  hops: r.hops.map((h, j) =>
-                    j === i
-                      ? { ...h, ingredientId: e.target.value, alpha: undefined }
-                      : h,
-                  ),
-                })
-              }
+        {r.hops.map((h, i) => {
+          const hop = c.hops.find((a) => a.id === h.ingredientId)!;
+          const use =
+            h.use === "dry hop"
+              ? "Dry hopping"
+              : h.use === "whirlpool"
+                ? "Whirlpool"
+                : "Boil";
+          return (
+            <article
+              className="hop-addition"
+              key={i}
+              aria-label={`${hop.name} · ${use} · addition ${i + 1}`}
             >
-              {alphabetical(c.hops, (h) => h.name).map((h) => (
-                <option value={h.id} key={h.id}>
-                  {h.name}
-                </option>
-              ))}
-            </select>
-            <Field
-              label={`Hop ${i + 1} amount (${us ? "oz" : "g"})`}
-              value={us ? h.grams / G_PER_OZ : h.grams}
-              min={0}
-              step={us ? 0.1 : 1}
-              onChange={(n) =>
-                update({
-                  hops: r.hops.map((h, j) =>
-                    j === i ? { ...h, grams: us ? n * G_PER_OZ : n } : h,
-                  ),
-                })
-              }
-            />
-            <select
-              aria-label={`Hop ${i + 1} use`}
-              value={h.use}
-              onChange={(e) =>
-                update({
-                  hops: r.hops.map((h, j) =>
-                    j === i
-                      ? {
-                          ...h,
-                          use: e.target.value as typeof h.use,
-                          minutes: e.target.value === "dry hop" ? 4320 : 20,
-                        }
-                      : h,
-                  ),
-                })
-              }
-            >
-              <option value="boil">Boil</option>
-              <option value="dry hop">Dry hop</option>
-              <option value="whirlpool">Whirlpool</option>
-            </select>
-            <Field
-              label={
-                h.use === "dry hop"
-                  ? `Hop ${i + 1} days`
-                  : `Hop ${i + 1} minutes`
-              }
-              value={h.use === "dry hop" ? h.minutes / 1440 : h.minutes}
-              min={0}
-              step={1}
-              onChange={(n) =>
-                update({
-                  hops: r.hops.map((h, j) =>
-                    j === i
-                      ? { ...h, minutes: n * (h.use === "dry hop" ? 1440 : 1) }
-                      : h,
-                  ),
-                })
-              }
-            />
-            <Field
-              label={`Hop ${i + 1} AA %`}
-              value={
-                h.alpha ?? c.hops.find((a) => a.id === h.ingredientId)!.alpha[0]
-              }
-              min={0}
-              max={100}
-              onChange={(n) =>
-                update({
-                  hops: r.hops.map((h, j) =>
-                    j === i ? { ...h, alpha: n } : h,
-                  ),
-                })
-              }
-            />
-            <button
-              className="icon-button"
-              aria-label={`Remove hop ${i + 1}`}
-              onClick={() => update({ hops: r.hops.filter((_, j) => j !== i) })}
-            >
-              <Trash2 size={15} />
-            </button>
-          </div>
-        ))}
+              <header className="hop-addition-heading">
+                <div>
+                  <h3>{hop.name}</h3>
+                  <span>{use}</span>
+                </div>
+                <button
+                  className="icon-button"
+                  aria-label={`Remove ${hop.name} ${use.toLowerCase()} addition ${i + 1}`}
+                  onClick={() =>
+                    update({ hops: r.hops.filter((_, j) => j !== i) })
+                  }
+                >
+                  <Trash2 size={17} />
+                </button>
+              </header>
+              <div className="hop-row">
+                <label className="field">
+                  <span>Hop variety</span>
+                  <select
+                    aria-label={`Hop variety for addition ${i + 1}`}
+                    value={h.ingredientId}
+                    onChange={(e) =>
+                      update({
+                        hops: r.hops.map((h, j) =>
+                          j === i
+                            ? {
+                                ...h,
+                                ingredientId: e.target.value,
+                                alpha: undefined,
+                              }
+                            : h,
+                        ),
+                      })
+                    }
+                  >
+                    {alphabetical(c.hops, (h) => h.name).map((h) => (
+                      <option value={h.id} key={h.id}>
+                        {h.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <Field
+                  label="Amount"
+                  inputLabel={`${hop.name} ${use.toLowerCase()} amount, addition ${i + 1}`}
+                  suffix={us ? "oz" : "g"}
+                  value={us ? h.grams / G_PER_OZ : h.grams}
+                  min={0}
+                  step={us ? 0.1 : 1}
+                  onChange={(n) =>
+                    update({
+                      hops: r.hops.map((h, j) =>
+                        j === i ? { ...h, grams: us ? n * G_PER_OZ : n } : h,
+                      ),
+                    })
+                  }
+                />
+                <label className="field">
+                  <span>Add during</span>
+                  <select
+                    aria-label={`Addition stage for ${hop.name}, addition ${i + 1}`}
+                    value={h.use}
+                    onChange={(e) =>
+                      update({
+                        hops: r.hops.map((h, j) =>
+                          j === i
+                            ? {
+                                ...h,
+                                use: e.target.value as typeof h.use,
+                                minutes:
+                                  e.target.value === "dry hop" ? 4320 : 20,
+                              }
+                            : h,
+                        ),
+                      })
+                    }
+                  >
+                    <option value="boil">Boil</option>
+                    <option value="dry hop">Dry hopping</option>
+                    <option value="whirlpool">Whirlpool</option>
+                  </select>
+                </label>
+                <Field
+                  label={
+                    h.use === "boil" ? "Time before boil ends" : "Contact time"
+                  }
+                  inputLabel={`${hop.name} ${use.toLowerCase()} time, addition ${i + 1}`}
+                  suffix={h.use === "dry hop" ? "days" : "min"}
+                  help={brewingHelp(
+                    h.use === "dry hop" ? "Hop days" : "Hop minutes",
+                  )}
+                  value={h.use === "dry hop" ? h.minutes / 1440 : h.minutes}
+                  min={0}
+                  step={1}
+                  onChange={(n) =>
+                    update({
+                      hops: r.hops.map((h, j) =>
+                        j === i
+                          ? {
+                              ...h,
+                              minutes: n * (h.use === "dry hop" ? 1440 : 1),
+                            }
+                          : h,
+                      ),
+                    })
+                  }
+                />
+                <Field
+                  label="Alpha acids"
+                  inputLabel={`${hop.name} alpha acids, addition ${i + 1}`}
+                  suffix="%"
+                  value={h.alpha ?? midpoint(hop.alpha)}
+                  min={0}
+                  max={100}
+                  onChange={(n) =>
+                    update({
+                      hops: r.hops.map((h, j) =>
+                        j === i ? { ...h, alpha: n } : h,
+                      ),
+                    })
+                  }
+                />
+              </div>
+            </article>
+          );
+        })}
         <button
           className="text-button"
           onClick={() =>
@@ -416,59 +462,68 @@ export default function Editor({
           status with the lab.
         </p>
       </Section>
-      <RecipeAdditives recipe={r} onChange={set} us={us} />
-      <Section title="Batch & equipment" eyebrow="YOUR BREWHOUSE">
-        <p className="muted">
-          Changing volume or efficiency here scales ingredient amounts to
-          preserve gravity. Hop timing and boil-off rate stay fixed.
-        </p>
-        <div className="field-grid">
-          <Field
-            label="Post-boil batch size"
-            suffix={us ? "gal" : "L"}
-            value={us ? lToGal(r.batchL) : r.batchL}
-            min={us ? 0.14 : 0.5}
-            onChange={(n) =>
-              set(scaleRecipe(r, us ? n * L_PER_GAL : n, r.efficiency, c))
-            }
-          />
-          <Field
-            label="Brewhouse efficiency"
-            suffix="%"
-            value={r.efficiency}
-            min={1}
-            max={100}
-            step={1}
-            onChange={(n) => set(scaleRecipe(r, r.batchL, n, c))}
-          />
-          <Field
-            label="Boil duration"
-            suffix="min"
-            value={r.boilMinutes}
-            min={0}
-            max={240}
-            step={1}
-            onChange={(n) => update({ boilMinutes: n })}
-          />
-          <Field
-            label="Boil-off rate"
-            suffix={us ? "gal/h" : "L/h"}
-            value={us ? lToGal(r.boilOffLPerHour) : r.boilOffLPerHour}
-            min={0}
-            onChange={(n) =>
-              update({ boilOffLPerHour: us ? n * L_PER_GAL : n })
-            }
-          />
-          <Field
-            label="Transfer loss"
-            suffix={us ? "gal" : "L"}
-            value={us ? lToGal(r.lossL) : r.lossL}
-            min={0}
-            max={(us ? lToGal(r.batchL) : r.batchL) - 0.1}
-            onChange={(n) => update({ lossL: us ? n * L_PER_GAL : n })}
-          />
-        </div>
-      </Section>
+      <details className="builder-optional">
+        <summary>
+          Optional additives & experiments
+          {r.additives?.length ? ` · ${r.additives.length} additions` : ""}
+        </summary>
+        <RecipeAdditives recipe={r} onChange={set} us={us} />
+      </details>
+      <details className="builder-optional">
+        <summary>Equipment & batch scaling</summary>
+        <Section title="Batch & equipment" eyebrow="YOUR BREWHOUSE">
+          <p className="muted">
+            Changing volume or efficiency here scales ingredient amounts to
+            preserve gravity. Hop timing and boil-off rate stay fixed.
+          </p>
+          <div className="field-grid">
+            <Field
+              label="Post-boil batch size"
+              suffix={us ? "gal" : "L"}
+              value={us ? lToGal(r.batchL) : r.batchL}
+              min={us ? 0.14 : 0.5}
+              onChange={(n) =>
+                set(scaleRecipe(r, us ? n * L_PER_GAL : n, r.efficiency, c))
+              }
+            />
+            <Field
+              label="Brewhouse efficiency"
+              suffix="%"
+              value={r.efficiency}
+              min={1}
+              max={100}
+              step={1}
+              onChange={(n) => set(scaleRecipe(r, r.batchL, n, c))}
+            />
+            <Field
+              label="Boil duration"
+              suffix="min"
+              value={r.boilMinutes}
+              min={0}
+              max={240}
+              step={1}
+              onChange={(n) => update({ boilMinutes: n })}
+            />
+            <Field
+              label="Boil-off rate"
+              suffix={us ? "gal/h" : "L/h"}
+              value={us ? lToGal(r.boilOffLPerHour) : r.boilOffLPerHour}
+              min={0}
+              onChange={(n) =>
+                update({ boilOffLPerHour: us ? n * L_PER_GAL : n })
+              }
+            />
+            <Field
+              label="Transfer loss"
+              suffix={us ? "gal" : "L"}
+              value={us ? lToGal(r.lossL) : r.lossL}
+              min={0}
+              max={(us ? lToGal(r.batchL) : r.batchL) - 0.1}
+              onChange={(n) => update({ lossL: us ? n * L_PER_GAL : n })}
+            />
+          </div>
+        </Section>
+      </details>
     </div>
   );
 }

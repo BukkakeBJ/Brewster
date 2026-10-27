@@ -9,6 +9,7 @@ import "./sharing.css";
 import "./design.css";
 import "./headings.css";
 import "./readability.css";
+import "./workflow.css";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

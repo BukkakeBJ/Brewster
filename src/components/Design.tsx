@@ -129,6 +129,44 @@ export default function Design({
     };
     worker.current.postMessage({ target: t, catalog: c, userWeight });
   }
+  const mainFlavors = new Set([
+    "bready",
+    "citrus",
+    "tropical",
+    "clean",
+    "body",
+  ]);
+  const extraFlavors = c.vocabulary.filter(
+    (v) => v.axis && !mainFlavors.has(v.id),
+  );
+  const flavorControls = (items: Catalog["vocabulary"]) => (
+    <div className="flavor-sliders">
+      {alphabetical(items, (v) => v.label).map((v) => (
+        <div className="flavor-slider-row" key={v.id}>
+          <HelpLabel
+            label={v.label}
+            help={flavorHelp(v.id, v.label)}
+            htmlFor={`design-flavor-${v.id}`}
+          />
+          <input
+            id={`design-flavor-${v.id}`}
+            aria-label={`Target flavor ${v.label}`}
+            type="range"
+            min="0"
+            max="5"
+            step=".25"
+            value={t.flavors[v.id] ?? 0}
+            onChange={(e) =>
+              update({
+                flavors: { ...t.flavors, [v.id]: Number(e.target.value) },
+              })
+            }
+          />
+          <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
+        </div>
+      ))}
+    </div>
+  );
   return (
     <>
       <div className="design-grid">
@@ -498,7 +536,10 @@ export default function Design({
                 <option value="dry hop">Dry hopping</option>
               </select>
             </div>
-            <HopCharacterHelp focus={t.hopFocus ?? "aroma"} />
+            <details className="advanced">
+              <summary>Learn about hop timing & aroma</summary>
+              <HopCharacterHelp focus={t.hopFocus ?? "aroma"} />
+            </details>
             <div className="help-option">
               <label className="checkbox">
                 <input
@@ -516,37 +557,18 @@ export default function Design({
                 content={help["Hop evidence filter"]}
               />
             </div>
-            <div className="flavor-sliders">
-              {c.vocabulary
-                .filter((v) => v.axis)
-                .map((v) => (
-                  <div className="flavor-slider-row" key={v.id}>
-                    <HelpLabel
-                      label={v.label}
-                      help={flavorHelp(v.id, v.label)}
-                      htmlFor={`design-flavor-${v.id}`}
-                    />
-                    <input
-                      id={`design-flavor-${v.id}`}
-                      aria-label={`Target flavor ${v.label}`}
-                      type="range"
-                      min="0"
-                      max="5"
-                      step=".25"
-                      value={t.flavors[v.id] ?? 0}
-                      onChange={(e) =>
-                        update({
-                          flavors: {
-                            ...t.flavors,
-                            [v.id]: Number(e.target.value),
-                          },
-                        })
-                      }
-                    />
-                    <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
-                  </div>
-                ))}
-            </div>
+            {flavorControls(
+              c.vocabulary.filter((v) => v.axis && mainFlavors.has(v.id)),
+            )}
+            <details className="advanced">
+              <summary>
+                More flavor controls · {extraFlavors.length}
+                {extraFlavors.some((v) => (t.flavors[v.id] ?? 0) > 0)
+                  ? ` · ${extraFlavors.filter((v) => (t.flavors[v.id] ?? 0) > 0).length} set`
+                  : ""}
+              </summary>
+              {flavorControls(extraFlavors)}
+            </details>
             <div className="descriptor-constraints">
               <div className="field">
                 <HelpLabel
@@ -636,141 +658,156 @@ export default function Design({
                 ))}
             </div>
           </details>
-          <IngredientMatches
-            target={t}
-            catalog={c}
-            us={us}
-            update={update}
-            userWeight={userWeight}
-          />
-          <Section
-            title="Your constraints"
-            eyebrow="03 / WHAT YOU HAVE"
-            action={
-              <InfoTip
-                label="On hand & excluded ingredients"
-                content={help["On hand & excluded ingredients"]}
-              />
-            }
-          >
-            <div className="field-grid">
-              <div className="field">
-                <HelpLabel
-                  label="Yeast form"
-                  help={help["Yeast form"]}
-                  htmlFor="design-option-5"
+          <details className="builder-optional">
+            <summary>Browse suggested ingredients (optional)</summary>
+            <IngredientMatches
+              target={t}
+              catalog={c}
+              us={us}
+              update={update}
+              userWeight={userWeight}
+            />
+          </details>
+          <details className="builder-optional">
+            <summary>
+              Ingredient limits & advanced settings
+              {t.onHand.length + t.exclude.length
+                ? ` · ${t.onHand.length + t.exclude.length} inventory limits`
+                : ""}
+            </summary>
+            <Section
+              title="Your constraints"
+              eyebrow="03 / WHAT YOU HAVE"
+              action={
+                <InfoTip
+                  label="On hand & excluded ingredients"
+                  content={help["On hand & excluded ingredients"]}
                 />
-                <select
-                  id="design-option-5"
-                  aria-label="Yeast form"
-                  value={t.yeastForm}
-                  onChange={(e) =>
-                    update({ yeastForm: e.target.value as Target["yeastForm"] })
-                  }
-                >
-                  <option value="any">Dry or liquid</option>
-                  <option value="dry">Dry only</option>
-                  <option value="liquid">Liquid only</option>
-                </select>
-              </div>
-              <div className="field">
-                <HelpLabel
-                  label="Budget approach"
-                  help={help["Budget approach"]}
-                  htmlFor="design-option-6"
-                />
-                <select
-                  id="design-option-6"
-                  aria-label="Budget approach"
-                  value={t.budget}
-                  onChange={(e) =>
-                    update({ budget: e.target.value as Target["budget"] })
-                  }
-                >
-                  <option value="any">Unrestricted</option>
-                  <option value="economy">Economy · dry yeast, hop cap</option>
-                </select>
-              </div>
-            </div>
-            <details className="advanced">
-              <summary>On hand & excluded ingredients</summary>
-              <p className="muted">
-                An empty on-hand list permits all ingredients. Once selected, it
-                becomes a strict allowlist: include a base malt, hops and yeast.
-                Quantities on hand are not tracked.
-              </p>
-              <input
-                className="ingredient-search"
-                placeholder="Search ingredients for constraints…"
-                value={ingredientQuery}
-                onChange={(e) => setIngredientQuery(e.target.value)}
-              />
-              {searchByName(
-                [...c.malts, ...c.hops, ...c.yeasts],
-                ingredientQuery,
-                (i) => i.name,
-                (i) => i.kind,
-              )
-                .filter(() => !!ingredientQuery.trim())
-                .slice(0, 12)
-                .map((i) => (
-                  <div className="constraint-row" key={i.id}>
-                    <span>
-                      {i.name} <small>{i.kind}</small>
-                    </span>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={t.onHand.includes(i.id)}
-                        onChange={() => toggle("onHand", i.id)}
-                      />{" "}
-                      On hand
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={t.exclude.includes(i.id)}
-                        onChange={() => toggle("exclude", i.id)}
-                      />{" "}
-                      Exclude
-                    </label>
-                  </div>
-                ))}
-              <div className="filter-chips">
-                {(["onHand", "exclude"] as const).flatMap((k) =>
-                  t[k].map((id) => (
-                    <button key={k + id} onClick={() => toggle(k, id)}>
-                      {k === "onHand" ? "On hand" : "Exclude"}:{" "}
-                      {
-                        [...c.malts, ...c.hops, ...c.yeasts].find(
-                          (i) => i.id === id,
-                        )?.name
-                      }{" "}
-                      ×
-                    </button>
-                  )),
-                )}
-              </div>
-            </details>
-            <details className="advanced">
-              <summary>Optimization weights</summary>
+              }
+            >
               <div className="field-grid">
-                {(["flavor", "numbers", "style"] as const).map((k) => (
-                  <Field
-                    key={k}
-                    label={k + " weight"}
-                    help={help[k + " weight"]}
-                    value={t.weights[k]}
-                    min={0}
-                    max={10}
-                    onChange={(n) =>
-                      update({ weights: { ...t.weights, [k]: n } })
-                    }
+                <div className="field">
+                  <HelpLabel
+                    label="Yeast form"
+                    help={help["Yeast form"]}
+                    htmlFor="design-option-5"
                   />
-                ))}
+                  <select
+                    id="design-option-5"
+                    aria-label="Yeast form"
+                    value={t.yeastForm}
+                    onChange={(e) =>
+                      update({
+                        yeastForm: e.target.value as Target["yeastForm"],
+                      })
+                    }
+                  >
+                    <option value="any">Dry or liquid</option>
+                    <option value="dry">Dry only</option>
+                    <option value="liquid">Liquid only</option>
+                  </select>
+                </div>
+                <div className="field">
+                  <HelpLabel
+                    label="Budget approach"
+                    help={help["Budget approach"]}
+                    htmlFor="design-option-6"
+                  />
+                  <select
+                    id="design-option-6"
+                    aria-label="Budget approach"
+                    value={t.budget}
+                    onChange={(e) =>
+                      update({ budget: e.target.value as Target["budget"] })
+                    }
+                  >
+                    <option value="any">Unrestricted</option>
+                    <option value="economy">
+                      Economy · dry yeast, hop cap
+                    </option>
+                  </select>
+                </div>
               </div>
-            </details>
-          </Section>
+              <details className="advanced">
+                <summary>On hand & excluded ingredients</summary>
+                <p className="muted">
+                  An empty on-hand list permits all ingredients. Once selected,
+                  it becomes a strict allowlist: include a base malt, hops and
+                  yeast. Quantities on hand are not tracked.
+                </p>
+                <input
+                  className="ingredient-search"
+                  placeholder="Search ingredients for constraints…"
+                  value={ingredientQuery}
+                  onChange={(e) => setIngredientQuery(e.target.value)}
+                />
+                {searchByName(
+                  [...c.malts, ...c.hops, ...c.yeasts],
+                  ingredientQuery,
+                  (i) => i.name,
+                  (i) => i.kind,
+                )
+                  .filter(() => !!ingredientQuery.trim())
+                  .slice(0, 12)
+                  .map((i) => (
+                    <div className="constraint-row" key={i.id}>
+                      <span>
+                        {i.name} <small>{i.kind}</small>
+                      </span>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={t.onHand.includes(i.id)}
+                          onChange={() => toggle("onHand", i.id)}
+                        />{" "}
+                        On hand
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={t.exclude.includes(i.id)}
+                          onChange={() => toggle("exclude", i.id)}
+                        />{" "}
+                        Exclude
+                      </label>
+                    </div>
+                  ))}
+                <div className="filter-chips">
+                  {(["onHand", "exclude"] as const).flatMap((k) =>
+                    t[k].map((id) => (
+                      <button key={k + id} onClick={() => toggle(k, id)}>
+                        {k === "onHand" ? "On hand" : "Exclude"}:{" "}
+                        {
+                          [...c.malts, ...c.hops, ...c.yeasts].find(
+                            (i) => i.id === id,
+                          )?.name
+                        }{" "}
+                        ×
+                      </button>
+                    )),
+                  )}
+                </div>
+              </details>
+              <details className="advanced">
+                <summary>Optimization weights</summary>
+                <div className="field-grid">
+                  {(["flavor", "numbers", "style"] as const).map((k) => (
+                    <Field
+                      key={k}
+                      label={k + " weight"}
+                      help={help[k + " weight"]}
+                      value={t.weights[k]}
+                      min={0}
+                      max={10}
+                      onChange={(n) =>
+                        update({ weights: { ...t.weights, [k]: n } })
+                      }
+                    />
+                  ))}
+                </div>
+              </details>
+            </Section>
+          </details>
         </div>
         <aside className="design-preview">
           <Section
@@ -794,12 +831,8 @@ export default function Design({
               onClick={run}
             >
               <Sparkles size={16} />
-              {busy ? "Exploring recipes…" : "Find my recipes"}
+              {busy ? "Exploring recipes…" : "Generate recipe options"}
             </button>
-            <p className="solver-note">
-              18 ingredient combinations · deterministic local search · no
-              external AI
-            </p>
             {busy && (
               <button
                 className="text-button"
@@ -912,7 +945,7 @@ export default function Design({
                     })
                   }
                 >
-                  Make it my own <ArrowUpRight size={14} />
+                  Use this recipe <ArrowUpRight size={14} />
                 </button>
               </article>
             ))}
