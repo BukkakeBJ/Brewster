@@ -16,9 +16,19 @@ export const processStages = [
     hint: "Hop timing experiments, kettle additions, boil observations…",
   },
   {
+    id: "whirlpool",
+    label: "Whirlpool / hop stand",
+    hint: "Post-boil additions, contact temperature, time before chilling…",
+  },
+  {
     id: "cooling",
-    label: "Whirlpool & chilling",
+    label: "Chilling & transfer",
     hint: "Hop-stand temperature and duration, chilling, transfer losses…",
+  },
+  {
+    id: "steep-dry-hop",
+    label: "Steep / dry hop",
+    hint: "Cocoa nib or spice steeping, cold-side additions, dry-hop contact time…",
   },
   {
     id: "fermentation",

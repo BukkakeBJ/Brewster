@@ -189,7 +189,7 @@ export function scaleRecipe(
   if (efficiency <= 0 || efficiency > 100 || !Number.isFinite(efficiency))
     throw new Error("Invalid efficiency");
   const ratio = batchL / recipe.batchL;
-  return {
+  const scaled: Recipe = {
     ...recipe,
     batchL,
     efficiency,
@@ -214,6 +214,31 @@ export function scaleRecipe(
         }
       : {}),
   };
+  if (recipe.waterPlan) {
+    const evaporationL = (recipe.boilOffLPerHour * recipe.boilMinutes) / 60;
+    const absorbedL = catalog
+      ? scaled.grains.reduce(
+          (sum, grain) =>
+            sum +
+            (catalog.malts.find((m) => m.id === grain.ingredientId)
+              ?.requiresMash
+              ? grain.kg
+              : 0),
+          0,
+        ) * recipe.waterPlan.absorptionLPerKg
+      : (Math.max(
+          0,
+          recipe.waterPlan.startingWaterL - recipe.batchL - evaporationL,
+        ) *
+          ratio *
+          recipe.efficiency) /
+        efficiency;
+    scaled.waterPlan = {
+      ...recipe.waterPlan,
+      startingWaterL: batchL + evaporationL + absorbedL,
+    };
+  }
+  return scaled;
 }
 export function predict(
   recipe: Recipe,

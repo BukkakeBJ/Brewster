@@ -19,25 +19,45 @@ import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
 import { recipeDesignBrief, styleFlavorBrief } from "../engine/recommendations";
 import { alphabetical, searchByName } from "../engine/search";
+import { targetSchema } from "../validation";
+import { waterSettings } from "../engine/waterPlan";
 export default function Design({
   catalog: c,
   onOpen,
   us,
   userWeight = 1,
   fromRecipe,
+  waterRecipe,
+  onTargetChange,
+  resetKey = 0,
 }: {
   catalog: Catalog;
   onOpen: (r: Recipe) => void;
   us: boolean;
   userWeight?: number;
   fromRecipe?: Recipe;
+  waterRecipe?: Recipe;
+  onTargetChange?: (target: Target) => void;
+  resetKey?: number;
 }) {
   const [autoStyle, setAutoStyle] = useState(true);
   const help = designHelp.fields as Record<string, string>;
   const flavorHelp = (id: string, label: string) =>
     `${(designHelp.flavors as Record<string, string>)[id] ?? `${label} is a sensory descriptor.`} ${help["Flavor intensity"]}`;
   const [t, setT] = useState<Target>(() =>
-      matchStyleToTargets(defaultTarget, c),
+      (() => {
+        try {
+          return targetSchema.parse(
+            JSON.parse(
+              localStorage.getItem(`brew-goals:${waterRecipe?.id}`) ?? "null",
+            ),
+          );
+        } catch {
+          return (
+            waterRecipe?.designTargets ?? matchStyleToTargets(defaultTarget, c)
+          );
+        }
+      })(),
     ),
     [results, setResults] = useState<Candidate[]>([]),
     [busy, setBusy] = useState(false),
@@ -59,6 +79,74 @@ export default function Design({
       });
   };
   const worker = useRef<Worker | null>(null);
+  const goalRecipeId = useRef(waterRecipe?.id);
+  useEffect(() => {
+    if (!waterRecipe || goalRecipeId.current === waterRecipe.id) return;
+    goalRecipeId.current = waterRecipe.id;
+    let restored: Target | undefined;
+    try {
+      restored = targetSchema.parse(
+        JSON.parse(
+          localStorage.getItem(`brew-goals:${waterRecipe.id}`) ?? "null",
+        ),
+      );
+    } catch {}
+    if (restored ?? waterRecipe.designTargets)
+      setT(restored ?? waterRecipe.designTargets!);
+  }, [waterRecipe?.id]);
+  useEffect(() => {
+    if (!waterRecipe || goalRecipeId.current !== waterRecipe.id) return;
+    try {
+      localStorage.setItem(`brew-goals:${waterRecipe.id}`, JSON.stringify(t));
+    } catch {}
+  }, [t]);
+  useEffect(() => {
+    onTargetChange?.(t);
+  }, [t, onTargetChange]);
+  useEffect(() => {
+    if (!waterRecipe) return;
+    worker.current?.terminate();
+    setBusy(false);
+    setStale(true);
+    setT((current) => ({
+      ...current,
+      batchL: waterRecipe.batchL,
+      efficiency: waterRecipe.efficiency,
+      waterPlan: waterSettings(waterRecipe, c),
+      equipment: {
+        boilMinutes: waterRecipe.boilMinutes,
+        boilOffLPerHour: waterRecipe.boilOffLPerHour,
+        lossL: waterRecipe.lossL,
+      },
+    }));
+  }, [waterRecipe, c]);
+  useEffect(() => {
+    if (!resetKey) return;
+    worker.current?.terminate();
+    setBusy(false);
+    setResults([]);
+    setAutoStyle(true);
+    setT(
+      matchStyleToTargets(
+        {
+          ...structuredClone(defaultTarget),
+          ...(waterRecipe
+            ? {
+                batchL: waterRecipe.batchL,
+                efficiency: waterRecipe.efficiency,
+                waterPlan: waterSettings(waterRecipe, c),
+                equipment: {
+                  boilMinutes: waterRecipe.boilMinutes,
+                  boilOffLPerHour: waterRecipe.boilOffLPerHour,
+                  lossL: waterRecipe.lossL,
+                },
+              }
+            : {}),
+        },
+        c,
+      ),
+    );
+  }, [resetKey]);
   useEffect(() => {
     if (!fromRecipe) return;
     worker.current?.terminate();
@@ -68,7 +156,10 @@ export default function Design({
     setAutoStyle(true);
     setT(
       matchStyleToTargets(
-        recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight),
+        fromRecipe.designTargets ?? {
+          ...recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight),
+          waterPlan: waterSettings(fromRecipe, c),
+        },
         c,
       ),
     );
@@ -101,7 +192,26 @@ export default function Design({
         ? t[key].filter((i) => i !== id)
         : [...t[key], id],
     });
-  function run() {
+  const openCandidate = (candidate: Recipe) =>
+    onOpen({
+      ...candidate,
+      id: crypto.randomUUID(),
+      designTargets: t,
+      ...(fromRecipe
+        ? {
+            name: fromRecipe.name,
+            description: fromRecipe.description,
+            notes: fromRecipe.notes,
+            additives: fromRecipe.additives?.map((a) => ({
+              ...a,
+              amount: (a.amount * candidate.batchL) / fromRecipe.batchL,
+            })),
+            processNotes: structuredClone(fromRecipe.processNotes),
+            tags: fromRecipe.tags,
+          }
+        : {}),
+    });
+  function run(continueToMalts = false) {
     worker.current?.terminate();
     setBusy(true);
     setError("");
@@ -115,6 +225,8 @@ export default function Design({
       if (e.data.error) setError(e.data.error);
       else {
         setResults(e.data.candidates);
+        if (continueToMalts && e.data.candidates.length)
+          openCandidate(e.data.candidates[0].recipe);
         if (!e.data.candidates.length)
           setError(
             "No recipe met the hard ingredient and grist constraints. Relax constraints and try again.",
@@ -193,10 +305,10 @@ export default function Design({
             </div>
             {fromRecipe && (
               <p className="muted">
-                Starting from {fromRecipe.name}. Change targets to explore a
-                redesigned copy; your current draft stays in the Recipe Book.
-                The new version keeps your name and experiment notes, but may
-                use different ingredients.
+                Starting from {fromRecipe.name}. Applying new suggestions keeps
+                your name and notes. Your current draft stays in the Recipe
+                Book. Style and goal edits take effect on ingredients when you
+                choose a generated recipe.
               </p>
             )}
             <div className="field">
@@ -310,25 +422,40 @@ export default function Design({
                   />
                 )}
               </div>
-              <Field
-                label="Post-boil batch"
-                help={help["Post-boil batch"]}
-                suffix={us ? "gal" : "L"}
-                value={us ? lToGal(t.batchL) : t.batchL}
-                min={us ? 0.3 : 1}
-                onChange={(n) => update({ batchL: us ? n * L_PER_GAL : n })}
-              />
-              <Field
-                label="Efficiency"
-                help={help["Efficiency"]}
-                suffix="%"
-                value={t.efficiency}
-                min={1}
-                max={100}
-                step={1}
-                onChange={(n) => update({ efficiency: n })}
-              />
+              {!waterRecipe && (
+                <Field
+                  label="Post-boil batch"
+                  help={help["Post-boil batch"]}
+                  suffix={us ? "gal" : "L"}
+                  value={us ? lToGal(t.batchL) : t.batchL}
+                  min={us ? 0.3 : 1}
+                  onChange={(n) => update({ batchL: us ? n * L_PER_GAL : n })}
+                />
+              )}
+              {!waterRecipe && (
+                <Field
+                  label="Efficiency"
+                  help={help["Efficiency"]}
+                  suffix="%"
+                  value={t.efficiency}
+                  min={1}
+                  max={100}
+                  step={1}
+                  onChange={(n) => update({ efficiency: n })}
+                />
+              )}
             </div>
+            {waterRecipe && (
+              <p className="notice">
+                Starting water:{" "}
+                {(us
+                  ? lToGal(t.waterPlan?.startingWaterL ?? 0)
+                  : (t.waterPlan?.startingWaterL ?? 0)
+                ).toFixed(2)}{" "}
+                {us ? "gal" : "L"}. Yield is calculated from your malt build and
+                losses; change water and equipment in step 1.
+              </p>
+            )}
             <details className="advanced">
               <summary>Gravity ranges & equipment</summary>
               <div className="help-option">
@@ -390,7 +517,7 @@ export default function Design({
                   />
                 </div>
               )}
-              <div className="field-grid">
+              <div className="field-grid" hidden={!!waterRecipe}>
                 <Field
                   label="Boil time"
                   help={help["Boil time"]}
@@ -828,11 +955,22 @@ export default function Design({
             <button
               className="button primary solve-button"
               disabled={busy}
-              onClick={run}
+              onClick={() => run()}
             >
               <Sparkles size={16} />
               {busy ? "Exploring recipes…" : "Generate recipe options"}
             </button>
+            {waterRecipe && (
+              <button
+                className="button primary guided-goal-continue"
+                disabled={busy}
+                onClick={() => run(true)}
+              >
+                {busy
+                  ? "Building your recipe…"
+                  : "Build malt bill & continue →"}
+              </button>
+            )}
             {busy && (
               <button
                 className="text-button"
@@ -918,34 +1056,9 @@ export default function Design({
                 </details>
                 <button
                   className="button primary"
-                  onClick={() =>
-                    onOpen({
-                      ...b.recipe,
-                      id: crypto.randomUUID(),
-                      ...(fromRecipe
-                        ? {
-                            name: fromRecipe.name.slice(0, 180) + " (redesign)",
-                            description: fromRecipe.description,
-                            notes: fromRecipe.notes,
-                            additives: fromRecipe.additives?.map((a) => ({
-                              ...a,
-                              amount:
-                                (a.amount * b.recipe.batchL) /
-                                fromRecipe.batchL,
-                            })),
-                            processNotes: structuredClone(
-                              fromRecipe.processNotes,
-                            ),
-                            tags: [
-                              ...(fromRecipe.tags ?? []).slice(0, 19),
-                              "redesign",
-                            ],
-                          }
-                        : {}),
-                    })
-                  }
+                  onClick={() => openCandidate(b.recipe)}
                 >
-                  Use this recipe <ArrowUpRight size={14} />
+                  Use recipe & continue to malts <ArrowUpRight size={14} />
                 </button>
               </article>
             ))}

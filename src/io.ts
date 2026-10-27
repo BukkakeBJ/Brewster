@@ -34,6 +34,10 @@ export function exportBeerXML(r: Recipe, c: Catalog) {
         BD_GENERAL_NOTES: r.notes ?? "",
         BD_ADDITIVES: JSON.stringify(r.additives ?? []),
         BD_PROCESS_NOTES: JSON.stringify(r.processNotes ?? {}),
+        BD_WATER_PLAN: r.waterPlan ? JSON.stringify(r.waterPlan) : "",
+        BD_DESIGN_TARGETS: r.designTargets
+          ? JSON.stringify(r.designTargets)
+          : "",
         BD_DESCRIPTION: r.description ?? "",
         BD_TAGS: JSON.stringify(r.tags ?? []),
         BD_ORIGIN: r.origin ? JSON.stringify(r.origin) : "",
@@ -203,6 +207,12 @@ export function importRecipe(
     name: x.NAME,
     styleId: x.BD_STYLE_ID ?? "",
     notes: String(x.BD_GENERAL_NOTES ?? x.NOTES ?? ""),
+    waterPlan: x.BD_WATER_PLAN
+      ? JSON.parse(String(x.BD_WATER_PLAN))
+      : undefined,
+    designTargets: x.BD_DESIGN_TARGETS
+      ? JSON.parse(String(x.BD_DESIGN_TARGETS))
+      : undefined,
     additives: x.BD_ADDITIVES
       ? JSON.parse(String(x.BD_ADDITIVES))
       : arr(x.MISCS?.MISC).map((a: any) => {

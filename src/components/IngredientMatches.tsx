@@ -1,3 +1,4 @@
+import { IngredientInfo } from "./IngredientPicker";
 import { useMemo, useState } from "react";
 import type { Catalog, Target } from "../engine/types";
 import {
@@ -175,7 +176,10 @@ export default function IngredientMatches({
             (malt?.type === "base" && malt.maxPercent >= 70);
           return (
             <article key={m.id} className="suggestion-card">
-              <h3>{m.name}</h3>
+              <div className="ingredient-name-with-info">
+                <h3>{m.name}</h3>
+                <IngredientInfo item={item} catalog={c} us={us} />
+              </div>
               <Tag tone="objective">REFERENCE SPECS</Tag>
               <p className="suggestion-spec">
                 {hop

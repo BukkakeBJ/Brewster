@@ -128,6 +128,16 @@ export interface RecipeOrigin {
   adaptations?: string;
 }
 export interface Recipe {
+  designTargets?: Target;
+  waterPlan?: {
+    startingWaterL: number;
+    absorptionLPerKg: number;
+    packagingLossL: number;
+    bottleMl: number;
+    dryCellsBillionPerG: number;
+    liquidCellsBillionPerPack: number;
+    dryPackGrams: number;
+  };
   additives?: import("./additives").AdditiveAddition[];
   processNotes?: ProcessNotes;
   id: string;
@@ -184,6 +194,7 @@ export interface Flavor {
   contributions: Record<string, Contribution[]>;
 }
 export interface Target {
+  waterPlan?: Recipe["waterPlan"];
   hopFocus?: import("./recommendations").HopFocus;
   matchHopFlavor?: boolean;
   hopChoices?: string[];

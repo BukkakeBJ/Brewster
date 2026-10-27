@@ -8,7 +8,8 @@
     "category": "Flavorings",
     "form": "Roasted bean pieces",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "Phase Three brewer discussion · adjunct use",
@@ -62,7 +63,8 @@
     "category": "Wood & spirits",
     "form": "Food-grade toasted wood chips",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · oak alternatives",
@@ -89,7 +91,8 @@
     "category": "Wood & spirits",
     "form": "Food-grade toasted wood cubes",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · oak alternatives",
@@ -170,7 +173,8 @@
     "category": "Flavorings",
     "form": "Whole bean pods",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · vanilla beans",
@@ -224,7 +228,8 @@
     "category": "Flavorings",
     "form": "Roasted coffee",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "AHA community discussion · coffee and bourbon",
@@ -278,7 +283,8 @@
     "category": "Flavorings",
     "form": "Unsweetened flakes",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "Phase Three brewer discussion · adjunct use",
@@ -305,7 +311,9 @@
     "category": "Spices & botanicals",
     "form": "Food-grade sticks or ground spice",
     "stages": [
-      "boil"
+      "boil",
+      "whirlpool",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "Phase Three brewer discussion · adjunct use",
@@ -332,7 +340,9 @@
     "category": "Spices & botanicals",
     "form": "Dried whole seed",
     "stages": [
-      "boil"
+      "boil",
+      "whirlpool",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · special brewing ingredients",
@@ -359,7 +369,9 @@
     "category": "Spices & botanicals",
     "form": "Dried bitter or sweet peel",
     "stages": [
-      "boil"
+      "boil",
+      "whirlpool",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · special brewing ingredients",
@@ -386,7 +398,9 @@
     "category": "Spices & botanicals",
     "form": "Fresh sliced or grated root",
     "stages": [
-      "boil"
+      "boil",
+      "whirlpool",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · special brewing ingredients",
@@ -413,7 +427,8 @@
     "category": "Spices & botanicals",
     "form": "Fresh or dried food-grade peppers",
     "stages": [
-      "conditioning"
+      "conditioning",
+      "steep-dry-hop"
     ],
     "source": {
       "title": "MoreBeer · special brewing ingredients",

@@ -13,7 +13,8 @@ import {
   midpoint,
 } from "../engine/calculations";
 import { brewingHelp } from "../brewingHelp";
-import WaterPlanner from "./WaterPlanner";
+import IngredientPicker from "./IngredientPicker";
+import type { BuilderStep } from "../engine/builder";
 import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
 import { Field, Section, Tag, HelpTerm } from "./ui";
@@ -25,11 +26,13 @@ export default function Editor({
   onChange: set,
   catalog: c,
   us,
+  section = "malts",
 }: {
   recipe: Recipe;
   onChange: (r: Recipe) => void;
   catalog: Catalog;
   us: boolean;
+  section?: BuilderStep;
 }) {
   const update = (patch: Partial<Recipe>) => set({ ...r, ...patch });
   const [yeastType, setYeastType] = useState("");
@@ -61,10 +64,10 @@ export default function Editor({
     fromTemp = (v: number) => (us ? fToC(v) : v);
   return (
     <div className="editor-stack">
-      <WaterPlanner recipe={r} catalog={c} us={us} onChange={set} />
       <Section
-        title="Grain bill"
-        eyebrow="01 / THE FOUNDATION"
+        hidden={section !== "malts"}
+        title="Malt build"
+        eyebrow="COLOR · MALT CHARACTER · GRAVITY"
         action={<Wheat size={22} />}
       >
         <div className="ingredient-header">
@@ -79,23 +82,21 @@ export default function Editor({
           return (
             <div className="grain-row" key={i}>
               <div>
-                <select
-                  aria-label={`Grain ${i + 1}`}
-                  value={g.ingredientId}
-                  onChange={(e) =>
+                <IngredientPicker
+                  label={`Fermentable ${i + 1}`}
+                  items={c.malts}
+                  selectedId={g.ingredientId}
+                  catalog={c}
+                  us={us}
+                  usage={{ percent: total ? (100 * g.kg) / total : 0 }}
+                  onChange={(id) =>
                     update({
-                      grains: r.grains.map((g, j) =>
-                        j === i ? { ...g, ingredientId: e.target.value } : g,
+                      grains: r.grains.map((row, j) =>
+                        j === i ? { ...row, ingredientId: id } : row,
                       ),
                     })
                   }
-                >
-                  {alphabetical(c.malts, (m) => m.name).map((m) => (
-                    <option value={m.id} key={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-                </select>
+                />
                 <small>
                   {m.type} · {m.lovibond} °L ·{" "}
                   <HelpTerm
@@ -165,6 +166,25 @@ export default function Editor({
           Total grist: {(us ? kgToLb(total) : total).toFixed(2)}{" "}
           {us ? "lb" : "kg"}
         </small>
+        <div className="field-grid">
+          <Field
+            label="Mash temperature"
+            suffix={us ? "°F" : "°C"}
+            value={temp(r.mashC)}
+            min={temp(40)}
+            max={temp(85)}
+            onChange={(n) => update({ mashC: fromTemp(n) })}
+          />
+          <Field
+            label="Mash duration"
+            suffix="min"
+            value={r.mashMinutes}
+            min={1}
+            max={240}
+            step={1}
+            onChange={(n) => update({ mashMinutes: n })}
+          />
+        </div>
         <Suggestions
           kind="malt"
           recipe={r}
@@ -174,6 +194,7 @@ export default function Editor({
         />
       </Section>
       <Section
+        hidden={section !== "hops"}
         title="Hop schedule"
         eyebrow="02 / BITTERNESS & AROMA"
         action={<Flower2 size={22} />}
@@ -208,32 +229,26 @@ export default function Editor({
                 </button>
               </header>
               <div className="hop-row">
-                <label className="field">
+                <div className="field">
                   <span>Hop variety</span>
-                  <select
-                    aria-label={`Hop variety for addition ${i + 1}`}
-                    value={h.ingredientId}
-                    onChange={(e) =>
+                  <IngredientPicker
+                    label={`Hop variety for addition ${i + 1}`}
+                    items={c.hops}
+                    selectedId={h.ingredientId}
+                    catalog={c}
+                    usage={{ use: h.use }}
+                    us={us}
+                    onChange={(id) =>
                       update({
-                        hops: r.hops.map((h, j) =>
+                        hops: r.hops.map((row, j) =>
                           j === i
-                            ? {
-                                ...h,
-                                ingredientId: e.target.value,
-                                alpha: undefined,
-                              }
-                            : h,
+                            ? { ...row, ingredientId: id, alpha: undefined }
+                            : row,
                         ),
                       })
                     }
-                  >
-                    {alphabetical(c.hops, (h) => h.name).map((h) => (
-                      <option value={h.id} key={h.id}>
-                        {h.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                  />
+                </div>
                 <Field
                   label="Amount"
                   inputLabel={`${hop.name} ${use.toLowerCase()} amount, addition ${i + 1}`}
@@ -326,7 +341,7 @@ export default function Editor({
                 ...r.hops,
                 {
                   ingredientId: c.hops.find((h) => h.name === "Cascade")!.id,
-                  grams: 25,
+                  grams: r.batchL * 0.75,
                   use: "boil",
                   minutes: 15,
                 },
@@ -336,10 +351,22 @@ export default function Editor({
         >
           <Plus size={15} /> Add hop addition
         </button>
+        <details className="advanced">
+          <summary>Whirlpool utilization assumption</summary>{" "}
+          <Field
+            label="Whirlpool utilization factor"
+            value={r.whirlpoolFactor}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(n) => update({ whirlpoolFactor: n })}
+          />
+        </details>
         <Suggestions kind="hop" recipe={r} catalog={c} onChange={set} us={us} />
       </Section>
       <Section
-        title="Yeast & process"
+        hidden={section !== "yeast"}
+        title="Yeast & fermentation"
         eyebrow="03 / THE FERMENTATION"
         action={<Thermometer size={22} />}
       >
@@ -361,22 +388,18 @@ export default function Editor({
           Type filters narrow the strain list. Choose a strain to change the
           recipe; your current strain stays available.
         </p>
-        <label className="field">
+        <div className="field">
           <span>Yeast strain</span>
-          <select
-            value={r.yeastId}
-            onChange={(e) => update({ yeastId: e.target.value })}
-          >
-            {alphabetical(
-              yeastOptions,
-              (y) => `${y.lab} ${y.code} · ${y.name}`,
-            ).map((y) => (
-              <option value={y.id} key={y.id}>
-                {y.lab} {y.code} · {y.name} ({y.form})
-              </option>
-            ))}
-          </select>
-        </label>
+          <IngredientPicker
+            label="Yeast strain"
+            items={yeastOptions}
+            selectedId={r.yeastId}
+            catalog={c}
+            usage={{ tempC: r.fermentC }}
+            us={us}
+            onChange={(id) => update({ yeastId: id })}
+          />
+        </div>
         <div className="yeast-selection-profile">
           <h3>{yeast.name}</h3>
           <p className="muted">
@@ -403,23 +426,6 @@ export default function Editor({
         </div>
         <div className="field-grid">
           <Field
-            label="Mash temperature"
-            suffix={us ? "°F" : "°C"}
-            value={temp(r.mashC)}
-            min={temp(40)}
-            max={temp(85)}
-            onChange={(n) => update({ mashC: fromTemp(n) })}
-          />
-          <Field
-            label="Mash duration"
-            suffix="min"
-            value={r.mashMinutes}
-            min={1}
-            max={240}
-            step={1}
-            onChange={(n) => update({ mashMinutes: n })}
-          />
-          <Field
             label="Fermentation temperature"
             suffix={us ? "°F" : "°C"}
             value={temp(r.fermentC)}
@@ -443,14 +449,6 @@ export default function Editor({
             max={5}
             onChange={(n) => update({ carbonation: n })}
           />
-          <Field
-            label="Whirlpool utilization factor"
-            value={r.whirlpoolFactor}
-            min={0}
-            max={1}
-            step={0.01}
-            onChange={(n) => update({ whirlpoolFactor: n })}
-          />
         </div>
         <Tag tone="objective">Strain specs</Tag>
         <p className="muted">
@@ -462,68 +460,9 @@ export default function Editor({
           status with the lab.
         </p>
       </Section>
-      <details className="builder-optional">
-        <summary>
-          Optional additives & experiments
-          {r.additives?.length ? ` · ${r.additives.length} additions` : ""}
-        </summary>
+      <div hidden={section !== "additives"}>
         <RecipeAdditives recipe={r} onChange={set} us={us} />
-      </details>
-      <details className="builder-optional">
-        <summary>Equipment & batch scaling</summary>
-        <Section title="Batch & equipment" eyebrow="YOUR BREWHOUSE">
-          <p className="muted">
-            Changing volume or efficiency here scales ingredient amounts to
-            preserve gravity. Hop timing and boil-off rate stay fixed.
-          </p>
-          <div className="field-grid">
-            <Field
-              label="Post-boil batch size"
-              suffix={us ? "gal" : "L"}
-              value={us ? lToGal(r.batchL) : r.batchL}
-              min={us ? 0.14 : 0.5}
-              onChange={(n) =>
-                set(scaleRecipe(r, us ? n * L_PER_GAL : n, r.efficiency, c))
-              }
-            />
-            <Field
-              label="Brewhouse efficiency"
-              suffix="%"
-              value={r.efficiency}
-              min={1}
-              max={100}
-              step={1}
-              onChange={(n) => set(scaleRecipe(r, r.batchL, n, c))}
-            />
-            <Field
-              label="Boil duration"
-              suffix="min"
-              value={r.boilMinutes}
-              min={0}
-              max={240}
-              step={1}
-              onChange={(n) => update({ boilMinutes: n })}
-            />
-            <Field
-              label="Boil-off rate"
-              suffix={us ? "gal/h" : "L/h"}
-              value={us ? lToGal(r.boilOffLPerHour) : r.boilOffLPerHour}
-              min={0}
-              onChange={(n) =>
-                update({ boilOffLPerHour: us ? n * L_PER_GAL : n })
-              }
-            />
-            <Field
-              label="Transfer loss"
-              suffix={us ? "gal" : "L"}
-              value={us ? lToGal(r.lossL) : r.lossL}
-              min={0}
-              max={(us ? lToGal(r.batchL) : r.batchL) - 0.1}
-              onChange={(n) => update({ lossL: us ? n * L_PER_GAL : n })}
-            />
-          </div>
-        </Section>
-      </details>
+      </div>
     </div>
   );
 }

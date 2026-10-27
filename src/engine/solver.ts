@@ -10,6 +10,7 @@ import { clamp, midpoint, predict, hopIbu } from "./calculations";
 import { consensus, flavorPredict } from "./flavor";
 import { ingredientMatches } from "./recommendations";
 import { hasBrewingSpecs } from "./yeast";
+import { planFromWater } from "./waterPlan";
 export interface Candidate {
   recipe: Recipe;
   prediction: Prediction;
@@ -280,9 +281,29 @@ export function solve(
     };
     const normalize = (a: Recipe) => {
       for (let k = 0; k < 3; k++) {
+        if (t.waterPlan)
+          a = planFromWater(
+            a,
+            small,
+            t.waterPlan.startingWaterL,
+            t.waterPlan.absorptionLPerKg,
+            t.waterPlan.packagingLossL,
+            t.waterPlan.bottleMl,
+          ).recipe;
         const p = predict(a, small);
         const factor = clamp(t.abv / (p.abv || 0.1), 0.3, 3);
         a.grains = a.grains.map((g) => ({ ...g, kg: g.kg * factor }));
+      }
+      if (t.waterPlan) {
+        a = planFromWater(
+          a,
+          small,
+          t.waterPlan.startingWaterL,
+          t.waterPlan.absorptionLPerKg,
+          t.waterPlan.packagingLossL,
+          t.waterPlan.bottleMl,
+        ).recipe;
+        a.waterPlan = { ...t.waterPlan };
       }
       if (a.hops.length) {
         a.hops[0].grams = 0;

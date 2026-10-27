@@ -1,3 +1,4 @@
+import { IngredientInfo } from "./IngredientPicker";
 import { useState } from "react";
 import { Sparkles, Plus, ArrowRight } from "lucide-react";
 import type { Catalog, Recipe } from "../engine/types";
@@ -182,7 +183,18 @@ export default function Suggestions({
               return (
                 <article key={s.item.ingredientId} className="suggestion-card">
                   <div className="suggestion-card-head">
-                    <h3>{s.name}</h3>
+                    <div className="ingredient-name-with-info">
+                      <h3>{s.name}</h3>
+                      <IngredientInfo
+                        item={
+                          (kind === "hop"
+                            ? c.hops.find((h) => h.id === s.item.ingredientId)
+                            : malt)!
+                        }
+                        catalog={c}
+                        us={us}
+                      />
+                    </div>
                     {s.alreadyUsed && <Tag tone="neutral">IN RECIPE</Tag>}
                   </div>
                   <Tag>EDITORIAL SUGGESTION</Tag>

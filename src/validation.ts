@@ -2,6 +2,48 @@ import { z } from "zod";
 import { additives, CUSTOM_ADDITIVE_ID } from "./engine/additives";
 import { processStages } from "./engine/processNotes";
 const n = (min: number, max: number) => z.number().finite().min(min).max(max);
+const waterPlanSchema = z.object({
+  startingWaterL: n(0.1, 100000),
+  absorptionLPerKg: n(0, 3),
+  packagingLossL: n(0, 10000),
+  bottleMl: n(1, 100000),
+  dryCellsBillionPerG: n(0.1, 100000),
+  liquidCellsBillionPerPack: n(0.1, 100000),
+  dryPackGrams: n(0.1, 100000),
+});
+export const targetSchema = z.object({
+  waterPlan: waterPlanSchema.optional(),
+  hopFocus: z.enum(["aroma", "bittering", "flavor", "dry hop"]).optional(),
+  matchHopFlavor: z.boolean().optional(),
+  hopChoices: z.array(z.string()).max(300).optional(),
+  baseMaltChoice: z.string().optional(),
+  yeastChoice: z.string().optional(),
+  og: z.tuple([n(1, 1.3), n(1, 1.3)]).optional(),
+  fg: z.tuple([n(1, 1.3), n(1, 1.3)]).optional(),
+  abv: n(0.5, 18),
+  ibu: n(0, 150),
+  srm: n(0, 5000).optional(),
+  batchL: n(0.5, 10000),
+  efficiency: n(1, 100),
+  styleId: z.string(),
+  flavors: z.record(z.string(), n(0, 5)),
+  must: z.array(z.string()).max(200),
+  avoid: z.array(z.string()).max(200),
+  onHand: z.array(z.string()).max(1000),
+  exclude: z.array(z.string()).max(1000),
+  yeastForm: z.enum(["any", "dry", "liquid"]),
+  budget: z.enum(["any", "economy"]),
+  equipment: z.object({
+    boilMinutes: n(0, 240),
+    boilOffLPerHour: n(0, 1000),
+    lossL: n(0, 10000),
+  }),
+  weights: z.object({
+    flavor: n(0, 1000),
+    numbers: n(0, 1000),
+    style: n(0, 1000),
+  }),
+});
 export const additiveAdditionSchema = z
   .object({
     id: z.string().min(1).max(160),
@@ -32,11 +74,13 @@ export const additiveAdditionSchema = z
   );
 export const recipeSchema = z
   .object({
+    designTargets: targetSchema.optional(),
     id: z.string().min(1).max(160),
     name: z.string().min(1).max(200),
     styleId: z.string(),
     description: z.string().max(1000).optional(),
     notes: z.string().max(20000).optional(),
+    waterPlan: waterPlanSchema.optional(),
     additives: z
       .array(additiveAdditionSchema)
       .max(100)

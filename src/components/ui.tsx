@@ -114,14 +114,16 @@ export function Section({
   eyebrow,
   children,
   action,
+  hidden = false,
 }: {
   title: string;
   eyebrow?: string;
   children: ReactNode;
   action?: ReactNode;
+  hidden?: boolean;
 }) {
   return (
-    <section className="panel">
+    <section className="panel" hidden={hidden}>
       <div className="section-head">
         <div>
           {eyebrow && <div className="eyebrow">{eyebrow}</div>}

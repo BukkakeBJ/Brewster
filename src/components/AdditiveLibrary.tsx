@@ -10,7 +10,7 @@ import {
 } from "../engine/additives";
 import { processStages } from "../engine/processNotes";
 import { alphabetical } from "../engine/search";
-import { Tag } from "./ui";
+import { Tag, InfoTip } from "./ui";
 import { Plus } from "lucide-react";
 export default function AdditiveLibrary({
   us = false,
@@ -104,7 +104,13 @@ export default function AdditiveLibrary({
             <article className="additive-card" key={a.id}>
               <header className="additive-card-title">
                 <span>{a.category}</span>
-                <h3>{a.name}</h3>
+                <div className="ingredient-name-with-info">
+                  <h3>{a.name}</h3>
+                  <InfoTip
+                    label={a.name}
+                    content={`${a.form}. Suggested stages: ${a.stages.map((id) => processStages.find((s) => s.id === id)?.label).join(", ")}. Usage guide: ${a.guide.doseBasis}. ${descriptors.length ? `Subjective associations: ${descriptors.map((d) => d.descriptor.replaceAll("-", " ")).join(", ")}. ` : ""}Record your dose and contact time; additive effects are outside the base beer predictions.`}
+                  />
+                </div>
               </header>
               <Tag tone="objective">REFERENCE IDENTITY</Tag>
               <p>{a.form}</p>

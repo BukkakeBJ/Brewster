@@ -5,8 +5,9 @@ import {
   createAdditiveAddition,
   createCustomAdditive,
 } from "../src/engine/additives";
-import { defaultRecipe as r } from "../src/defaults";
+import { defaultRecipe as r, defaultTarget } from "../src/defaults";
 import { catalog as c } from "../src/catalog";
+import { waterSettings } from "../src/engine/waterPlan";
 import { predict } from "../src/engine/calculations";
 import { flavorPredict } from "../src/engine/flavor";
 import { browserClient } from "./browserClient";
@@ -42,6 +43,8 @@ it("persists recipes and returns actionable validation errors", async () => {
   const described = {
     ...r,
     description: "Recipe book description",
+    waterPlan: waterSettings(r, c),
+    designTargets: defaultTarget,
     notes: "Brew notes",
     additives: [
       {
@@ -78,6 +81,8 @@ it("persists recipes and returns actionable validation errors", async () => {
   expect(list[0].description).toBe(described.description);
   expect(list[0].origin).toEqual(described.origin);
   expect(list[0].notes).toBe(described.notes);
+  expect(list[0].waterPlan).toEqual(described.waterPlan);
+  expect(list[0].designTargets).toEqual(described.designTargets);
   expect(list[0].processNotes).toEqual(described.processNotes);
   expect(list[0].additives).toEqual(described.additives);
   const bad = await fetch(api + "/api/recipes/" + r.id, {

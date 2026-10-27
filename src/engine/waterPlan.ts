@@ -1,5 +1,21 @@
 import type { Catalog, Recipe } from "./types";
 import { predict, scaleRecipe, volumes } from "./calculations";
+export function waterSettings(
+  recipe: Recipe,
+  catalog: Catalog,
+): NonNullable<Recipe["waterPlan"]> {
+  return (
+    recipe.waterPlan ?? {
+      startingWaterL: waterForRecipe(recipe, catalog),
+      absorptionLPerKg: 0.8,
+      packagingLossL: 0.5,
+      bottleMl: 330,
+      dryCellsBillionPerG: 10,
+      liquidCellsBillionPerPack: 100,
+      dryPackGrams: 11.5,
+    }
+  );
+}
 /** Starting mash + sparge water required by an existing recipe's current amounts. */
 export function waterForRecipe(
   recipe: Recipe,
@@ -63,6 +79,13 @@ export function planFromWater(
       "Water must cover evaporation and at least 0.5 L of post-boil wort.",
     );
   const scaled = scaleRecipe(recipe, batchL, recipe.efficiency, catalog);
+  scaled.waterPlan = {
+    ...waterSettings(recipe, catalog),
+    startingWaterL: waterL,
+    absorptionLPerKg,
+    packagingLossL,
+    bottleMl,
+  };
   const prediction = predict(scaled, catalog);
   const packagedL = Math.max(0, prediction.fermenterL - packagingLossL);
   return {

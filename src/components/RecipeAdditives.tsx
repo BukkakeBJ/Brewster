@@ -208,7 +208,7 @@ export default function RecipeAdditives({
             onChange({ ...r, additives: [...rows, addition] })
           }
         />
-        <details className="advanced">
+        <details className="advanced" open>
           <summary>Browse additives & add to this recipe</summary>
           <AdditiveLibrary
             compact

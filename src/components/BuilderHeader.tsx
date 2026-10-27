@@ -1,56 +1,48 @@
+import { builderSteps, type BuilderStep } from "../engine/builder";
 export default function BuilderHeader({
   stage,
   onStage,
 }: {
-  stage: string;
-  onStage: (stage: string) => void;
+  stage: BuilderStep;
+  onStage: (stage: BuilderStep) => void;
 }) {
-  const goals = stage === "Design";
+  const index = builderSteps.findIndex((step) => step.id === stage);
+  const current = builderSteps[index];
   return (
-    <header className="builder-header">
-      <p className="eyebrow">YOUR RECIPE WORKSPACE</p>
-      <h1>Recipe Builder</h1>
-      <p>
-        {goals
-          ? "Set the alcohol, bitterness and flavor you want. Generate recipes, then choose one to customize."
-          : "Adjust your ingredients and brew plan. The numbers and flavor estimate update as you edit."}
+    <header className="builder-header guided-builder-header">
+      <p className="eyebrow">
+        YOUR RECIPE · STEP {index + 1} OF {builderSteps.length}
       </p>
-      <div
-        className="builder-stages"
-        role="group"
-        aria-label="Recipe builder steps"
-      >
-        <button
-          type="button"
-          aria-label="Beer goals"
-          aria-pressed={goals}
-          aria-controls="builder-goals"
-          onClick={() => onStage("Design")}
+      <h1>{current.label}</h1>
+      <p>{current.description}</p>
+      <nav className="guided-steps" aria-label="Recipe builder steps">
+        {builderSteps.map((step, i) => (
+          <button
+            key={step.id}
+            type="button"
+            aria-current={step.id === stage ? "step" : undefined}
+            aria-label={`Step ${i + 1}: ${step.label}`}
+            onClick={() => onStage(step.id)}
+          >
+            <span>{i + 1}</span>
+            <strong>{step.label}</strong>
+          </button>
+        ))}
+      </nav>
+      <label className="guided-step-select field">
+        <span>Jump to a step</span>
+        <select
+          aria-label="Recipe builder step"
+          value={stage}
+          onChange={(e) => onStage(e.target.value as BuilderStep)}
         >
-          <span className="builder-step-number" aria-hidden="true">
-            1
-          </span>
-          <span>
-            <strong>Beer goals</strong>
-            <small>Targets & recipe suggestions</small>
-          </span>
-        </button>
-        <button
-          type="button"
-          aria-label="Ingredients & brew plan"
-          aria-pressed={!goals}
-          aria-controls="builder-recipe"
-          onClick={() => onStage("Recipe Editor")}
-        >
-          <span className="builder-step-number" aria-hidden="true">
-            2
-          </span>
-          <span>
-            <strong>Ingredients & brew plan</strong>
-            <small>Edit, name & save your recipe</small>
-          </span>
-        </button>
-      </div>
+          {builderSteps.map((step, i) => (
+            <option key={step.id} value={step.id}>
+              {i + 1}. {step.label}
+            </option>
+          ))}
+        </select>
+      </label>
     </header>
   );
 }

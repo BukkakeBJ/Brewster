@@ -1,3 +1,4 @@
+import { IngredientInfo } from "./IngredientPicker";
 import AdditiveLibrary from "./AdditiveLibrary";
 import { additives, type AdditiveAddition } from "../engine/additives";
 import { useMemo, useState } from "react";
@@ -365,7 +366,15 @@ export default function Library({
                       <BookOpen size={20} />
                     </span>
                     <div>
-                      <h3>{i.name}</h3>
+                      <div className="ingredient-name-with-info">
+                        <h3>{i.name}</h3>
+                        <IngredientInfo
+                          item={kind === "hop" ? h : kind === "malt" ? m : y}
+                          catalog={c}
+                          usage={usage}
+                          us={us}
+                        />
+                      </div>
                       <small>
                         {kind === "hop"
                           ? h.origin
