@@ -101,7 +101,9 @@ export default function IngredientPicker({
         <button
           type="button"
           className={
-            addLabel ? "button secondary add-ingredient" : "ingredient-picker-trigger"
+            addLabel
+              ? "button secondary add-ingredient"
+              : "ingredient-picker-trigger"
           }
           aria-label={label}
           aria-haspopup="dialog"

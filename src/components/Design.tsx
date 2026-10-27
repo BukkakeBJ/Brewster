@@ -13,6 +13,8 @@ import {
   selectDesignStyle,
 } from "../engine/styleMatch";
 import IngredientMatches from "./IngredientMatches";
+import BeerGlass from "./BeerGlass";
+import { colorName } from "../engine/glassware";
 import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
@@ -317,6 +319,9 @@ export default function Design({
   );
   const band = (k: "abv" | "ibu" | "srm") =>
     selectedStyle?.[k] as [number, number] | undefined;
+  const goalSrm =
+    t.srm ??
+    (selectedStyle ? (selectedStyle.srm[0] + selectedStyle.srm[1]) / 2 : 6);
   return (
     <>
       <div className="goals-grid">
@@ -444,7 +449,11 @@ export default function Design({
           <Section title="Flavor">
             <div className="field">
               <span>Hop character</span>
-              <div className="chip-row" role="group" aria-label="Hop flavor direction">
+              <div
+                className="chip-row"
+                role="group"
+                aria-label="Hop flavor direction"
+              >
                 {hopDirections.map((d) => (
                   <button
                     type="button"
@@ -582,7 +591,9 @@ export default function Design({
                   }
                 >
                   <option value="any">No limit</option>
-                  <option value="economy">Economy · dry yeast, fewer hops</option>
+                  <option value="economy">
+                    Economy · dry yeast, fewer hops
+                  </option>
                 </select>
               </label>
             </div>
@@ -737,12 +748,25 @@ export default function Design({
           </details>
         </div>
         <aside className="goals-aside">
-          <Section title="Your flavor goal">
+          <Section title="Your beer goal">
+            <div className="beer-preview">
+              <BeerGlass srm={goalSrm} styleId={t.styleId} size="lg" />
+              <div>
+                <b>{selectedStyle?.name ?? "Your own style"}</b>
+                <span>
+                  {t.abv}% ABV · {t.ibu} IBU
+                </span>
+                <span>
+                  {colorName(goalSrm)}
+                  {t.srm === undefined ? " (typical)" : ""}
+                </span>
+              </div>
+            </div>
             <Radar scores={t.flavors} />
             <p className="muted">
-              Want a head start? We'll design three recipes that hit these
-              goals with your water. Or press <b>Next</b> to choose
-              ingredients yourself.
+              Want a head start? We'll design three recipes that hit these goals
+              with your water. Or press <b>Next</b> to choose ingredients
+              yourself.
             </p>
             <button
               className="button primary wide"
@@ -781,10 +805,19 @@ export default function Design({
           <div className="candidate-grid">
             {results.map((b, i) => (
               <article className="candidate panel" key={b.recipe.id}>
-                <p className="eyebrow">
-                  {i === 0 ? "Closest match" : `Option ${i + 1}`}
-                </p>
-                <h3>{b.recipe.name}</h3>
+                <div className="candidate-head">
+                  <BeerGlass
+                    srm={b.prediction.srm}
+                    styleId={b.recipe.styleId}
+                    size="sm"
+                  />
+                  <div>
+                    <p className="eyebrow">
+                      {i === 0 ? "Closest match" : `Option ${i + 1}`}
+                    </p>
+                    <h3>{b.recipe.name}</h3>
+                  </div>
+                </div>
                 <div className="candidate-numbers">
                   <span>
                     <b>{b.prediction.abv.toFixed(1)}%</b> ABV

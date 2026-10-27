@@ -211,7 +211,10 @@ export function RangeField({
         {band && (
           <span
             className="range-band"
-            style={{ left: pct(band[0]), width: `calc(${pct(band[1])} - ${pct(band[0])})` }}
+            style={{
+              left: pct(band[0]),
+              width: `calc(${pct(band[1])} - ${pct(band[0])})`,
+            }}
             title={`Style range ${band.join("–")}`}
           />
         )}

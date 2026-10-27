@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import type { Catalog, Prediction, Recipe } from "../engine/types";
 import type { SavedRecipe } from "../sharing";
-import { beerColor, predict } from "../engine/calculations";
+import { predict } from "../engine/calculations";
 import { builderSteps, type BuilderStep } from "../engine/builder";
-import BrandMark from "./BrandMark";
+import BeerGlass from "./BeerGlass";
 
 export default function Home({
   recipe,
@@ -60,17 +60,15 @@ export default function Home({
           </div>
         </div>
         <div className="home-hero-art" aria-hidden="true">
-          <BrandMark size={220} />
+          <BeerGlass srm={3} glass="pilsner" size="lg" />
+          <BeerGlass srm={11} glass="pint" size="xl" />
+          <BeerGlass srm={40} glass="tulip" size="lg" />
         </div>
       </section>
 
       {prediction && (
         <section className="panel continue-card">
-          <i
-            className="glass"
-            style={{ background: beerColor(prediction.srm) }}
-            aria-hidden="true"
-          />
+          <BeerGlass srm={prediction.srm} styleId={recipe.styleId} size="md" />
           <div className="continue-body">
             <p className="eyebrow">Continue where you left off</p>
             <h2>{recipe.name}</h2>
@@ -149,11 +147,10 @@ export default function Home({
                 return (
                   <li key={r.id}>
                     <button onClick={() => onOpen(r)}>
-                      <i
-                        className="glass small"
-                        style={{
-                          background: p ? beerColor(p.srm) : "var(--line)",
-                        }}
+                      <BeerGlass
+                        srm={p?.srm ?? 5}
+                        styleId={r.styleId}
+                        size="xs"
                       />
                       <span>
                         <b>{r.name}</b>

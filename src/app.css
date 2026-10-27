@@ -729,6 +729,83 @@ input[type="range"]::-moz-range-thumb {
   gap: 0.1rem;
 }
 
+/* ---------- Beer glass art ---------- */
+.beer-glass {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 72px;
+  aspect-ratio: 3 / 4;
+  isolation: isolate;
+}
+.beer-glass::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 18%;
+  right: 18%;
+  bottom: 1%;
+  height: 5%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(52, 38, 14, 0.28),
+    transparent
+  );
+}
+.beer-glass img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+.beer-tint {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.beer-glass.xs {
+  width: 30px;
+}
+.beer-glass.sm {
+  width: 48px;
+}
+.beer-glass.lg {
+  width: 128px;
+}
+.beer-glass.xl {
+  width: 180px;
+}
+.beer-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.beer-preview > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+.beer-preview b {
+  font: 600 1.25rem var(--display);
+  color: var(--ink);
+}
+.beer-preview small {
+  color: var(--ink-3);
+}
+.goals-aside .beer-preview {
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
 /* ---------- Home ---------- */
 .home-hero {
   display: grid;
@@ -739,8 +816,7 @@ input[type="range"]::-moz-range-thumb {
   margin-bottom: 1.25rem;
   border-radius: 24px;
   background:
-    radial-gradient(circle at 85% 30%, #2f6a53 0, transparent 55%),
-    var(--brand);
+    radial-gradient(circle at 85% 30%, #2f6a53 0, transparent 55%), var(--brand);
   color: #fff;
 }
 .home-hero h1 {
@@ -778,13 +854,26 @@ input[type="range"]::-moz-range-thumb {
   gap: 0.75rem;
 }
 .home-hero-art {
-  width: 220px;
-  height: 220px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 300px;
+  height: 260px;
+}
+.home-hero-art::before {
+  content: "";
+  position: absolute;
+  inset: 10px 20px 0;
   border-radius: 50%;
-  background: #fffaf0;
-  display: grid;
-  place-items: center;
+  background: radial-gradient(circle at 50% 45%, #fffaf0 0 58%, #f4e6c9 100%);
   box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.35);
+}
+.home-hero-art .beer-glass {
+  margin: 0 -18px;
+}
+.home-hero-art .beer-glass.lg {
+  margin-bottom: 14px;
 }
 .continue-card {
   display: flex;
@@ -797,25 +886,6 @@ input[type="range"]::-moz-range-thumb {
 }
 .continue-body h2 {
   margin-bottom: 0.1rem;
-}
-.glass {
-  display: block;
-  width: 46px;
-  height: 64px;
-  flex-shrink: 0;
-  border-radius: 6px 6px 14px 14px;
-  border: 2px solid rgba(0, 0, 0, 0.12);
-  box-shadow:
-    inset 0 9px 0 #fffaf0,
-    inset 6px 0 10px rgba(255, 255, 255, 0.35);
-}
-.glass.small {
-  width: 26px;
-  height: 36px;
-  border-radius: 4px 4px 9px 9px;
-  box-shadow:
-    inset 0 5px 0 #fffaf0,
-    inset 3px 0 6px rgba(255, 255, 255, 0.35);
 }
 .mini-stats {
   display: flex;
@@ -1088,12 +1158,8 @@ input[type="range"]::-moz-range-thumb {
   gap: 1.25rem;
   align-items: start;
 }
-.builder-aside,
 .goals-aside {
   position: sticky;
-  top: calc(var(--header-h) + 128px);
-}
-.goals-aside {
   top: calc(var(--header-h) + 16px);
 }
 .guide {
@@ -1612,8 +1678,37 @@ input[type="range"]::-moz-range-thumb {
 .recipe-name {
   font: 600 1.4rem var(--display) !important;
 }
-.review-main > .panel:first-child .field + .field {
-  margin-top: 0.85rem;
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.name-fields {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+.beer-portrait {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+.beer-portrait figcaption {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-align: center;
+}
+.candidate-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.candidate-head .eyebrow {
+  margin: 0;
 }
 .save-row {
   display: flex;
@@ -2019,13 +2114,19 @@ input[type="range"]::-moz-range-thumb {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+.recipe-book-card > .tag {
+  align-self: flex-start;
+}
 .recipe-book-card.expanded {
   grid-column: 1 / -1;
 }
 .book-card-heading {
   display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
+  align-items: center;
+  gap: 0.9rem;
+}
+.book-card-heading > div {
+  min-width: 0;
 }
 .book-card-heading h3 {
   font: 600 1.2rem/1.25 var(--display);
@@ -2035,19 +2136,6 @@ input[type="range"]::-moz-range-thumb {
   margin: 0;
   color: var(--ink-3);
   font-size: 0.87rem;
-}
-.book-beer {
-  width: 34px;
-  height: 48px;
-  flex-shrink: 0;
-  border-radius: 4px 4px 11px 11px;
-  border: 2px solid rgba(0, 0, 0, 0.12);
-  box-shadow:
-    inset 0 7px 0 #fffaf0,
-    inset 4px 0 8px rgba(255, 255, 255, 0.35);
-}
-.book-beer i {
-  display: none;
 }
 .book-description {
   color: var(--ink-2);
@@ -2441,7 +2529,6 @@ input[type="range"]::-moz-range-thumb {
   .log-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .builder-aside,
   .goals-aside {
     position: static;
   }
@@ -2521,7 +2608,23 @@ input[type="range"]::-moz-range-thumb {
     border-radius: 20px;
   }
   .home-hero-art {
-    display: none;
+    order: -1;
+    width: 100%;
+    height: 132px;
+    margin: -8px 0 4px;
+  }
+  .home-hero-art::before {
+    inset: 6px 22% 0;
+  }
+  .home-hero-art .beer-glass.lg {
+    width: 70px;
+    margin-bottom: 6px;
+  }
+  .home-hero-art .beer-glass.xl {
+    width: 96px;
+  }
+  .home-hero-art .beer-glass {
+    margin: 0 -10px;
   }
   .home-actions .button {
     width: 100%;

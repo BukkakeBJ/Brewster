@@ -22,9 +22,9 @@ it("scales malts to the ABV goal while starting water stays fixed", () => {
     expect(matched.grains[1].kg / recipe.grains[1].kg).toBeCloseTo(ratio, 10);
     expect(matched.hops).toEqual(recipe.hops);
   }
-  expect(() =>
-    matchTargetAbv({ ...recipe, grains: [] }, catalog, 5),
-  ).toThrow(/malt/);
+  expect(() => matchTargetAbv({ ...recipe, grains: [] }, catalog, 5)).toThrow(
+    /malt/,
+  );
 });
 
 it("scales only boil hops to the IBU goal", () => {
@@ -53,6 +53,9 @@ it("explains which direction to move each number", () => {
   const tips = guidance(p, { abv: p.abv + 1, ibu: p.ibu - 10 });
   expect(tips[0].key).toBe("abv");
   expect(tips[0].text).toMatch(/under your goal.*base malt/);
-  expect(tips[1]).toMatchObject({ key: "ibu", text: expect.stringMatching(/over your goal/) });
+  expect(tips[1]).toMatchObject({
+    key: "ibu",
+    text: expect.stringMatching(/over your goal/),
+  });
   expect(guidance(p, { abv: p.abv, ibu: p.ibu })).toEqual([]);
 });

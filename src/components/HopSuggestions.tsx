@@ -44,8 +44,8 @@ export default function HopSuggestions({
   return (
     <Section title="Suggested hops for your goals">
       <p className="muted">
-        Picked to match the flavors you chose. Add any you like, then adjust
-        the amounts above.
+        Picked to match the flavors you chose. Add any you like, then adjust the
+        amounts above.
       </p>
       {error && (
         <p className="notice" role="alert">

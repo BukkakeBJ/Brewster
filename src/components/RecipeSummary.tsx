@@ -190,7 +190,11 @@ export default function RecipeSummary({
           </a>
         </div>
         <ReadOnlyAdditives recipe={r} us={us} />
-        {!r.additives?.length && <p className="muted">None. Fruit, spices, oak and more are optional.</p>}
+        {!r.additives?.length && (
+          <p className="muted">
+            None. Fruit, spices, oak and more are optional.
+          </p>
+        )}
       </div>
     </Section>
   );

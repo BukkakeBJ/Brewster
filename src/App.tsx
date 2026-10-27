@@ -50,6 +50,8 @@ import Design from "./components/Design";
 import FlavorPanel from "./components/FlavorPanel";
 import Home from "./components/Home";
 import PredictionBar from "./components/PredictionBar";
+import BeerGlass from "./components/BeerGlass";
+import { colorName } from "./engine/glassware";
 import { flavorPredict } from "./engine/flavor";
 import { Section, HelpTerm } from "./components/ui";
 import { alphabetical } from "./engine/search";
@@ -103,13 +105,7 @@ const stepTips: Partial<Record<BuilderStep, Tip["key"][]>> = {
   yeast: ["abv", "fg"],
 };
 
-function StyleCheck({
-  p,
-  style,
-}: {
-  p: Prediction;
-  style?: Style;
-}) {
+function StyleCheck({ p, style }: { p: Prediction; style?: Style }) {
   if (!style) return null;
   return (
     <Section title="Style check">
@@ -185,7 +181,9 @@ export default function App() {
       }
     }),
     [saved, setSaved] = useState<SavedRecipe[]>([]),
-    [us, setUs] = useState(() => localStorage.getItem("brew-units") !== "metric"),
+    [us, setUs] = useState(
+      () => localStorage.getItem("brew-units") !== "metric",
+    ),
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
   const [logs, setLogs] = useState<SavedBrewLog[]>([]);
@@ -629,6 +627,28 @@ export default function App() {
                       ))}
                 </div>
                 <aside className="builder-aside">
+                  <Section title="Your beer">
+                    <div className="beer-preview">
+                      <BeerGlass
+                        srm={p.srm}
+                        styleId={recipe.styleId}
+                        size="lg"
+                      />
+                      <div>
+                        <b>{colorName(p.srm)}</b>
+                        <span>
+                          {p.srm.toFixed(1)} SRM
+                          {designTarget.srm === undefined
+                            ? ""
+                            : ` · goal ${designTarget.srm}`}
+                        </span>
+                        <span>
+                          {p.abv.toFixed(1)}% ABV · {p.ibu.toFixed(0)} IBU
+                        </span>
+                        <small>{style?.name ?? "No particular style"}</small>
+                      </div>
+                    </div>
+                  </Section>
                   <FlavorPanel
                     target={designTarget.flavors}
                     flavor={flavor}
@@ -644,34 +664,50 @@ export default function App() {
             <div id="builder-recipe" className="review-grid">
               <div className="review-main">
                 <Section title="Name your beer">
-                  <label className="field">
-                    <span>Recipe name</span>
-                    <input
-                      className="recipe-name"
-                      aria-label="Recipe name"
-                      value={recipe.name}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, name: e.target.value })
-                      }
-                    />
-                  </label>
-                  <label className="field">
-                    <span>Style</span>
-                    <select
-                      aria-label="Beer style"
-                      value={recipe.styleId}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, styleId: e.target.value })
-                      }
-                    >
-                      <option value="">No particular style</option>
-                      {alphabetical(catalog.styles, (s) => s.name).map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  <div className="name-row">
+                    <figure className="beer-portrait">
+                      <BeerGlass
+                        srm={p.srm}
+                        styleId={recipe.styleId}
+                        size="lg"
+                      />
+                      <figcaption>
+                        {colorName(p.srm)} · {p.abv.toFixed(1)}% ABV
+                      </figcaption>
+                    </figure>
+                    <div className="name-fields">
+                      <label className="field">
+                        <span>Recipe name</span>
+                        <input
+                          className="recipe-name"
+                          aria-label="Recipe name"
+                          value={recipe.name}
+                          onChange={(e) =>
+                            setRecipe({ ...recipe, name: e.target.value })
+                          }
+                        />
+                      </label>
+                      <label className="field">
+                        <span>Style</span>
+                        <select
+                          aria-label="Beer style"
+                          value={recipe.styleId}
+                          onChange={(e) =>
+                            setRecipe({ ...recipe, styleId: e.target.value })
+                          }
+                        >
+                          <option value="">No particular style</option>
+                          {alphabetical(catalog.styles, (s) => s.name).map(
+                            (s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name}
+                              </option>
+                            ),
+                          )}
+                        </select>
+                      </label>
+                    </div>
+                  </div>
                   <div className="save-row">
                     <button
                       className="button primary large"
@@ -788,7 +824,10 @@ export default function App() {
                 </Section>
                 <Section title="Print & export">
                   <div className="export-buttons">
-                    <button className="button secondary" onClick={printBrewSheet}>
+                    <button
+                      className="button secondary"
+                      onClick={printBrewSheet}
+                    >
                       <Printer size={16} /> Print brew sheet
                     </button>
                     <button

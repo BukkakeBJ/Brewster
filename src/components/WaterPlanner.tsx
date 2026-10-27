@@ -103,7 +103,11 @@ export default function WaterPlanner({
   const presets = us ? [2.5, 5, 6.5, 10] : [10, 20, 25, 40];
   const shownWater = us ? lToGal(waterL) : waterL;
   const bottleLabel =
-    bottleMl === 354.882 ? "12 oz" : bottleMl === 330 ? "330 mL" : `${bottleMl} mL`;
+    bottleMl === 354.882
+      ? "12 oz"
+      : bottleMl === 330
+        ? "330 mL"
+        : `${bottleMl} mL`;
   return (
     <section className="panel water-step">
       <div className="water-input">
@@ -167,8 +171,8 @@ export default function WaterPlanner({
           <Settings2 size={16} /> Equipment & losses
         </summary>
         <p className="muted">
-          The defaults suit most home setups. Adjust them once you know how
-          your own system behaves.
+          The defaults suit most home setups. Adjust them once you know how your
+          own system behaves.
         </p>
         <div className="field-grid">
           <Field
@@ -194,9 +198,7 @@ export default function WaterPlanner({
           <Field
             label="Boil-off rate"
             suffix={us ? "gal/h" : "L/h"}
-            value={
-              us ? lToGal(recipe.boilOffLPerHour) : recipe.boilOffLPerHour
-            }
+            value={us ? lToGal(recipe.boilOffLPerHour) : recipe.boilOffLPerHour}
             min={0}
             onChange={(n) =>
               applyEquipment({

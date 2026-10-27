@@ -1,10 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  Search,
-  Copy,
-  ArrowUpRight,
-  Download,
-} from "lucide-react";
+import { Search, Copy, ArrowUpRight, Download } from "lucide-react";
 import BrandMark from "./BrandMark";
 import type { Catalog, Recipe } from "../engine/types";
 import {
@@ -18,13 +13,13 @@ import {
 } from "../engine/recipeBook";
 import {
   predict,
-  beerColor,
   lToGal,
   kgToLb,
   cToF,
   G_PER_OZ,
 } from "../engine/calculations";
 import { Tag } from "./ui";
+import BeerGlass from "./BeerGlass";
 import { ReadOnlyAdditives } from "./RecipeAdditives";
 import { additiveModelNote } from "../engine/additives";
 import { SavedProcessNotes } from "./RecipeNotes";
@@ -243,23 +238,22 @@ export default function RecipeBook({
               className={"recipe-book-card" + (expanded ? " expanded" : "")}
               key={entry.id}
             >
+              <Tag
+                tone={
+                  entry.collection === "starter" ? "subjective" : "objective"
+                }
+              >
+                {entry.collection === "starter"
+                  ? recipeOriginLabel(r)
+                  : entry.collection === "draft"
+                    ? "Unsaved draft"
+                    : entry.collection === "community"
+                      ? "Community"
+                      : `${entry.access?.visibility === "public" ? "Mine · shared" : "Mine · private"}${entry.unsaved ? " · unsaved edits" : ""}`}
+              </Tag>
               <div className="book-card-heading">
+                <BeerGlass srm={prediction.srm} styleId={r.styleId} size="md" />
                 <div>
-                  <Tag
-                    tone={
-                      entry.collection === "starter"
-                        ? "subjective"
-                        : "objective"
-                    }
-                  >
-                    {entry.collection === "starter"
-                      ? recipeOriginLabel(r)
-                      : entry.collection === "draft"
-                        ? "Unsaved draft"
-                        : entry.collection === "community"
-                          ? "Community"
-                          : `${entry.access?.visibility === "public" ? "Mine · shared" : "Mine · private"}${entry.unsaved ? " · unsaved edits" : ""}`}
-                  </Tag>
                   <h3>{r.name}</h3>
                   <p>
                     {r.origin?.brewery && <>{r.origin.brewery} · </>}
@@ -268,13 +262,6 @@ export default function RecipeBook({
                     · {(us ? lToGal(r.batchL) : r.batchL).toFixed(1)}{" "}
                     {us ? "gal" : "L"}
                   </p>
-                </div>
-                <div
-                  className="book-beer"
-                  aria-label={`Approximate beer color, ${prediction.srm.toFixed(1)} SRM`}
-                  style={{ background: beerColor(prediction.srm) }}
-                >
-                  <i />
                 </div>
               </div>
               <p className="book-description">

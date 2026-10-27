@@ -116,9 +116,15 @@ export function guidance(
     );
   const srm = targetStatus(p.srm, target.srm, TOLERANCE.srm);
   if (srm === "low")
-    push("srm", "Color is lighter than your goal. Add a little crystal or dark malt.");
+    push(
+      "srm",
+      "Color is lighter than your goal. Add a little crystal or dark malt.",
+    );
   if (srm === "high")
-    push("srm", "Color is darker than your goal. Reduce crystal, chocolate or roasted malt.");
+    push(
+      "srm",
+      "Color is darker than your goal. Reduce crystal, chocolate or roasted malt.",
+    );
   if (style && (p.fg < style.fg[0] - 0.002 || p.fg > style.fg[1] + 0.002))
     push(
       "fg",
