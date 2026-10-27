@@ -45,6 +45,28 @@ export default function WaterPlanner({
   } catch (e) {
     error = (e as Error).message;
   }
+  const applyWater = (nextWaterL: number, nextAbsorption = absorption) => {
+    setWaterL(nextWaterL);
+    setAbsorption(nextAbsorption);
+    let next: Recipe;
+    try {
+      next = planFromWater(
+        recipe,
+        catalog,
+        nextWaterL,
+        nextAbsorption,
+        packLossL,
+        bottleMl,
+        dry ? dryCells : liquidCells,
+      ).recipe;
+    } catch {
+      // The render shows the invalid water budget; keep the last valid recipe.
+      return;
+    }
+    onChange(next);
+  };
+  const matchesWater =
+    plan && Math.abs(plan.recipe.batchL - recipe.batchL) < 0.000001;
   const vol = (l: number) =>
     `${(us ? lToGal(l) : l).toFixed(2)} ${us ? "gal" : "L"}`;
   return (
@@ -55,7 +77,7 @@ export default function WaterPlanner({
           <b>Start with your water.</b>
           <small>
             {(us ? lToGal(waterL) : waterL).toFixed(us ? 1 : 2)}{" "}
-            {us ? "gal" : "L"} starting water · preview ingredients & bottles
+            {us ? "gal" : "L"} starting water · live ingredient scaling
           </small>
         </span>
         <ChevronDown className="water-chevron" size={18} />
@@ -65,9 +87,10 @@ export default function WaterPlanner({
         eyebrow="WATER → RECIPE → BOTTLES"
       >
         <p className="muted">
-          Enter all starting brewing water (mash + sparge). This scales your
-          current recipe, keeping its ingredient varieties, grist ratios and hop
-          timings. Start with a recipe from Design or the Recipe Book.
+          Change your total starting water (mash + sparge) to automatically
+          scale the malts and hops in your current recipe. Ingredient varieties,
+          grist ratios and hop timings stay the same. Yeast needs and bottles
+          update with the expected batch volume.
         </p>
         <div className="field-grid">
           <Field
@@ -75,7 +98,7 @@ export default function WaterPlanner({
             suffix={us ? "gal" : "L"}
             value={us ? lToGal(waterL) : waterL}
             min={0.1}
-            onChange={(n) => setWaterL(us ? n * L_PER_GAL : n)}
+            onChange={(n) => applyWater(us ? n * L_PER_GAL : n)}
             help="Total water before grain absorption and boiling, including mash and sparge water. This is not finished beer volume. No extra top-up, dead-space or cooling shrinkage is modeled; account for these in your equipment losses."
           />
           <Field
@@ -86,7 +109,7 @@ export default function WaterPlanner({
             max={us ? 0.36 : 3}
             step={us ? 0.01 : 0.05}
             onChange={(n) =>
-              setAbsorption(us ? (n * L_PER_GAL) / KG_PER_LB : n)
+              applyWater(waterL, us ? (n * L_PER_GAL) / KG_PER_LB : n)
             }
             help="Planning assumption per kilogram of mash grain. Default 0.8 L/kg is an adjustable heuristic; squeezing a bag or draining differently changes retention. Extract and non-mash fermentables do not absorb water in this model."
           />
@@ -161,7 +184,12 @@ export default function WaterPlanner({
                 <li key={`h${i}`}>
                   {catalog.hops.find((m) => m.id === h.ingredientId)?.name}:{" "}
                   {(us ? h.grams / G_PER_OZ : h.grams).toFixed(2)}{" "}
-                  {us ? "oz" : "g"} · {h.use} · {h.minutes} min
+                  {us ? "oz" : "g"} ·{" "}
+                  {h.use === "dry hop"
+                    ? `Dry hopping · ${h.minutes / 1440} days`
+                    : h.use === "whirlpool"
+                      ? `Whirlpool · ${h.minutes} min contact`
+                      : `Boil · ${h.minutes} min before the end`}
                 </li>
               ))}
             </ul>
@@ -173,14 +201,24 @@ export default function WaterPlanner({
                 : `≈ ${Math.ceil(plan.yeastUnits)} liquid packs, rounded up`}
               . Verify with the supplier; a starter may be needed.
             </p>
-            <button className="button" onClick={() => onChange(plan!.recipe)}>
-              Apply water-scaled ingredient amounts
-            </button>
+            {matchesWater ? (
+              <p className="water-scale-status" role="status">
+                Recipe amounts are scaled to this water.
+              </p>
+            ) : (
+              <button
+                className="button secondary"
+                onClick={() => onChange(plan!.recipe)}
+              >
+                Scale current recipe to this water
+              </button>
+            )}
             <p className="muted">
-              Applying updates this recipe's draft amounts and batch size; yeast
-              dosage and bottles remain live estimates in this planner. Save the
-              recipe to keep its scaled amounts. Bottle count is an approximate
-              yield, not a carbonation or priming-sugar calculation.
+              Water and absorption edits update your draft ingredient amounts
+              and batch size immediately. Use the button to apply the prefilled
+              water amount. Save your recipe to keep the scaled amounts. Yeast
+              dosage and bottle count are planning estimates; bottle count does
+              not calculate priming sugar.
             </p>
           </>
         )}
