@@ -13,7 +13,8 @@ import {
 import WaterPlanner from "./WaterPlanner";
 import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
-import { Field, Section, Tag } from "./ui";
+import { Field, Section, Tag, HelpTerm } from "./ui";
+import { alphabetical } from "../engine/search";
 export default function Editor({
   recipe: r,
   onChange: set,
@@ -40,7 +41,9 @@ export default function Editor({
         <div className="ingredient-header">
           <span>Fermentable</span>
           <span>Amount · {us ? "lb" : "kg"}</span>
-          <span>Grist</span>
+          <span>
+            <HelpTerm label="Grist" />
+          </span>
         </div>
         {r.grains.map((g, i) => {
           const m = c.malts.find((m) => m.id === g.ingredientId)!;
@@ -58,14 +61,18 @@ export default function Editor({
                     })
                   }
                 >
-                  {c.malts.map((m) => (
+                  {alphabetical(c.malts, (m) => m.name).map((m) => (
                     <option value={m.id} key={m.id}>
                       {m.name}
                     </option>
                   ))}
                 </select>
                 <small>
-                  {m.type} · {m.lovibond} °L · {m.ppg.toFixed(1)} PPG
+                  {m.type} · {m.lovibond} °L ·{" "}
+                  <HelpTerm
+                    label={`${m.ppg.toFixed(1)} PPG`}
+                    helpKey="Potential"
+                  />
                 </small>
               </div>
               <Field
@@ -155,7 +162,7 @@ export default function Editor({
                 })
               }
             >
-              {c.hops.map((h) => (
+              {alphabetical(c.hops, (h) => h.name).map((h) => (
                 <option value={h.id} key={h.id}>
                   {h.name}
                 </option>
@@ -192,8 +199,8 @@ export default function Editor({
               }
             >
               <option value="boil">Boil</option>
-              <option value="whirlpool">Whirlpool</option>
               <option value="dry hop">Dry hop</option>
+              <option value="whirlpool">Whirlpool</option>
             </select>
             <Field
               label={
@@ -269,7 +276,10 @@ export default function Editor({
             value={r.yeastId}
             onChange={(e) => update({ yeastId: e.target.value })}
           >
-            {c.yeasts.map((y) => (
+            {alphabetical(
+              c.yeasts,
+              (y) => `${y.lab} ${y.code} · ${y.name}`,
+            ).map((y) => (
               <option value={y.id} key={y.id}>
                 {y.lab} {y.code} · {y.name} ({y.form})
               </option>
@@ -329,9 +339,10 @@ export default function Editor({
         </div>
         <Tag tone="objective">Strain specs</Tag>
         <p className="muted">
-          Attenuation{" "}
+          <HelpTerm label="Attenuation" />{" "}
           {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation.join("–")}% ·
-          Verify POF and diastaticus status with the lab.
+          Verify <HelpTerm label="POF" /> and <HelpTerm label="diastaticus" />{" "}
+          status with the lab.
         </p>
       </Section>
       <RecipeAdditives recipe={r} onChange={set} us={us} />

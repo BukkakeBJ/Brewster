@@ -7,6 +7,7 @@ import {
 import designHelp from "../../data/design-help.json";
 import { Section, Tag, InfoTip } from "./ui";
 import { cToF } from "../engine/calculations";
+import { searchByName } from "../engine/search";
 export default function IngredientMatches({
   target: t,
   catalog: c,
@@ -27,13 +28,14 @@ export default function IngredientMatches({
   const [kind, setKind] = useState<"hops" | "malts" | "yeasts">("hops");
   const [query, setQuery] = useState(""),
     [limit, setLimit] = useState(5);
-  const rows = matches[kind].filter(
-    (m) =>
-      !query ||
-      `${m.name} ${m.descriptors.map((d) => d.label).join(" ")}`
-        .toLowerCase()
-        .includes(query.toLowerCase()),
-  );
+  const rows = query.trim()
+    ? searchByName(
+        matches[kind],
+        query,
+        (m) => m.name,
+        (m) => m.descriptors.map((d) => d.label).join(" "),
+      )
+    : matches[kind];
   const all = [...c.malts, ...c.hops, ...c.yeasts];
   const selected = [
     ...(t.hopChoices ?? []),

@@ -1,0 +1,573 @@
+/* Shared help labels retain the surrounding text's size and emphasis. */
+.help-term {
+  display: inline;
+}
+.help-term .info-tip-anchor {
+  margin-left: 3px;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title h2 {
+  margin: 0;
+}
+.section-title .info-tip-anchor {
+  flex-shrink: 0;
+}
+.field-label {
+  line-height: 1.45;
+}
+.field-label > label {
+  min-width: 0;
+}
+.hop-row {
+  align-items: end;
+}
+.info-tip-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+.metric .info-tip-trigger {
+  color: #e2e6c9;
+}
+.metric .info-tip-trigger:hover,
+.metric .info-tip-trigger[aria-expanded="true"] {
+  background: #f0d191;
+  color: #173b31;
+}
+.metric .info-tip-trigger:focus-visible {
+  outline-color: #f0d191;
+}
+.metric .help-term {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.spec-side dt,
+.complete-specs dt {
+  overflow-wrap: anywhere;
+}
+
+/* Phone and tablet reading sizes. Do not compress text to fit desktop rows. */
+@media screen and (max-width: 900px) {
+  body {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .muted,
+  .library-note,
+  .popular-library > span,
+  .library-count,
+  .library-count span,
+  .book-count,
+  .book-hop-profile p,
+  .book-flavor-profile p,
+  .book-flavor-profile small {
+    color: #536047;
+  }
+  .field-label,
+  .field > span,
+  .filter-chips button,
+  .library-types button,
+  .flavor-sliders .flavor-slider-row {
+    color: #40523d;
+  }
+  small,
+  .field input,
+  .field select,
+  select,
+  textarea,
+  .grain-row select,
+  .hop-row > select,
+  .hop-row .number-wrap input,
+  .library-search input,
+  .book-search > input,
+  .studio-hero p,
+  .page-heading p,
+  .muted,
+  .ingredient-intro,
+  .ingredient-guide,
+  .empty-state,
+  .design-tip p,
+  .tasting-heading,
+  .book-intro p,
+  .book-description,
+  .book-recipe-details p,
+  .additive-card p,
+  .additive-card small,
+  .info-tip-panel,
+  .info-tip-panel strong,
+  .water-planner ul,
+  .water-planner [role="status"],
+  .hop-character-guide p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .field,
+  .field-label,
+  .field > span,
+  .hop-row .field > span,
+  .number-wrap small,
+  .recipe-meta,
+  .recipe-meta select,
+  .button,
+  .actions .button,
+  .book-card-actions .button,
+  .suggestion-card .button,
+  .text-button,
+  .grain-row small,
+  .percent,
+  .style-row > div:first-child,
+  .style-row small,
+  .details > div,
+  .export-buttons button,
+  .notice,
+  .alert,
+  .toast,
+  .radar-legend,
+  .flavor-explanation > div,
+  .flavor-explanation b,
+  .filter-chips button,
+  .library-note,
+  .library-card-head small,
+  .spec-side dl > div,
+  .descriptor-meter,
+  .library-expand,
+  .ingredient-guide a,
+  .complete-specs div,
+  .source-record,
+  .source-reference-specs dl > div,
+  .yeast-filters .muted,
+  .advanced,
+  .advanced p,
+  .advanced > summary,
+  .ingredient-search,
+  .constraint-row,
+  .constraint-row small,
+  .flavor-sliders label,
+  .flavor-sliders .flavor-slider-row,
+  .candidate-reasons p,
+  .tasting-list label,
+  .tasting-list b,
+  .log-status,
+  .calibration-yeast,
+  .log-archive-item b,
+  .comparison-grid table,
+  .tasting-errors > div,
+  .tasting-errors small,
+  .log-aside .checkbox,
+  .suggestions-toggle,
+  .suggestion-modes button,
+  .suggestion-card p,
+  .suggested-dose,
+  .suggestion-problem,
+  .suggestion-status,
+  .popular-library > span,
+  .book-card-heading p,
+  .book-stats strong small,
+  .book-detail-columns span,
+  .book-source a,
+  .recipe-note-editor,
+  .book-hop-profile b,
+  .book-hop-profile p,
+  .book-flavor-profile p,
+  .book-flavor-profile small,
+  .book-flavor-chips span,
+  .live-match-cards .suggestion-card a,
+  .additive-card > a,
+  .additive-model-note,
+  .design-style-match,
+  .design-style-match a,
+  .shared-workspace-note,
+  .water-planner > summary small,
+  .recipe-sharing,
+  .recipe-sharing small,
+  .recipe-sharing-actions button,
+  .book-tabs button,
+  .library-types button,
+  .hop-character-heading button {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .eyebrow,
+  .section-head .eyebrow,
+  .studio-kicker,
+  .studio-footnote,
+  .recipe-name-label,
+  .legend-line,
+  .tag,
+  .neutral,
+  .ingredient-header,
+  .library-types span,
+  .library-count,
+  .library-count span,
+  .sensory-side > small,
+  .flavor-explanation details,
+  .source-reference-specs dt,
+  .solver-note,
+  .design-tip > span,
+  .candidate-numbers small,
+  .calibration-number span,
+  .calibration-yeast span,
+  .log-archive-item span,
+  .suggestions-toggle small,
+  .suggestion-disclaimer,
+  .suggestion-spec,
+  .suggestion-impact > span:last-child,
+  .suggestion-card > a,
+  .book-tabs span,
+  .book-count,
+  .book-stats > div > span,
+  .book-tags span,
+  .book-source small,
+  .book-recipe-details .book-warning,
+  footer,
+  .hop-character-model-note {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .field input,
+  .field select,
+  select,
+  textarea {
+    min-height: 46px;
+  }
+  .field input[type="range"] {
+    min-height: 28px;
+  }
+  .field,
+  .number-wrap,
+  .library-search input {
+    min-width: 0;
+  }
+  .field-label {
+    align-items: center;
+  }
+  .field-label .info-tip-trigger {
+    width: 30px;
+    height: 30px;
+  }
+  .field-grid {
+    align-items: end;
+  }
+  .info-tip-trigger {
+    min-width: 28px;
+    min-height: 28px;
+  }
+  .button {
+    min-height: 44px;
+    white-space: normal;
+    text-align: left;
+  }
+  .recipe-title-row,
+  .recipe-meta,
+  .book-tabs,
+  .library-types,
+  .legend-line {
+    flex-wrap: wrap;
+  }
+  .recipe-meta select {
+    max-width: 100%;
+  }
+  .recipe-title-row > div {
+    min-width: 0;
+  }
+  .recipe-title-row { flex-direction: column; align-items: stretch; }
+  .actions { flex-wrap: wrap; }
+  .recipe-name {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+  .book-detail-columns p,
+  .spec-side dl > div {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .source-record,
+  .book-source,
+  .ingredient-guide a,
+  .additive-card > a {
+    overflow-wrap: anywhere;
+  }
+  .ingredient-guide h4 {
+    font-size: 18px;
+  }
+  .radar text {
+    font-size: 13px;
+  }
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .metric,
+  .metric:nth-last-child(-n + 2) {
+    grid-column: auto;
+    padding: 16px 14px;
+    border-bottom: 1px solid #6a81594d;
+    border-right: 1px solid #6a81594d;
+  }
+  .metric:nth-child(2n) {
+    border-right: 0;
+  }
+  .metric:nth-child(3) {
+    border-right: 1px solid #6a81594d;
+  }
+  .metric:last-child {
+    grid-column: 1 / -1;
+    border: 0;
+  }
+  .metric > span:first-child {
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+  .metric strong {
+    font-size: 36px;
+  }
+  .metric small,
+  .metric-foot {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .metric > div {
+    margin: 6px 0;
+  }
+  .metric:last-child {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+  }
+  .metric:last-child > div {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .metric:last-child .metric-foot {
+    grid-column: 1;
+  }
+  .flavor-sliders .flavor-slider-row {
+    grid-template-columns: 125px minmax(0, 1fr) 25px;
+  }
+  .details > div {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 900px) {
+  .sidebar { width: 104px; padding: 20px 8px; }
+  main { margin-left: 104px; width: calc(100% - 104px); }
+  .nav-item { flex-direction: column; justify-content: center; min-height: 64px; font-size: 12px; padding: 8px 3px; gap: 5px; }
+  .nav-label { display: block; font-size: 12px; line-height: 1.3; text-align: center; }
+}
+
+@media screen and (max-width: 600px) {
+  .sidebar {
+    height: 82px;
+  }
+  .brand small {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+  }
+  .unit-toggle {
+    top: 22px;
+    right: 14px;
+  }
+  .unit-toggle button {
+    font-size: 12px;
+    min-height: 36px;
+    padding: 5px 7px;
+  }
+  .sidebar nav {
+    height: 76px;
+    padding: 5px;
+  }
+  .nav-item {
+    min-width: 0;
+    height: 64px;
+    padding: 4px 1px;
+  }
+  .nav-item,
+  .nav-label {
+    font-size: 12px;
+    line-height: 1.15;
+  }
+  .nav-label {
+    max-width: 74px;
+  }
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+  .studio-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 24px 20px 28px;
+  }
+  .studio-hero-copy {
+    z-index: 2;
+  }
+  .studio-kicker,
+  .studio-footnote {
+    white-space: normal;
+    letter-spacing: 0.04em;
+  }
+  .studio-hero h1,
+  .studio-hero-ingredient-library h1,
+  .studio-hero-recipe-book h1,
+  .studio-hero-brew-log h1 {
+    font-size: 38px;
+    line-height: 1.1;
+    max-width: 260px;
+    margin: 20px 0 16px;
+  }
+  .studio-hero p,
+  .studio-hero-ingredient-library p {
+    max-width: none;
+  }
+  .studio-hero .brew-art,
+  .studio-hero-ingredient-library .brew-art {
+    position: absolute;
+    right: -25px;
+    top: 28px;
+    width: 145px;
+    height: 150px;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .brew-art .art-note,
+  .brew-art .art-caption {
+    display: none;
+  }
+  .field-grid,
+  .yeast-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grain-row {
+    grid-template-columns: minmax(0, 1fr) 80px 26px;
+    gap: 10px;
+    align-items: center;
+    padding: 16px 0;
+  }
+  .grain-row > div:first-child {
+    grid-column: 1 / -1;
+  }
+  .grain-row > .field {
+    grid-column: 1;
+  }
+  .grain-row .field > span {
+    display: block;
+  }
+  .ingredient-header {
+    display: none;
+  }
+  .grain-row small {
+    display: block;
+    margin-top: 8px;
+  }
+  .grain-row small .info-tip-anchor {
+    display: inline-flex;
+  }
+  .hop-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 18px 0;
+  }
+  .hop-row > select:first-child {
+    grid-column: 1 / -1;
+  }
+  .hop-row > button {
+    grid-column: 2;
+    justify-self: end;
+    width: 36px;
+    height: 36px;
+  }
+  .hop-row .number-wrap input {
+    padding: 10px;
+  }
+  .hop-row > select {
+    height: 46px;
+  }
+  .book-filters {
+    grid-template-columns: 1fr;
+  }
+  .book-filters .field:last-child {
+    grid-column: auto;
+  }
+  .book-search {
+    flex-wrap: wrap;
+  }
+  .book-search > input {
+    flex-basis: 100%;
+  }
+  .book-card-heading > div:first-child {
+    min-width: 0;
+  }
+  .book-card-heading .tag {
+    white-space: normal;
+  }
+  .book-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .book-stats > .tag {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    justify-self: start;
+  }
+  .constraint-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .constraint-row > span {
+    flex-basis: 100%;
+  }
+  .additive-filters {
+    grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 375px) {
+  .brand {
+    font-size: 18px;
+  }
+  .brand-icon,
+  .brand-icon svg {
+    width: 44px;
+    height: 48px;
+  }
+  .brand small {
+    font-size: 7px;
+  }
+  .unit-toggle button {
+    font-size: 11px;
+    padding: 5px 6px;
+  }
+  .page-content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .panel {
+    padding: 18px 14px;
+  }
+  .field-grid,
+  .yeast-filters {
+    grid-template-columns: 1fr;
+  }
+  .flavor-sliders .flavor-slider-row {
+    grid-template-columns: 110px minmax(0, 1fr) 24px;
+    gap: 6px;
+  }
+  .metric {
+    padding: 14px 11px;
+  }
+  .metric strong {
+    font-size: 32px;
+  }
+  .nav-item,
+  .nav-label {
+    font-size: 11px;
+  }
+}

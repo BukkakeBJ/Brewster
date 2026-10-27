@@ -9,6 +9,7 @@ import {
   displayAdditiveAmount,
 } from "../engine/additives";
 import { processStages } from "../engine/processNotes";
+import { alphabetical } from "../engine/search";
 import { Tag } from "./ui";
 import { Plus } from "lucide-react";
 export default function AdditiveLibrary({
@@ -59,7 +60,10 @@ export default function AdditiveLibrary({
             }}
           >
             <option value="">All categories</option>
-            {[...new Set(additives.map((a) => a.category))].map((c) => (
+            {alphabetical(
+              [...new Set(additives.map((a) => a.category))],
+              (c) => c,
+            ).map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>

@@ -18,6 +18,7 @@ import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
 import { recipeDesignBrief, styleFlavorBrief } from "../engine/recommendations";
+import { alphabetical, searchByName } from "../engine/search";
 export default function Design({
   catalog: c,
   onOpen,
@@ -176,7 +177,7 @@ export default function Design({
                 }}
               >
                 <option value="">Freeform / no style penalty</option>
-                {c.styles.map((s) => (
+                {alphabetical(c.styles, (s) => s.name).map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
                   </option>
@@ -560,7 +561,7 @@ export default function Design({
                   onChange={(e) => toggle("must", e.target.value)}
                 >
                   <option value="">Choose a descriptor…</option>
-                  {c.vocabulary.map((v) => (
+                  {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
                     <option key={v.id} value={v.id}>
                       {v.label}
                     </option>
@@ -580,7 +581,7 @@ export default function Design({
                   onChange={(e) => toggle("avoid", e.target.value)}
                 >
                   <option value="">Choose a descriptor…</option>
-                  {c.vocabulary.map((v) => (
+                  {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
                     <option key={v.id} value={v.id}>
                       {v.label}
                     </option>
@@ -704,14 +705,13 @@ export default function Design({
                 value={ingredientQuery}
                 onChange={(e) => setIngredientQuery(e.target.value)}
               />
-              {[...c.malts, ...c.hops, ...c.yeasts]
-                .filter(
-                  (i) =>
-                    ingredientQuery &&
-                    `${i.name} ${i.kind}`
-                      .toLowerCase()
-                      .includes(ingredientQuery.toLowerCase()),
-                )
+              {searchByName(
+                [...c.malts, ...c.hops, ...c.yeasts],
+                ingredientQuery,
+                (i) => i.name,
+                (i) => i.kind,
+              )
+                .filter(() => !!ingredientQuery.trim())
                 .slice(0, 12)
                 .map((i) => (
                   <div className="constraint-row" key={i.id}>

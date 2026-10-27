@@ -9,7 +9,8 @@ import type {
   Recipe,
 } from "../engine/types";
 import { calibrate, tastingErrors } from "../engine/feedback";
-import { Field, Section, Tag } from "./ui";
+import { Field, Section, Tag, HelpTerm } from "./ui";
+import { alphabetical } from "../engine/search";
 import { Radar } from "./FlavorPanel";
 import { download } from "../io";
 import { lToGal, L_PER_GAL, cToF, fToC } from "../engine/calculations";
@@ -246,7 +247,7 @@ export default function BrewLog({
               unknown.
             </p>
             <div className="tasting-list">
-              {c.vocabulary.map((v) => (
+              {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
                 <label key={v.id}>
                   <input
                     type="checkbox"
@@ -296,7 +297,7 @@ export default function BrewLog({
                     value={attribute}
                     onChange={(e) => setAttribute(e.target.value)}
                   >
-                    {ingredients.map((i) => (
+                    {alphabetical(ingredients, (i) => i.name).map((i) => (
                       <option key={i.id} value={i.id}>
                         {i.name}
                       </option>
@@ -309,7 +310,7 @@ export default function BrewLog({
                     value={descriptor}
                     onChange={(e) => setDescriptor(e.target.value)}
                   >
-                    {c.vocabulary.map((v) => (
+                    {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
                       <option key={v.id} value={v.id}>
                         {v.label}
                       </option>
@@ -429,7 +430,10 @@ export default function BrewLog({
                 <small>%</small>
               </strong>
               <span>
-                Observed brewhouse efficiency
+                <HelpTerm
+                  label="Observed brewhouse efficiency"
+                  helpKey="Calibration"
+                />
                 <br />
                 {calibration.efficiencySamples} valid brew
                 {calibration.efficiencySamples === 1 ? "" : "s"}

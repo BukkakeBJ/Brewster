@@ -36,7 +36,8 @@ import Library from "./components/Library";
 import Design from "./components/Design";
 import FlavorPanel from "./components/FlavorPanel";
 import { flavorPredict } from "./engine/flavor";
-import { Section, Tag } from "./components/ui";
+import { Section, Tag, HelpTerm } from "./components/ui";
+import { alphabetical } from "./engine/search";
 export default function App() {
   const sharedWorkspace = !["localhost", "127.0.0.1", "[::1]"].includes(
     window.location.hostname,
@@ -229,7 +230,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#" onClick={(e) => e.preventDefault()}>
+        <a className="brand" href="#" aria-label="BrewMaster" onClick={(e) => e.preventDefault()}>
           <span className="brand-icon">
             <BrandMark size={60} />
           </span>
@@ -244,6 +245,7 @@ export default function App() {
             <button
               className={tab === label ? "nav-item active" : "nav-item"}
               key={label}
+              aria-label={label}
               aria-current={tab === label ? "page" : undefined}
               onClick={() => setTab(label)}
             >
@@ -256,19 +258,21 @@ export default function App() {
         <div className="sidebar-label saved-label">
           YOUR RECIPES <span>{ownedRecipes.length}</span>
         </div>
-        {ownedRecipes.slice(0, 6).map((r) => (
-          <button
-            className="saved-recipe"
-            key={r.id}
-            onClick={() => {
-              setRecipe(drafts[r.id] ?? recipeSchema.parse(r));
-              setTab("Recipe Editor");
-            }}
-          >
-            <span className="mini-dot" />
-            {r.name}
-          </button>
-        ))}
+        {alphabetical(ownedRecipes, (r) => r.name)
+          .slice(0, 6)
+          .map((r) => (
+            <button
+              className="saved-recipe"
+              key={r.id}
+              onClick={() => {
+                setRecipe(drafts[r.id] ?? recipeSchema.parse(r));
+                setTab("Recipe Editor");
+              }}
+            >
+              <span className="mini-dot" />
+              {r.name}
+            </button>
+          ))}
         <button
           className="text-button new-recipe"
           onClick={() => {
@@ -384,7 +388,7 @@ export default function App() {
                     }
                   >
                     <option value="">No style constraint</option>
-                    {catalog.styles.map((s) => (
+                    {alphabetical(catalog.styles, (s) => s.name).map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name}
                       </option>
@@ -464,7 +468,9 @@ export default function App() {
                     ["FINAL GRAVITY", p.fg.toFixed(3), "SG"],
                   ].map(([label, value, unit], i) => (
                     <div className="metric" key={label}>
-                      <span>{label}</span>
+                      <span>
+                        <HelpTerm label={label} />
+                      </span>
                       <div>
                         {i === 2 && (
                           <i
@@ -543,7 +549,9 @@ export default function App() {
                         return (
                           <div className="style-row" key={k}>
                             <div>
-                              <b>{k.toUpperCase()}</b>
+                              <b>
+                                <HelpTerm label={k.toUpperCase()} />
+                              </b>
                               <span>
                                 {p![k].toFixed(
                                   k === "og" || k === "fg" ? 3 : 1,
@@ -597,7 +605,9 @@ export default function App() {
                           ["Attenuation", p.attenuation.toFixed(1) + "%"],
                         ].map(([k, v]) => (
                           <div key={k}>
-                            <dt>{k}</dt>
+                            <dt>
+                              <HelpTerm label={k} />
+                            </dt>
                             <dd>{v}</dd>
                           </div>
                         ))}

@@ -1,4 +1,5 @@
 import InfoTip from "./InfoTip";
+import { brewingHelp } from "../brewingHelp";
 export { InfoTip };
 import { useState, useEffect, useRef, useId, type ReactNode } from "react";
 export function Field({
@@ -9,7 +10,7 @@ export function Field({
   max,
   step = 0.1,
   suffix,
-  help,
+  help: explicitHelp,
 }: {
   label: string;
   value: number;
@@ -21,6 +22,7 @@ export function Field({
   help?: string;
 }) {
   const id = useId();
+  const help = explicitHelp ?? brewingHelp(label);
   const Container = help ? "div" : "label";
   const fmt = (v: number) => String(Number(v.toFixed(3)));
   const [draft, setDraft] = useState(() => fmt(value));
@@ -89,6 +91,21 @@ export function HelpLabel({
     </div>
   );
 }
+export function HelpTerm({
+  label,
+  helpKey = label,
+}: {
+  label: string;
+  helpKey?: string;
+}) {
+  const help = brewingHelp(helpKey);
+  return (
+    <span className="help-term">
+      {label}
+      {help && <InfoTip label={label} content={help} />}
+    </span>
+  );
+}
 export function Section({
   title,
   eyebrow,
@@ -105,7 +122,12 @@ export function Section({
       <div className="section-head">
         <div>
           {eyebrow && <div className="eyebrow">{eyebrow}</div>}
-          <h2>{title}</h2>
+          <div className="section-title">
+            <h2>{title}</h2>
+            {brewingHelp(title) && (
+              <InfoTip label={title} content={brewingHelp(title)!} />
+            )}
+          </div>
         </div>
         {action}
       </div>

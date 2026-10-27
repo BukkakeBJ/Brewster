@@ -13,7 +13,8 @@ import {
 } from "../engine/library";
 import { startingPoints } from "../engine/suggestions";
 import { defaultRecipe } from "../defaults";
-import { Field, Tag } from "./ui";
+import { alphabetical, searchByName } from "../engine/search";
+import { Field, HelpTerm, Tag } from "./ui";
 export default function Library({
   catalog: c,
   us,
@@ -42,7 +43,7 @@ export default function Library({
   const all = kind === "hop" ? c.hops : kind === "malt" ? c.malts : c.yeasts;
   const roles =
     kind === "hop"
-      ? ["Bittering", "Aroma", "Flavor", "Dry hopping"]
+      ? ["Aroma", "Bittering", "Dry hopping", "Flavor"]
       : kind === "malt"
         ? Array.from(new Set(c.malts.map(maltRole)))
         : Array.from(new Set(c.yeasts.map(yeastFamily)));
@@ -65,10 +66,8 @@ export default function Library({
           "popular",
         ).map((s) => s.item.ingredientId),
   );
-  const filtered = all.filter((i) => {
+  const eligible = all.filter((i) => {
     if (popularOnly && kind !== "yeast" && !popularIds.has(i.id)) return false;
-    const text = JSON.stringify({ ...i, source: undefined }).toLowerCase();
-    if (q && !text.includes(q.toLowerCase())) return false;
     if (descriptor && !byDescriptor.has(i.id)) return false;
     if (
       role !== "All" &&
@@ -95,6 +94,12 @@ export default function Library({
     }
     return true;
   });
+  const filtered = searchByName<Ingredient>(
+    eligible,
+    q,
+    (i) => i.name,
+    (i) => JSON.stringify({ ...i, source: undefined }),
+  );
   return (
     <>
       <div className="library-types">
@@ -167,7 +172,7 @@ export default function Library({
               }}
             >
               <option value="">Any flavor descriptor</option>
-              {c.vocabulary.map((v) => (
+              {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.label}
                 </option>
@@ -175,7 +180,7 @@ export default function Library({
             </select>
           </div>
           <div className="filter-chips">
-            {["All", ...roles].map((x) => (
+            {["All", ...alphabetical(roles, (x) => x)].map((x) => (
               <button
                 key={x}
                 className={role === x ? "active" : ""}
@@ -288,7 +293,10 @@ export default function Library({
                           ? [
                               ["Purpose", h.purpose],
                               ["Alpha acids", h.alpha.join("–") + "%"],
-                              ["Beta acids", h.beta?.join("–") ?? "Unknown"],
+                              [
+                                "Beta acids",
+                                h.beta ? h.beta.join("–") + "%" : "Unknown",
+                              ],
                               [
                                 "Total oils",
                                 h.totalOil === null
@@ -338,7 +346,12 @@ export default function Library({
                               ]
                         ).map(([k, v]) => (
                           <div key={k}>
-                            <dt>{k}</dt>
+                            <dt>
+                              <HelpTerm
+                                label={k}
+                                helpKey={k === "Color" ? "Malt color" : k}
+                              />
+                            </dt>
                             <dd>{v}</dd>
                           </div>
                         ))}
@@ -369,7 +382,12 @@ export default function Library({
                           No descriptors available for this context.
                         </p>
                       )}
-                      <small>Confidence-weighted consensus · 0–5</small>
+                      <small>
+                        <HelpTerm
+                          label="Confidence-weighted consensus · 0–5"
+                          helpKey="Consensus"
+                        />
+                      </small>
                     </div>
                   </div>
                   <p className="ingredient-intro">{d.intro}</p>
@@ -406,7 +424,12 @@ export default function Library({
                           )
                           .map(([k, v]) => (
                             <div key={k}>
-                              <dt>{k.replace(/([A-Z])/g, " $1")}</dt>
+                              <dt>
+                                <HelpTerm
+                                  label={k.replace(/([A-Z])/g, " $1")}
+                                  helpKey={k}
+                                />
+                              </dt>
                               <dd>
                                 {v === null
                                   ? "Unknown"

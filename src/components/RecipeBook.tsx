@@ -54,7 +54,7 @@ export default function RecipeBook({
     [originKind, setOriginKind] = useState(""),
     [styleId, setStyleId] = useState(""),
     [selected, setSelected] = useState<string | null>(null),
-    [sort, setSort] = useState("collection");
+    [sort, setSort] = useState("name");
   const entries = useMemo(
     () => recipeBookEntries(saved, drafts),
     [saved, drafts],

@@ -2,6 +2,7 @@ import seed from "../../data/additives.json";
 import sensorySeed from "../../data/additive-descriptors.json";
 import type { Source, Descriptor } from "./types";
 import type { ProcessStage } from "./processNotes";
+import { searchByName } from "./search";
 export type AdditiveUnit = "g" | "mL" | "item";
 export type ContactUnit = "minutes" | "hours" | "days";
 export interface Additive {
@@ -38,12 +39,16 @@ export const additiveDescriptors = sensorySeed as Descriptor[];
 export const additiveModelNote =
   "Additives are recorded in the schedule, but their alcohol, sugar, dilution, color, flavor, clarity and loss effects are not included in the predictions. Numbers and radar describe the base beer.";
 export function findAdditives(query = "", category = "", stage = "") {
-  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  return additives.filter(
+  const eligible = additives.filter(
     (a) =>
       (!category || a.category === category) &&
-      (!stage || a.stages.includes(stage as ProcessStage)) &&
-      words.every((word) => JSON.stringify(a).toLowerCase().includes(word)),
+      (!stage || a.stages.includes(stage as ProcessStage)),
+  );
+  return searchByName(
+    eligible,
+    query,
+    (a) => a.name,
+    (a) => JSON.stringify({ ...a, source: undefined }),
   );
 }
 export function createAdditiveAddition(
