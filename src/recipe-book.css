@@ -42,6 +42,22 @@
   align-items: flex-start;
 }
 
+.recipe-book-card .book-label-art {
+  grid-template-rows: 1px 12px 92px minmax(86px, 1fr) 18px 1px;
+  row-gap: 6px;
+}
+
+.book-label-art .label-rule,
+.book-label-art .label-kicker,
+.book-label-art .label-subtitle {
+  margin: 0;
+  align-self: center;
+}
+
+.book-label-art .label-title {
+  align-self: start;
+}
+
 .book-style-list {
   grid-auto-rows: 1fr;
   align-items: stretch;
