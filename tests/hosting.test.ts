@@ -5,6 +5,8 @@ import { join } from "node:path";
 import { defaultRecipe } from "../src/defaults";
 import { predict } from "../src/engine/calculations";
 import { catalog } from "../src/catalog";
+import { browserClient } from "./browserClient";
+const fetch = browserClient();
 
 mkdirSync(".runtime", { recursive: true });
 const directory = mkdtempSync(".runtime/hosting-test-");
@@ -129,8 +131,12 @@ it("keeps recipes and brew logs after restarting with the mounted database", asy
   await start();
   const recipes = await (await fetch(api + "/api/recipes")).json();
   const logs = await (await fetch(api + "/api/logs")).json();
-  expect(recipes.find((r: { id: string }) => r.id === recipe.id)).toEqual(
-    recipe,
-  );
-  expect(logs.find((r: { id: string }) => r.id === log.id)).toEqual(log);
+  expect(recipes.find((r: { id: string }) => r.id === recipe.id)).toEqual({
+    ...recipe,
+    access: { visibility: "private", owned: true },
+  });
+  expect(logs.find((r: { id: string }) => r.id === log.id)).toEqual({
+    ...log,
+    access: { visibility: "private", owned: true },
+  });
 }, 15000);

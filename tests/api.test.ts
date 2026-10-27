@@ -9,6 +9,8 @@ import { defaultRecipe as r } from "../src/defaults";
 import { catalog as c } from "../src/catalog";
 import { predict } from "../src/engine/calculations";
 import { flavorPredict } from "../src/engine/flavor";
+import { browserClient } from "./browserClient";
+const fetch = browserClient();
 let child: ChildProcess;
 const filename = `.runtime/api-test-${process.pid}.sqlite`;
 const api = "http://127.0.0.1:3002";

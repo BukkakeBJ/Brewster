@@ -26,6 +26,8 @@ Calculated specifications and subjective flavor estimates retain their explicit 
 
 `src/desktop.css` adds reading sizes only for screens at least 901 px wide: 16 px form values and reading text, 14 px labels and supporting text, and 12 px captions. Navigation is 15 px and recipe metrics are 38 px. These use rem units to respect the browser's text-size preference. The desktop sidebar is wider, dense ingredient columns have more room, and smaller desktop windows stack working panels and recipe/library cards to keep the text usable. Phone/tablet typography and printed brew sheets retain their existing sizes.
 
+`src/headings.css` strengthens the subjects of panels and cards: main section headings and ingredient names are 30 px on desktop, with bold 26 px ingredient names on smaller screens. Additive cards have a separate pale-green title band with category and name, followed by identity, usage and sensory details. Their add-to-recipe buttons use a solid green action treatment. This follow-up changes heading hierarchy across screen sizes while keeping ordinary mobile form text and brew-sheet printing intact.
+
 ## Mobile and working layout
 
 The phone layout has a compact sticky brand header, top-right Metric/Imperial switch and a floating five-screen bottom navigation with safe-area spacing. Page content reserves bottom space so the navigation cannot cover the last controls. Active navigation uses `aria-current="page"`. The narrow layout was checked at a 409 px content viewport; desktop at 1265 px. All five screens fit without horizontal overflow at those widths.

@@ -28,11 +28,15 @@ export function closestStyles(
   target: StyleTargets,
   catalog: Pick<Catalog, "styles">,
 ): StyleMatch[] {
-  if (![target.abv, target.ibu, target.srm].every(Number.isFinite)) return [];
+  if (
+    ![target.abv, target.ibu].every(Number.isFinite) ||
+    (target.srm !== undefined && !Number.isFinite(target.srm))
+  )
+    return [];
   const axes: (keyof typeof scales)[] = [
     "abv",
     "ibu",
-    "srm",
+    ...(target.srm !== undefined ? ["srm" as const] : []),
     ...(target.og ? ["og" as const] : []),
     ...(target.fg ? ["fg" as const] : []),
   ];

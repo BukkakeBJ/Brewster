@@ -183,4 +183,37 @@ describe("recipe book", () => {
       readDraftBank(JSON.stringify({ ok: r, bad: { name: "broken" } })),
     ).toEqual({ [r.id]: r });
   });
+  it("separates private owned recipes from public community recipes and strips access metadata from copies", () => {
+    const owned = {
+      ...r,
+      id: "my-private",
+      access: { visibility: "private" as const, owned: true },
+    };
+    const shared = {
+      ...r,
+      id: "shared-other",
+      name: "Community beer",
+      access: { visibility: "public" as const, owned: false },
+    };
+    const ownShared = {
+      ...r,
+      id: "my-shared",
+      access: { visibility: "public" as const, owned: true },
+    };
+    const entries = recipeBookEntries([owned, shared, ownShared], {
+      "shared-other": { ...shared, name: "Local edit" },
+    });
+    expect(
+      filterBook(entries, c, { collection: "mine" }).map((e) => e.recipe.id),
+    ).toEqual(["my-private", "my-shared"]);
+    expect(
+      filterBook(entries, c, { collection: "community" }).map(
+        (e) => e.recipe.id,
+      ),
+    ).toEqual(["shared-other", "my-shared"]);
+    expect(entries.find((e) => e.recipe.id === shared.id)?.recipe.name).toBe(
+      "Community beer",
+    );
+    expect(copyBookRecipe(shared, "private-copy")).not.toHaveProperty("access");
+  });
 });

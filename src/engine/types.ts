@@ -192,7 +192,7 @@ export interface Target {
   fg?: Range;
   abv: number;
   ibu: number;
-  srm: number;
+  srm?: number;
   batchL: number;
   efficiency: number;
   styleId: string;

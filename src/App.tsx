@@ -14,7 +14,9 @@ import {
   Check,
   Plus,
 } from "lucide-react";
-import { getJson } from "./api";
+import { ensureWorkspace, getJson } from "./api";
+import RecipeSharing from "./components/RecipeSharing";
+import type { SavedRecipe, SavedBrewLog, Visibility } from "./sharing";
 import { catalog as baseCatalog } from "./catalog";
 import BrandMark from "./components/BrandMark";
 import StudioHero from "./components/StudioHero";
@@ -49,11 +51,18 @@ export default function App() {
         return defaultRecipe;
       }
     }),
-    [saved, setSaved] = useState<Recipe[]>([]),
+    [saved, setSaved] = useState<SavedRecipe[]>([]),
     [us, setUs] = useState(() => localStorage.getItem("brew-units") === "us"),
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
-  const [logs, setLogs] = useState<Log[]>([]);
+  const [logs, setLogs] = useState<SavedBrewLog[]>([]);
+  const [saving, setSaving] = useState(false);
+  const ownedRecipes = saved.filter((r) => r.access.owned);
+  const storedRecipe = saved.find((r) => r.id === recipe.id);
+  const personalLogs = useMemo(
+    () => logs.filter((l) => l.access.owned),
+    [logs],
+  );
   const [designFromRecipe, setDesignFromRecipe] = useState<Recipe>();
   const [drafts, setDrafts] = useState<Record<string, Recipe>>(() => {
     try {
@@ -80,20 +89,23 @@ export default function App() {
       ...baseCatalog,
       descriptors: [
         ...baseCatalog.descriptors,
-        ...logs.flatMap((l) => l.descriptors),
+        ...personalLogs.flatMap((l) => l.descriptors),
       ],
     }),
-    [logs],
+    [personalLogs],
   );
   const catalog = prefs.personalize ? libraryCatalog : baseCatalog;
-  const calibration = useMemo(() => calibrate(logs, baseCatalog), [logs]);
+  const calibration = useMemo(
+    () => calibrate(personalLogs, baseCatalog),
+    [personalLogs],
+  );
   useEffect(() => {
     try {
       localStorage.setItem("brew-preferences", JSON.stringify(prefs));
     } catch {}
   }, [prefs]);
   useEffect(() => {
-    getJson<Log[]>("/api/logs")
+    getJson<SavedBrewLog[]>("/api/logs")
       .then(setLogs)
       .catch(() => setError("Brew log API unavailable."));
   }, []);
@@ -119,11 +131,25 @@ export default function App() {
     }
   }, [recipe]);
   useEffect(() => {
-    getJson<Recipe[]>("/api/recipes")
+    getJson<SavedRecipe[]>("/api/recipes")
       .then(setSaved)
       .catch(() =>
         setError("API unavailable. Start the app with npm run dev."),
       );
+  }, []);
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("recipe");
+    if (!id) return;
+    getJson<SavedRecipe>("/api/recipes/" + encodeURIComponent(id))
+      .then((r) => {
+        setRecipe(
+          r.access.owned
+            ? recipeSchema.parse(r)
+            : copyBookRecipe(r, crypto.randomUUID()),
+        );
+        setTab("Recipe Editor");
+      })
+      .catch(() => setError("This recipe is private or no longer shared."));
   }, []);
   const notify = (s: string) => {
     setMessage(s);
@@ -142,26 +168,55 @@ export default function App() {
   } catch (e) {
     calculationError = String(e);
   }
-  async function save(asCopy = false) {
+  async function save(
+    asCopy = false,
+    requestedVisibility?: Visibility,
+  ): Promise<boolean> {
+    const isNew = asCopy || !storedRecipe?.access.owned;
     const toSave = asCopy
       ? copyBookRecipe(recipe, crypto.randomUUID())
-      : recipe;
+      : isNew
+        ? { ...recipe, id: crypto.randomUUID() }
+        : recipe;
+    const visibility =
+      requestedVisibility ??
+      (isNew ? "private" : storedRecipe!.access.visibility);
+    setSaving(true);
+    setError("");
     try {
+      await ensureWorkspace();
       const response = await fetch(
         "/api/recipes/" + encodeURIComponent(toSave.id),
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(toSave),
+          body: JSON.stringify({ ...recipeSchema.parse(toSave), visibility }),
         },
       );
       if (!response.ok) throw new Error((await response.json()).error);
-      const stored = await response.json();
+      const stored: SavedRecipe = await response.json();
       setSaved((s) => [stored, ...s.filter((r) => r.id !== stored.id)]);
-      if (asCopy) setRecipe(stored);
-      notify("Recipe saved to your Recipe Book");
+      if (isNew && !asCopy) {
+        const bank = { ...draftBankRef.current };
+        delete bank[recipe.id];
+        draftBankRef.current = bank;
+        setDrafts(bank);
+        try {
+          localStorage.setItem("brew-drafts", JSON.stringify(bank));
+        } catch {}
+      }
+      setRecipe(recipeSchema.parse(stored));
+      notify(
+        visibility === "public"
+          ? "Recipe shared publicly"
+          : "Recipe saved privately in My recipes",
+      );
+      return true;
     } catch (e) {
       setError(String(e));
+      return false;
+    } finally {
+      setSaving(false);
     }
   }
   const tabs = [
@@ -199,14 +254,14 @@ export default function App() {
           ))}
         </nav>
         <div className="sidebar-label saved-label">
-          YOUR RECIPES <span>{saved.length}</span>
+          YOUR RECIPES <span>{ownedRecipes.length}</span>
         </div>
-        {saved.slice(0, 6).map((r) => (
+        {ownedRecipes.slice(0, 6).map((r) => (
           <button
             className="saved-recipe"
             key={r.id}
             onClick={() => {
-              setRecipe(drafts[r.id] ?? r);
+              setRecipe(drafts[r.id] ?? recipeSchema.parse(r));
               setTab("Recipe Editor");
             }}
           >
@@ -238,11 +293,11 @@ export default function App() {
         <div className="sidebar-bottom">
           <span className="tiny-dot" />{" "}
           {sharedWorkspace
-            ? "Public brewing workspace"
+            ? "Your brewing workspace"
             : "Local brewing workspace"}
           <small>
             {sharedWorkspace
-              ? "Saved recipes & brew logs are shared."
+              ? "Private by default. Sharing is optional."
               : "Recipes stay on this Mac."}
           </small>
         </div>
@@ -284,8 +339,9 @@ export default function App() {
         <div className="page-content">
           {sharedWorkspace && (
             <p className="shared-workspace-note">
-              Public workspace · Saved recipes and brew logs are shared with
-              everyone. Unsaved drafts stay in this browser.
+              Recipes are private by default. Choose Share publicly to add one
+              to the Community collection. New brew logs and tasting notes stay
+              private.
             </p>
           )}
           <StudioHero
@@ -368,14 +424,35 @@ export default function App() {
                     }}
                   />
                 </label>
-                <button className="button secondary" onClick={() => save(true)}>
+                <button
+                  className="button secondary"
+                  disabled={saving}
+                  onClick={() => save(true)}
+                >
                   <Copy size={15} /> Save a copy
                 </button>
-                <button className="button primary" onClick={() => save()}>
-                  <Save size={15} /> Save recipe
+                <button
+                  className="button primary"
+                  disabled={saving}
+                  onClick={() => save()}
+                >
+                  <Save size={15} />{" "}
+                  {saving
+                    ? "Saving…"
+                    : storedRecipe?.access.owned &&
+                        storedRecipe.access.visibility === "public"
+                      ? "Update public recipe"
+                      : "Save privately"}
                 </button>
               </div>
             </div>
+            <RecipeSharing
+              recipe={recipe}
+              stored={storedRecipe}
+              busy={saving}
+              error={error}
+              onVisibility={(visibility) => save(false, visibility)}
+            />
             {p && (
               <>
                 <div className="metrics">
@@ -574,7 +651,7 @@ export default function App() {
               catalog={baseCatalog}
               us={us}
               onOpen={(r) => {
-                setRecipe(r);
+                setRecipe(recipeSchema.parse(r));
                 setTab("Recipe Editor");
               }}
               onNew={() => {

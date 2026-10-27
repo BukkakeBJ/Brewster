@@ -13,6 +13,8 @@ import { Field, Section, Tag } from "./ui";
 import { Radar } from "./FlavorPanel";
 import { download } from "../io";
 import { lToGal, L_PER_GAL, cToF, fToC } from "../engine/calculations";
+import { ensureWorkspace } from "../api";
+import { recordAccess, type SavedBrewLog } from "../sharing";
 export interface Preferences {
   personalize: boolean;
   userWeight: number;
@@ -34,8 +36,8 @@ export default function BrewLog({
   prediction: Prediction;
   flavor: Flavor;
   catalog: Catalog;
-  logs: Log[];
-  onSaved: (l: Log) => void;
+  logs: SavedBrewLog[];
+  onSaved: (l: SavedBrewLog) => void;
   us: boolean;
   prefs: Preferences;
   setPrefs: (p: Preferences) => void;
@@ -71,7 +73,10 @@ export default function BrewLog({
     setAdded([]);
     setTasting({});
   }, [r.id]);
-  const calibration = calibrate(logs, c);
+  const calibration = calibrate(
+    logs.filter((l) => l.access.owned),
+    c,
+  );
   const ingredients = [
     ...new Set([
       ...r.grains.map((g) => g.ingredientId),
@@ -127,6 +132,7 @@ export default function BrewLog({
     setBusy(true);
     setStatus("");
     try {
+      await ensureWorkspace();
       const l: Log = {
         id: crypto.randomUUID(),
         date,
@@ -151,7 +157,9 @@ export default function BrewLog({
       onSaved(body);
       setSelected(body.id);
       setAdded([]);
-      setStatus("Brew recorded. Your prediction snapshot is preserved.");
+      setStatus(
+        "Brew recorded privately. Your prediction snapshot is preserved.",
+      );
     } catch (e) {
       setStatus(String(e));
     }
@@ -168,7 +176,9 @@ export default function BrewLog({
           >
             <p className="muted">
               Current recipe: <b>{r.name}</b>. Saving records an immutable
-              recipe and prediction snapshot alongside your measurements.
+              recipe and prediction snapshot alongside your measurements. New
+              brew logs and tasting notes stay private, including for shared
+              recipes.
             </p>
             <label className="field log-date">
               <span>Brew date</span>
@@ -449,7 +459,7 @@ export default function BrewLog({
           </Section>
           <Section
             title="Your brew archive"
-            eyebrow={`${logs.length} BREWS RECORDED`}
+            eyebrow={`${logs.filter((l) => l.access.owned).length} PRIVATE BREWS RECORDED`}
           >
             {logs.length === 0 ? (
               <p className="muted">
@@ -464,7 +474,10 @@ export default function BrewLog({
                 >
                   <b>{l.recipe.name}</b>
                   <span>
-                    {l.date} · OG {l.actualOg.toFixed(3)}
+                    {l.date} · OG {l.actualOg.toFixed(3)} ·{" "}
+                    {l.access.owned
+                      ? "Private"
+                      : "Previously shared · read-only"}
                   </span>
                 </button>
               ))
@@ -494,6 +507,11 @@ export default function BrewLog({
               title={l.recipe.name + " · " + l.date}
               eyebrow="PREDICTED VS ACTUAL"
             >
+              <p className="muted">
+                {recordAccess(l)?.owned
+                  ? "Private brew log · visible only in this browser’s workspace."
+                  : "Previously shared log · published before optional sharing was added. Read-only."}
+              </p>
               <div className="comparison-grid">
                 <table>
                   <thead>

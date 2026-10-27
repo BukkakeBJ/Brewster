@@ -52,7 +52,6 @@ export const defaultRecipe: Recipe = {
 export const defaultTarget: Target = {
   abv: 5.5,
   ibu: 35,
-  srm: 6,
   batchL: 20,
   efficiency: 72,
   styleId: "american-pale-ale",

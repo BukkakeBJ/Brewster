@@ -13,6 +13,7 @@ import {
   selectDesignStyle,
 } from "../engine/styleMatch";
 import IngredientMatches from "./IngredientMatches";
+import HopCharacterHelp from "./HopCharacterHelp";
 import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
@@ -42,6 +43,10 @@ export default function Design({
     [error, setError] = useState(""),
     [stale, setStale] = useState(false),
     [ingredientQuery, setIngredientQuery] = useState("");
+  const lastColorTarget = useRef(defaultTarget.srm ?? 6);
+  useEffect(() => {
+    if (t.srm !== undefined) lastColorTarget.current = t.srm;
+  }, [t.srm]);
   const applyStyleFlavor = (id = t.styleId) => {
     const recipe = starterRecipes.find((r) => r.styleId === id);
     if (recipe)
@@ -228,15 +233,44 @@ export default function Design({
                 step={1}
                 onChange={(n) => update({ ibu: n })}
               />
-              <Field
-                label="Target color"
-                help={help["Target color"]}
-                suffix="SRM"
-                value={t.srm}
-                min={1}
-                max={60}
-                onChange={(n) => update({ srm: n })}
-              />
+              <div className="optional-color">
+                <div className="field-label">
+                  Color (optional)
+                  <InfoTip
+                    label="Target color"
+                    content={help["Target color"]}
+                  />
+                </div>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={t.srm !== undefined}
+                    onChange={(e) =>
+                      update({
+                        srm: e.target.checked
+                          ? lastColorTarget.current
+                          : undefined,
+                      })
+                    }
+                  />
+                  Set a color target
+                </label>
+                {t.srm === undefined ? (
+                  <p className="muted">
+                    Any color · Predicted SRM is still shown. Color does not
+                    affect style matching or recipe scoring.
+                  </p>
+                ) : (
+                  <Field
+                    label="Target color"
+                    suffix="SRM"
+                    value={t.srm}
+                    min={1}
+                    max={60}
+                    onChange={(n) => update({ srm: n })}
+                  />
+                )}
+              </div>
               <Field
                 label="Post-boil batch"
                 help={help["Post-boil batch"]}
@@ -448,6 +482,7 @@ export default function Design({
               <select
                 id="design-option-2"
                 aria-label="Hop recommendation use"
+                aria-describedby="hop-character-explanation"
                 value={t.hopFocus ?? "aroma"}
                 onChange={(e) =>
                   update({
@@ -462,6 +497,7 @@ export default function Design({
                 <option value="dry hop">Dry hopping</option>
               </select>
             </div>
+            <HopCharacterHelp focus={t.hopFocus ?? "aroma"} />
             <div className="help-option">
               <label className="checkbox">
                 <input

@@ -3,6 +3,7 @@ import seeds from "../../data/recipes.json";
 import nonBeerStyles from "../../data/non-beer-styles.json";
 import type { Catalog, Recipe } from "./types";
 import { recipeSchema } from "../validation";
+import { recordAccess, type RecordAccess } from "../sharing";
 export const starterRecipes: Recipe[] = seeds.map((r) => recipeSchema.parse(r));
 /** Coverage is based on shipped recipes, independent of drafts or active UI filters.
  * New catalog entries count as beer unless explicitly classified as non-beer. */
@@ -21,8 +22,9 @@ export function beerStyleCoverage(
 export interface BookEntry {
   id: string;
   recipe: Recipe;
-  collection: "starter" | "mine" | "draft";
+  collection: "starter" | "mine" | "draft" | "community";
   unsaved: boolean;
+  access?: RecordAccess;
 }
 export function isCraftRecipe(r: Recipe) {
   return !!r.origin && r.origin.kind !== "original-starter";
@@ -54,12 +56,17 @@ export function recipeBookEntries(
     unsaved: false,
   }));
   const mine = saved.map((recipe) => {
-    const draft = drafts[recipe.id];
+    const access = recordAccess(recipe) ?? {
+      visibility: "private" as const,
+      owned: true,
+    };
+    const draft = access.owned ? drafts[recipe.id] : undefined;
     return {
-      id: "mine:" + recipe.id,
+      id: (access.owned ? "mine:" : "community:") + recipe.id,
       recipe: draft ?? recipe,
-      collection: "mine" as const,
+      collection: access.owned ? ("mine" as const) : ("community" as const),
       unsaved: !!draft && !sameRecipe(draft, recipe),
+      access,
     };
   });
   const ids = new Set(saved.map((r) => r.id));
@@ -94,6 +101,8 @@ export function filterBook(
   return entries.filter((e) => {
     if (collection === "craft") {
       if (e.collection !== "starter" || !isCraftRecipe(e.recipe)) return false;
+    } else if (collection === "community") {
+      if (e.access?.visibility !== "public") return false;
     } else if (collection !== "all" && e.collection !== collection)
       return false;
     if (brewery && e.recipe.origin?.brewery !== brewery) return false;
@@ -130,7 +139,7 @@ export function filterBook(
 }
 export function copyBookRecipe(recipe: Recipe, id: string): Recipe {
   return {
-    ...structuredClone(recipe),
+    ...structuredClone(recipeSchema.parse(recipe)),
     id,
     name: recipe.name.slice(0, 193) + " (copy)",
   };

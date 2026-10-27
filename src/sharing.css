@@ -1,0 +1,95 @@
+.recipe-sharing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border: 1px solid #cbd5bd;
+  border-radius: 6px;
+  background: #edf1e3;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.recipe-sharing-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+}
+.recipe-sharing-status > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.recipe-sharing-status p {
+  font-size: 13px;
+}
+.sharing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.sharing-help,
+.sharing-message {
+  flex-basis: 100%;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.sharing-help summary {
+  cursor: pointer;
+}
+.sharing-help p {
+  margin-top: 10px;
+  max-width: 850px;
+}
+.share-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid #9eae8b;
+  border-radius: 12px;
+  background: #fffdf3;
+  color: #193c32;
+  box-shadow: 0 12px 80px #163a3150;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.share-dialog::backdrop {
+  background: #102b25a6;
+}
+.share-dialog h2 {
+  font:
+    400 30px/1.2 Georgia,
+    serif;
+  margin: 14px 0 20px;
+}
+.share-dialog p {
+  margin-bottom: 16px;
+}
+.share-dialog .sharing-actions {
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+@media screen and (min-width: 901px) {
+  .recipe-sharing {
+    font-size: 16px;
+  }
+  .recipe-sharing-status p,
+  .sharing-help,
+  .sharing-message {
+    font-size: 14px;
+  }
+}
+@media print {
+  .recipe-sharing,
+  .share-dialog {
+    display: none !important;
+  }
+}

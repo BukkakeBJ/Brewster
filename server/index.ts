@@ -5,6 +5,7 @@ import { db } from "./db";
 import { recipeSchema, logSchema } from "../src/validation";
 import { predict } from "../src/engine/calculations";
 import { catalog } from "../src/catalog";
+import { workspace } from "./workspace";
 const app = express();
 // Railway terminates HTTPS at its reverse proxy. Trust its nearest proxy so
 // same-origin saves use the public HTTPS URL rather than the internal HTTP URL.
@@ -21,23 +22,68 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: "2mb" }));
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
+app.use("/api", workspace);
+app.get("/api/workspace", (_req, res) => res.json({ newRecipes: "private" }));
 app.get("/api/recipes", (_req, res) =>
   res.json(
     db
-      .prepare("SELECT document FROM recipes ORDER BY updated_at DESC")
-      .all()
-      .map((r) => JSON.parse(r.document as string)),
+      .prepare(
+        "SELECT document,owner_id,visibility FROM recipes WHERE owner_id=? OR visibility='public' ORDER BY updated_at DESC",
+      )
+      .all(res.locals.ownerId)
+      .map((r) => ({
+        ...JSON.parse(r.document as string),
+        access: {
+          visibility: r.visibility,
+          owned: r.owner_id === res.locals.ownerId,
+        },
+      })),
   ),
 );
+app.get("/api/recipes/:id", (req, res) => {
+  const row = db
+    .prepare(
+      "SELECT document,owner_id,visibility FROM recipes WHERE id=? AND (owner_id=? OR visibility='public')",
+    )
+    .get(req.params.id, res.locals.ownerId);
+  if (!row) return res.status(404).json({ error: "Recipe not found" });
+  res.json({
+    ...JSON.parse(row.document as string),
+    access: {
+      visibility: row.visibility,
+      owned: row.owner_id === res.locals.ownerId,
+    },
+  });
+});
 app.put("/api/recipes/:id", (req, res) => {
   try {
     const r = recipeSchema.parse(req.body);
     if (r.id !== req.params.id) throw new Error("Recipe ID mismatch");
+    const existing = db
+      .prepare("SELECT owner_id,visibility FROM recipes WHERE id=?")
+      .get(r.id);
+    if (existing && existing.owner_id !== res.locals.ownerId)
+      return res
+        .status(403)
+        .json({
+          error:
+            "This recipe is read-only. Save your own private copy to customize it.",
+        });
+    const visibility = req.body.visibility ?? existing?.visibility ?? "private";
+    if (visibility !== "private" && visibility !== "public")
+      throw new Error("Choose private or public visibility");
     predict(r, catalog);
     db.prepare(
-      "INSERT INTO recipes(id,name,document,updated_at) VALUES (?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,document=excluded.document,updated_at=excluded.updated_at",
-    ).run(r.id, r.name, JSON.stringify(r), new Date().toISOString());
-    res.json(r);
+      "INSERT INTO recipes(id,name,document,updated_at,owner_id,visibility) VALUES (?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,document=excluded.document,updated_at=excluded.updated_at,visibility=excluded.visibility",
+    ).run(
+      r.id,
+      r.name,
+      JSON.stringify(r),
+      new Date().toISOString(),
+      res.locals.ownerId,
+      visibility,
+    );
+    res.json({ ...r, access: { visibility, owned: true } });
   } catch (e) {
     res
       .status(400)
@@ -45,21 +91,42 @@ app.put("/api/recipes/:id", (req, res) => {
   }
 });
 app.delete("/api/recipes/:id", (req, res) => {
-  db.prepare("DELETE FROM recipes WHERE id=?").run(req.params.id);
+  const result = db
+    .prepare("DELETE FROM recipes WHERE id=? AND owner_id=?")
+    .run(req.params.id, res.locals.ownerId);
+  if (!result.changes)
+    return res
+      .status(404)
+      .json({ error: "Recipe not found in this workspace" });
   res.json({ ok: true });
 });
 app.get("/api/logs", (_req, res) =>
   res.json(
     db
-      .prepare("SELECT document FROM brew_logs ORDER BY date DESC")
-      .all()
-      .map((r) => JSON.parse(r.document as string)),
+      .prepare(
+        "SELECT document,owner_id FROM brew_logs WHERE owner_id=? OR owner_id IS NULL ORDER BY date DESC",
+      )
+      .all(res.locals.ownerId)
+      .map((r) => ({
+        ...JSON.parse(r.document as string),
+        access: {
+          visibility: r.owner_id === null ? "public" : "private",
+          owned: r.owner_id === res.locals.ownerId,
+        },
+      })),
   ),
 );
 app.put("/api/logs/:id", (req, res) => {
   try {
     const log = logSchema.parse(req.body);
     if (log.id !== req.params.id) throw new Error("Log ID mismatch");
+    const owner = db
+      .prepare("SELECT owner_id FROM brew_logs WHERE id=?")
+      .get(log.id);
+    if (owner && owner.owner_id !== res.locals.ownerId)
+      return res
+        .status(403)
+        .json({ error: "This brew log belongs to another workspace." });
     predict(log.recipe, catalog);
     for (const d of log.descriptors) {
       if (!catalog.vocabulary.some((v) => v.id === d.descriptor))
@@ -103,10 +170,16 @@ app.put("/api/logs/:id", (req, res) => {
           JSON.stringify(d.source),
         );
       db.prepare(
-        "INSERT INTO brew_logs(id,recipe_id,date,document) VALUES (?,?,?,?) ON CONFLICT(id) DO UPDATE SET recipe_id=excluded.recipe_id,date=excluded.date,document=excluded.document",
-      ).run(log.id, log.recipe.id, log.date, JSON.stringify(log));
+        "INSERT INTO brew_logs(id,recipe_id,date,document,owner_id) VALUES (?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET recipe_id=excluded.recipe_id,date=excluded.date,document=excluded.document",
+      ).run(
+        log.id,
+        log.recipe.id,
+        log.date,
+        JSON.stringify(log),
+        res.locals.ownerId,
+      );
       db.exec("COMMIT");
-      res.json(log);
+      res.json({ ...log, access: { visibility: "private", owned: true } });
     } catch (e) {
       db.exec("ROLLBACK");
       throw e;

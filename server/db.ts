@@ -8,6 +8,21 @@ mkdirSync(dirname(filename), { recursive: true });
 export const db = new DatabaseSync(filename);
 db.exec("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;");
 db.exec(readFileSync(new URL("./schema.sql", import.meta.url), "utf8"));
+// Existing records were deliberately public before optional sharing existed.
+// Preserve them as read-only community records; never assign them to a visitor.
+for (const table of ["recipes", "brew_logs"]) {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all();
+  if (!columns.some((column) => column.name === "owner_id"))
+    db.exec(`ALTER TABLE ${table} ADD COLUMN owner_id TEXT`);
+}
+const recipeColumns = db.prepare("PRAGMA table_info(recipes)").all();
+if (!recipeColumns.some((column) => column.name === "visibility"))
+  db.exec(
+    "ALTER TABLE recipes ADD COLUMN visibility TEXT NOT NULL DEFAULT 'public' CHECK (visibility IN ('private','public'))",
+  );
+db.exec(
+  "CREATE INDEX IF NOT EXISTS recipes_owner_visibility ON recipes(owner_id,visibility); CREATE INDEX IF NOT EXISTS brew_logs_owner ON brew_logs(owner_id);",
+);
 const insert = (table: string, values: Record<string, unknown>) => {
   const cols = Object.keys(values);
   db.prepare(

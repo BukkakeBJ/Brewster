@@ -76,6 +76,7 @@ export default function RecipeBook({
     mine: entries.filter((e) => e.collection === "mine").length,
     draft: entries.filter((e) => e.collection === "draft").length,
     starter: entries.filter((e) => e.collection === "starter").length,
+    community: entries.filter((e) => e.access?.visibility === "public").length,
   };
   const breweries = [
     ...new Set(
@@ -100,7 +101,11 @@ export default function RecipeBook({
     setQuery("");
   };
   const open = (e: BookEntry, copy = false) =>
-    onOpen(copy ? copyBookRecipe(e.recipe, crypto.randomUUID()) : e.recipe);
+    onOpen(
+      copy || e.collection === "community"
+        ? copyBookRecipe(e.recipe, crypto.randomUUID())
+        : e.recipe,
+    );
   return (
     <>
       <div className="book-intro">
@@ -109,8 +114,9 @@ export default function RecipeBook({
           <p>
             Explore familiar brewery beers, published clone recipes and
             independent house approximations. Source badges tell you which is
-            which. Your own saved recipes and drafts remain in their
-            collections. Every beer style in the catalog has a starting recipe;
+            which. Your saved recipes are private unless you choose to share
+            them. Community recipes are public and open as your own editable
+            copies. Every beer style in the catalog has a starting recipe;
             historical brewery inspirations are labeled separately from
             published formulas.
           </p>
@@ -125,6 +131,7 @@ export default function RecipeBook({
           ["starter", "Style collection"],
           ["craft", "Craft & clones"],
           ["mine", "My recipes"],
+          ["community", "Community"],
           ["draft", "Drafts"],
         ].map(([key, label]) => (
           <button
@@ -290,9 +297,9 @@ export default function RecipeBook({
                       ? recipeOriginLabel(r)
                       : entry.collection === "draft"
                         ? "UNSAVED DRAFT"
-                        : entry.unsaved
-                          ? "SAVED · UNSAVED EDITS"
-                          : "MY SAVED RECIPE"}
+                        : entry.collection === "community"
+                          ? "COMMUNITY · PUBLIC RECIPE"
+                          : `${entry.access?.visibility === "public" ? "MY RECIPE · SHARED PUBLICLY" : "MY RECIPE · PRIVATE"}${entry.unsaved ? " · UNSAVED EDITS" : ""}`}
                   </Tag>
                   <h2>{r.name}</h2>
                   <p>
@@ -418,9 +425,11 @@ export default function RecipeBook({
                   )}
                   {entry.collection === "starter"
                     ? "Use a copy"
-                    : entry.collection === "draft"
-                      ? "Resume draft"
-                      : "Open recipe"}
+                    : entry.collection === "community"
+                      ? "Customize a private copy"
+                      : entry.collection === "draft"
+                        ? "Resume draft"
+                        : "Open recipe"}
                 </button>
                 <button
                   className="button secondary"

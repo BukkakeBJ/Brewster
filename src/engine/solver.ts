@@ -42,7 +42,7 @@ export function objective(
   let numbers =
     ((p.abv - t.abv) / 0.5) ** 2 +
     ((p.ibu - t.ibu) / 10) ** 2 +
-    ((p.srm - t.srm) / 3) ** 2;
+    (t.srm === undefined ? 0 : ((p.srm - t.srm) / 3) ** 2);
   if (t.og) numbers += (out(p.og, t.og) / 0.005) ** 2;
   if (t.fg) numbers += (out(p.fg, t.fg) / 0.003) ** 2;
   const style = c.styles.find((s) => s.id === t.styleId);
@@ -50,17 +50,19 @@ export function objective(
     ? (["og", "fg", "abv", "ibu", "srm"] as const).reduce(
         (s, k) =>
           s +
-          (out(p[k], style[k]) /
-            (k === "og"
-              ? 0.005
-              : k === "fg"
-                ? 0.003
-                : k === "ibu"
-                  ? 10
-                  : k === "srm"
-                    ? 3
-                    : 0.5)) **
-            2,
+          (k === "srm" && t.srm === undefined
+            ? 0
+            : (out(p[k], style[k]) /
+                (k === "og"
+                  ? 0.005
+                  : k === "fg"
+                    ? 0.003
+                    : k === "ibu"
+                      ? 10
+                      : k === "srm"
+                        ? 3
+                        : 0.5)) **
+              2),
         0,
       )
     : 0;
@@ -76,6 +78,8 @@ export function solve(
   iterations = 70,
   userWeight = 1,
 ): Candidate[] {
+  if (t.srm !== undefined && (!Number.isFinite(t.srm) || t.srm < 0))
+    throw new Error("Choose a valid SRM color target or Any color.");
   if (
     t.batchL <= t.equipment.lossL ||
     t.batchL <= 0 ||
@@ -126,6 +130,7 @@ export function solve(
         !/hull|lactose|smok|acid|sour/i.test(m.name),
     )
     .sort((a, b) => {
+      if (t.srm === undefined) return rank(b) - rank(a);
       const colorTarget = Math.max(2, t.srm * 3);
       return (
         rank(b) -
@@ -376,7 +381,10 @@ export function solve(
       ["ibu", 3],
       ["srm", 1.5],
     ] as const)
-      if (Math.abs(b.prediction[key] - t[key]) > tolerance)
+      if (
+        t[key] !== undefined &&
+        Math.abs(b.prediction[key] - t[key]!) > tolerance
+      )
         tradeoffs.push(
           `${key.toUpperCase()} target ${t[key]}; candidate ${b.prediction[key].toFixed(2)}. Targets compete; adjust weights or ingredients.`,
         );
@@ -397,7 +405,10 @@ export function solve(
     const sty = c.styles.find((s) => s.id === t.styleId);
     if (sty)
       for (const k of ["og", "fg", "abv", "ibu", "srm"] as const)
-        if (out(b.prediction[k], sty[k]))
+        if (
+          !(k === "srm" && t.srm === undefined) &&
+          out(b.prediction[k], sty[k])
+        )
           tradeoffs.push(
             `${k.toUpperCase()} falls outside ${sty.name}'s reference range.`,
           );

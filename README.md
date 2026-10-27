@@ -10,7 +10,7 @@ Node 22.13+ required; Node 24+ recommended (Node's built-in SQLite avoids native
 npm install && npm run dev
 ```
 
-Open http://127.0.0.1:5173. React/TypeScript/Vite + Tailwind frontend, Express/TypeScript API, SQLite in `.runtime/brew.sqlite`. No accounts or external AI services. Local development stores data on this machine; the hosted app is a public shared workspace. `npm test` runs engine and API tests; `npm run build` checks TypeScript and builds the frontend. `npm start` serves the built app on port 3001.
+Open http://127.0.0.1:5173. React/TypeScript/Vite + Tailwind frontend, Express/TypeScript API, SQLite in `.runtime/brew.sqlite`. No accounts or external AI services. Local development stores data on this machine; the hosted app has private browser workspaces and an optional public Community collection. `npm test` runs engine and API tests; `npm run build` checks TypeScript and builds the frontend. `npm start` serves the built app on port 3001.
 
 ## Railway deployment
 
@@ -22,11 +22,19 @@ Set service variables `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=3001`, and `B
 
 Attach a persistent Railway volume to the service at `/data`. The Docker image sets `BREW_DB=/data/brew.sqlite`; the database and SQLite WAL files must stay on this volume. Use one service replica with SQLite. Without this volume, saved data is lost when the container is replaced. Catalog records are refreshed on startup while saved recipes and logs remain intact. The local `.runtime` database is excluded from Git and Docker uploads.
 
-This deployment is intentionally public, with no sign-in: visitors can view and change shared saved recipes and brew logs. Browser drafts and display preferences remain local to that browser; pressing Save publishes to the shared database. Tasting personalization and calibration use the shared logs, not a private account history. The sidebar identifies hosted workspaces as public. Do not enter private notes in shared saved records.
+The app is publicly accessible without a sign-in, but new recipes and brew logs are private by default. **Save privately** stores a recipe in this browser's workspace. **Share publicly** opens a confirmation that explains which recipe and process notes will be published. Community recipes can be viewed and copied; only their original browser can update or unshare them. Browser drafts and display preferences stay local. Personalization and calibration use this browser's own brew logs.
 
-The API accepts same-origin browser saves, including HTTPS through Railway's nearest reverse proxy, and rejects other browser origins. This is not access control for a public API. Local Vite origins are additionally accepted outside production. `HOST`, `PORT`, and `BREW_DB` can be overridden for another host. For production locally, run `npm run build` then `NODE_ENV=production npm start`.
+The API checks browser ownership on private reads and every update/delete, and also rejects foreign browser origins. Same-origin HTTPS saves work through Railway's nearest reverse proxy. Local Vite origins are additionally accepted outside production. `HOST`, `PORT`, and `BREW_DB` can be overridden for another host. HTTPS is required for production ownership cookies; use normal development mode for a local HTTP browser preview.
 
 Hosting references: [Railway volumes](https://docs.railway.com/volumes), [health checks](https://docs.railway.com/deployments/healthchecks), and [Infrastructure as Code and legacy configuration status](https://docs.railway.com/infrastructure-as-code).
+
+## Optional sharing and private workspaces
+
+No account is required. A random 256-bit ownership token is kept in an HttpOnly, SameSite=Lax cookie; the database stores only its SHA-256 hash alongside each record. Production uses a Secure, host-only `__Host-` cookie with no Domain attribute. The cookie lasts one year. `src/api.ts` establishes it before concurrent initial reads or early saves. Workspace API responses are not cacheable, do not return ownership secrets, and distinguish record visibility from edit ownership. This is anonymous browser ownership, not account synchronization or recovery: another browser/device has a separate workspace, and clearing/losing site data or expiry loses private access. Export JSON backups before clearing site data. Public copies do not grant editing rights to the original.
+
+New rows default to `private`. Saving a copy makes a new private recipe even when its source was public. Sharing explicitly publishes ingredients, process parameters, description and all recipe/process/additive notes, with a `?recipe=<id>` link. **Make private** removes that recipe from other visitors' API results and makes its link unavailable to them. Copies and exports already held by someone else cannot be recalled. New brew logs, recipe snapshots, personal ingredient evidence and tasting notes remain private even if the associated recipe is public. Recipe JSON and BeerXML describe the brew, not its access rights; copies and imports do not inherit public visibility.
+
+The SQLite startup migration preserves pre-existing intentionally public recipes and brew logs. These have no ownership token and appear as read-only Community recipes or labeled previously shared logs; a visitor cannot claim, modify or delete them. They are not silently made private for the first person to visit, and legacy public logs are excluded from personal calibration. Their underlying records are retained. Fresh schema creation includes ownership and visibility columns; existing SQLite files receive additive column/index migrations.
 
 ## Architecture decision
 
@@ -195,6 +203,14 @@ Design defaults to **Automatically match style to numeric targets**. Editing ABV
 `src/engine/styleMatch.ts` ranks styles by summed squared distance outside their ranges, normalized by ABV 0.5 percentage points, IBU 10, SRM 3, OG 0.005 and FG 0.003. Optional gravity intervals use the gap between intervals; overlapping ranges have zero gap. Ties use normalized midpoint distance, then style ID for deterministic results. Mead/cider entries are excluded through `data/non-beer-styles.json`. Broad placeholder ranges are excluded: ABV upper bound must be positive and at most 20, IBU at most 150, SRM at most 80; maximum range widths are 8 ABV percentage points, 100 IBU and 40 SRM. All ranges must be finite and ordered. These are matching heuristics, not style definitions. The UI flags when even the closest style is outside your targets. Numeric similarity does not establish sensory similarity, fermentation method or style authenticity.
 
 Design's information icons explain each control, including units, optimization constraints and sensory limitations. Hover or keyboard-focus an icon to read it; clicking pins the explanation, and Escape or an outside click dismisses it. Help text and vocabulary explanations live in `data/design-help.json`. Popups stay within the viewport for mobile use.
+
+**Evaluate hop character for** has a visible explanation for the selected kettle bittering, late-boil flavor, whirlpool aroma or dry-hop context, plus an expandable comparison and clickable/hover help. `data/hop-character-help.json` contains original plain-language descriptions of when additions happen, typical sensory expectations and how the app uses the choice. Linked producer references cover [whole-leaf addition uses](https://www.yakimachief.com/products/whole-leaf-hops) and [whirlpool/fermentation guidance](https://www.yakimachief.com/products/veterans-blend). App-specific scoring and starting timings are identified as BrewMaster behavior; aroma expectations remain estimates. Whirlpool bitterness depends on the configured reduced-utilization approximation; dry hops contribute zero calculated IBU in this model, which does not promise zero perceived bitterness.
+
+### Optional color target
+
+Design starts with **Any color**. Enable **Set a color target** to enter SRM, or turn it off to leave color unconstrained; toggling it off and back on restores the last entered value. A redesign brief opened from an existing recipe initially includes its predicted color, which can also be disabled. Recipe color is still calculated and displayed as SRM/EBC with a swatch in all cases.
+
+An omitted `Target.srm` is not zero or a hidden default. Style matching skips its SRM distance and midpoint comparison. The solver omits the numeric SRM penalty, style SRM penalty and SRM tradeoff messages. Specialty malt ranking omits its color-target distance; ingredient, flavor, alcohol and bitterness constraints still apply, and the selected style can still guide ingredient/process choices. Morey predictions and numeric style reference ranges remain available as information. Unit tests compare predictions with different SRM but identical other values to verify that optional color does not change their objective score.
 
 ### Starting water, ingredient amounts and bottles
 

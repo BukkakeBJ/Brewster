@@ -8,6 +8,25 @@ import {
 import { solve } from "../src/engine/solver";
 import { starterRecipes } from "../src/engine/recipeBook";
 
+it("does not bias specialty malt ranking toward a hidden color target", () => {
+  const malt = c.malts.find((m) => m.type === "crystal-caramel")!;
+  const small = {
+    ...c,
+    malts: [
+      { ...malt, id: "light", lovibond: 5 },
+      { ...malt, id: "dark", lovibond: 300 },
+    ],
+  };
+  const any = ingredientMatches(
+    { ...t, styleId: "", srm: undefined },
+    small,
+  ).malts;
+  expect(any).toHaveLength(2);
+  expect(any[0].score).toBe(any[1].score);
+  const pale = ingredientMatches({ ...t, styleId: "", srm: 3 }, small).malts;
+  expect(pale[0].id).toBe("light");
+});
+
 it("changes hop candidates by flavor and usage evidence, without equating low IBU with low aroma", () => {
   const citra = c.hops.find((h) => h.id === "h-citra")!,
     saaz = c.hops.find((h) => h.id === "h-saaz-cz")!;

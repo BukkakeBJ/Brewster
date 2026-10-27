@@ -1,0 +1,57 @@
+{
+  "note": "Original brewing explanations informed by the linked producer references. Flavor expectations are guidance, not measured outcomes. App notes describe BrewMaster's own model.",
+  "profiles": [
+    {
+      "id": "bittering",
+      "label": "Kettle bittering",
+      "summary": "Boil additions mainly used to reach your bitterness target.",
+      "when": "Added to the kettle during the boil, commonly early enough for a longer boil contact. Recipe minutes mean time remaining before the boil ends.",
+      "effect": "Heat turns hop alpha acids into bitter compounds. Alpha-acid percentage, amount and boil time influence the IBU estimate. Longer boiling changes how much hop aroma remains.",
+      "app": "The app favors higher-alpha candidates for this use and adjusts kettle amounts toward your IBU target. You can override the variety, amount and timing.",
+      "source": {
+        "title": "Yakima Chief Hops · whole-leaf brewing uses",
+        "url": "https://www.yakimachief.com/products/whole-leaf-hops",
+        "accessed": "2026-10-26"
+      }
+    },
+    {
+      "id": "flavor",
+      "label": "Late-boil flavor",
+      "summary": "A hop addition near the end of the boil to add hop character along with some bitterness.",
+      "when": "Added during the last part of the boil. A 10-minute addition means 10 minutes before the boil ends.",
+      "effect": "A shorter boil contact can retain more aroma character than an early addition while still adding bitterness. Results depend on the hop, dose and process.",
+      "app": "The app ranks boil-use flavor evidence and starts this addition at up to 10 minutes. Recipe search may adjust its amount and timing, and you can edit the result.",
+      "source": {
+        "title": "Yakima Chief Hops · addition-stage guidance",
+        "url": "https://www.yakimachief.com/products/veterans-blend",
+        "accessed": "2026-10-26"
+      }
+    },
+    {
+      "id": "aroma",
+      "label": "Whirlpool aroma",
+      "summary": "A hot hop steep after the boil, aimed at hop aroma and flavor.",
+      "when": "Added after boiling stops, while the wort (unfermented beer) is still hot and before it is fully cooled. This is also called a hop stand.",
+      "effect": "Temperature and contact time shape aroma and can also add bitterness. A whirlpool addition can help build hop character while keeping kettle bitterness under control.",
+      "app": "The app ranks descriptor evidence for whirlpool use. Its bitterness estimate uses your reduced whirlpool utilization setting; amount, stand time and that setting remain editable.",
+      "source": {
+        "title": "Yakima Chief Hops · post-boil/whirlpool guidance",
+        "url": "https://www.yakimachief.com/products/veterans-blend",
+        "accessed": "2026-10-26"
+      }
+    },
+    {
+      "id": "dry hop",
+      "label": "Dry hopping",
+      "summary": "Hops added to cooled beer during or after fermentation, primarily to build aroma.",
+      "when": "Added in the fermenter during active fermentation or after it finishes. Record contact time in days in the recipe editor.",
+      "effect": "Hop variety, dose and fermentation stage influence the aroma. Strong hop aroma can coexist with a low calculated IBU; perceived bitterness can still change.",
+      "app": "The app uses dry-hop descriptor evidence and treats dry hops as zero IBU in its calculation. That is a model assumption, not a guarantee of zero perceived bitterness. Amount and contact time are editable.",
+      "source": {
+        "title": "Yakima Chief Hops · fermentation and dry-hop uses",
+        "url": "https://www.yakimachief.com/products/whole-leaf-hops",
+        "accessed": "2026-10-26"
+      }
+    }
+  ]
+}

@@ -19,6 +19,23 @@ it("moves between pale lager, pale ale and imperial stout as numeric targets cha
     "russian-imperial-stout",
   );
 });
+it("matches ABV and bitterness without an implicit color value when color is optional", () => {
+  const base = {
+    ...c.styles[0],
+    abv: [4, 6] as [number, number],
+    ibu: [20, 40] as [number, number],
+  };
+  const dark = { ...base, id: "a-dark", srm: [25, 35] as [number, number] };
+  const light = { ...base, id: "z-light", srm: [2, 4] as [number, number] };
+  const catalog = { styles: [light, dark] };
+  const any = closestStyles({ abv: 5, ibu: 30 }, catalog);
+  expect(any.every((m) => m.withinRanges)).toBe(true);
+  expect(any[0].midpointDistance).toBe(any[1].midpointDistance);
+  expect(any[0].style.id).toBe("a-dark");
+  expect(closestStyles({ abv: 5, ibu: 30, srm: 3 }, catalog)[0].style.id).toBe(
+    "z-light",
+  );
+});
 it("excludes non-beer and catch-all ranges, preserves targets and choices, and labels distant matches", () => {
   const before = JSON.stringify(t);
   const target = {

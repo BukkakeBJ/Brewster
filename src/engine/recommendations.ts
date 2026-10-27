@@ -140,9 +140,12 @@ export function ingredientMatches(t: Target, c: Catalog, userWeight = 1) {
         "Limited matching sensory evidence; review the reference and run a small trial.",
       );
     if (malt && malt.type !== "base") {
-      score -= Math.abs(malt.lovibond - Math.max(2, t.srm * 3)) * 0.03;
+      if (t.srm !== undefined)
+        score -= Math.abs(malt.lovibond - Math.max(2, t.srm * 3)) * 0.03;
       reasons.push(
-        `Color role evaluated against your ${t.srm} SRM target; respect the ${malt.maxPercent}% grist limit.`,
+        t.srm === undefined
+          ? `Any color: no color-target penalty; respect the ${malt.maxPercent}% grist limit.`
+          : `Color role evaluated against your ${t.srm} SRM target; respect the ${malt.maxPercent}% grist limit.`,
       );
     }
     if (i.kind === "hop") {

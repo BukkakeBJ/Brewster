@@ -1,5 +1,8 @@
 import { it, expect } from "vitest";
-import { solve } from "../src/engine/solver";
+import { solve, objective } from "../src/engine/solver";
+import { defaultRecipe } from "../src/defaults";
+import { predict } from "../src/engine/calculations";
+import { flavorPredict } from "../src/engine/flavor";
 import { catalog as c } from "../src/catalog";
 import { defaultTarget as t } from "../src/defaults";
 it("returns ranked recipes close to numeric targets and respects exclusions/form", () => {
@@ -22,4 +25,23 @@ it("is deterministic and leaves targets unchanged", () => {
   const before = JSON.stringify(t);
   expect(solve(t, c, 5)[0].prediction).toEqual(solve(t, c, 5)[0].prediction);
   expect(JSON.stringify(t)).toBe(before);
+});
+it("ignores color in numeric and style penalties when no color target is set", () => {
+  const target = { ...t, srm: undefined, styleId: "american-pale-ale" };
+  const p = predict(defaultRecipe, c),
+    f = flavorPredict(defaultRecipe, c, p);
+  const dark = { ...p, srm: 70 };
+  expect(objective(target, defaultRecipe, p, f, c)).toBe(
+    objective(target, defaultRecipe, dark, f, c),
+  );
+  expect(
+    objective({ ...target, srm: 6 }, defaultRecipe, dark, f, c),
+  ).toBeGreaterThan(objective({ ...target, srm: 6 }, defaultRecipe, p, f, c));
+  const result = solve(target, c, 10);
+  expect(result).toHaveLength(3);
+  for (const candidate of result) {
+    expect(Number.isFinite(candidate.score)).toBe(true);
+    expect(Number.isFinite(candidate.prediction.srm)).toBe(true);
+    expect(candidate.tradeoffs.some((t) => /^SRM/.test(t))).toBe(false);
+  }
 });

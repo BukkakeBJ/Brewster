@@ -1,0 +1,102 @@
+/* Clear subjects on working panels and ingredient cards, across screen sizes. */
+@media screen {
+  .section-head h2 {
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #193c32;
+    overflow-wrap: anywhere;
+  }
+  .section-head > div {
+    min-width: 0;
+    flex: 1;
+  }
+  .section-head > svg {
+    flex-shrink: 0;
+  }
+  .library-types button.active span {
+    background: #e5ecd5;
+    color: #244b3c;
+    font-weight: 650;
+  }
+  .library-card-head h3,
+  .additive-card h3,
+  .additive-schedule-row h3 {
+    font-family: Georgia, serif;
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #193c32;
+    overflow-wrap: anywhere;
+  }
+  .suggestion-card h3,
+  .candidate h3,
+  .hop-character-heading h3 {
+    font-size: 1.375rem;
+    font-weight: 650;
+    line-height: 1.3;
+    color: #193c32;
+  }
+  .book-card-heading h2 {
+    font-weight: 600;
+  }
+  .book-hop-profile h3,
+  .book-flavor-profile h3,
+  .book-recipe-details h3,
+  .saved-additives h3,
+  .saved-additives h4 {
+    font-size: 1.25rem;
+    font-weight: 650;
+    line-height: 1.35;
+    color: #193c32;
+  }
+  .additive-card {
+    border: 1px solid #bdc9ac;
+    box-shadow: 3px 3px 0 #dfe1cc;
+  }
+  .additive-card-title {
+    margin: -1rem -1rem 1.1rem;
+    padding: 18px 20px;
+    border-bottom: 1px solid #c2cfb1;
+    border-left: 4px solid #7b8f50;
+    border-radius: 7px 7px 0 0;
+    background: #e9eed9;
+  }
+  .additive-card-title > span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #52683e;
+  }
+  .additive-card > .button {
+    margin-top: 16px;
+    white-space: normal;
+    text-align: left;
+  }
+  .additive-card > .button svg {
+    flex-shrink: 0;
+  }
+  .additive-schedule-row > h3 {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #d2dcc2;
+    margin-bottom: 14px;
+  }
+}
+@media screen and (min-width: 901px) {
+  .section-head h2 {
+    font-size: 1.875rem;
+  }
+  .library-card-head h3,
+  .additive-card h3,
+  .additive-schedule-row h3 {
+    font-size: 1.875rem;
+  }
+  .suggestion-card h3,
+  .candidate h3 {
+    font-size: 1.5rem;
+  }
+}

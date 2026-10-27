@@ -10,6 +10,7 @@ import {
 } from "../engine/additives";
 import { processStages } from "../engine/processNotes";
 import { Tag } from "./ui";
+import { Plus } from "lucide-react";
 export default function AdditiveLibrary({
   us = false,
   batchL = 20,
@@ -97,11 +98,12 @@ export default function AdditiveLibrary({
           );
           return (
             <article className="additive-card" key={a.id}>
-              <h3>{a.name}</h3>
+              <header className="additive-card-title">
+                <span>{a.category}</span>
+                <h3>{a.name}</h3>
+              </header>
               <Tag tone="objective">REFERENCE IDENTITY</Tag>
-              <p>
-                {a.category} · {a.form}
-              </p>
+              <p>{a.form}</p>
               <p className="muted">
                 Suggested stage:{" "}
                 {a.stages
@@ -147,11 +149,8 @@ export default function AdditiveLibrary({
                 {a.source.title} ↗
               </a>
               {onAdd && (
-                <button
-                  className="button secondary"
-                  onClick={() => onAdd(a.id)}
-                >
-                  Add {a.name} to recipe
+                <button className="button primary" onClick={() => onAdd(a.id)}>
+                  <Plus size={16} /> Add {a.name} to recipe
                 </button>
               )}
             </article>
