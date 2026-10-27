@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Catalog, Flavor } from "../engine/types";
-import { Section, Tag } from "./ui";
+import { Section } from "./ui";
 export function Radar({
   scores,
   target,
@@ -23,7 +23,10 @@ export function Radar({
 }) {
   const point = (i: number, v: number) => {
     const a = (i / axes.length) * Math.PI * 2 - Math.PI / 2;
-    return [150 + (Math.cos(a) * v * 94) / 5, 150 + (Math.sin(a) * v * 94) / 5];
+    return [
+      150 + (Math.cos(a) * v * 108) / 5,
+      150 + (Math.sin(a) * v * 108) / 5,
+    ];
   };
   const poly = (s: Record<string, number>) =>
     axes.map((a, i) => point(i, s[a] ?? 0).join(",")).join(" ");
@@ -32,7 +35,7 @@ export function Radar({
       className="radar"
       role="img"
       aria-label="Flavor estimate radar on a zero to five scale"
-      viewBox="0 0 300 300"
+      viewBox="-30 -4 360 308"
       width={size}
       height={size}
     >
@@ -41,12 +44,12 @@ export function Radar({
           key={n}
           points={axes.map((_, i) => point(i, n).join(",")).join(" ")}
           fill="none"
-          stroke="#dfe2d2"
+          stroke="var(--line)"
           strokeWidth=".6"
         />
       ))}
       {axes.map((a, i) => {
-        const [x, y] = point(i, 6.1);
+        const [x, y] = point(i, 5.85);
         const [lx, ly] = point(i, 5);
         return (
           <g key={a}>
@@ -55,7 +58,7 @@ export function Radar({
               y1="150"
               x2={lx}
               y2={ly}
-              stroke="#e1e4d7"
+              stroke="var(--line)"
               strokeWidth=".7"
             />
             <text
@@ -63,8 +66,9 @@ export function Radar({
               y={y}
               textAnchor="middle"
               dominantBaseline="middle"
-              fill="#8d967b"
-              fontSize="8"
+              fill="var(--ink-3)"
+              fontSize="11"
+              fontWeight="600"
             >
               {a.replace("-", " ").toUpperCase()}
             </text>
@@ -74,25 +78,22 @@ export function Radar({
       {target && (
         <polygon
           points={poly(target)}
-          fill="#c8a36510"
-          stroke="#bf9e65"
+          fill="none"
+          stroke="var(--accent)"
           strokeDasharray="4 3"
           strokeWidth="1.2"
         />
       )}
       <polygon
         points={poly(scores)}
-        fill="#708b5b28"
-        stroke="#6b8b58"
+        fill="var(--brand-fill)"
+        stroke="var(--brand)"
         strokeWidth="1.8"
       />
       {axes.map((a, i) => {
         const [x, y] = point(i, scores[a] ?? 0);
-        return <circle key={a} cx={x} cy={y} r="2.6" fill="#688654" />;
+        return <circle key={a} cx={x} cy={y} r="2.8" fill="var(--brand)" />;
       })}
-      <text x="153" y="147" fill="#c1c6b5" fontSize="7">
-        0
-      </text>
     </svg>
   );
 }
@@ -109,75 +110,102 @@ export default function FlavorPanel({
 }) {
   const [axis, setAxis] = useState("citrus");
   const rows = f.contributions[axis] ?? [];
-  const explanation = (
-    <>
-      <p className="muted">
-        A sensory estimate, not a measurement. Select any axis to see what’s
-        behind it.
-      </p>
-      <select
-        aria-label="Explain flavor axis"
-        value={axis}
-        onChange={(e) => setAxis(e.target.value)}
-      >
-        {c.vocabulary.map((v) => (
-          <option value={v.id} key={v.id}>
-            {v.label} · {(f.scores[v.id] ?? 0).toFixed(1)}/5
-          </option>
-        ))}
-      </select>
-      <div className="flavor-explanation">
-        {rows.length === 0 ? (
-          <p className="muted">
-            No matching descriptors for this context. Missing evidence does not
-            prove absence.
-          </p>
-        ) : (
-          rows.map((r, i) => (
-            <div key={i}>
-              <b>
-                {r.ingredient} <span>+{r.score.toFixed(2)}</span>
-              </b>
-              <p>{r.reason}</p>
-              {r.descriptorIds.map((id) => {
-                const d = c.descriptors.find((d) => d.id === id);
-                return (
-                  d && (
-                    <details key={id}>
-                      <summary>
-                        {d.sourceType} · {d.confidence} confidence ·{" "}
-                        {d.intensity}/5
-                      </summary>
-                      <p>
-                        {d.usageContext} · {d.note}
-                      </p>
-                      <a href={d.source.url} target="_blank" rel="noreferrer">
-                        {d.source.title} ↗
-                      </a>
-                    </details>
-                  )
-                );
-              })}
-            </div>
-          ))
-        )}
-      </div>
-    </>
-  );
+  const label = (id: string) =>
+    c.vocabulary.find((v) => v.id === id)?.label ?? id;
+  const gaps = target
+    ? Object.entries(target)
+        .filter(
+          ([id]) =>
+            !["carbonation", "bitterness"].includes(id) &&
+            c.vocabulary.some((v) => v.id === id && v.axis),
+        )
+        .map(([id, goal]) => ({ id, goal, diff: (f.scores[id] ?? 0) - goal }))
+        .filter((g) => Math.abs(g.diff) >= 0.75)
+        .sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff))
+        .slice(0, 3)
+    : [];
   return (
-    <Section title="In the glass" eyebrow="SUBJECTIVE / FLAVOR ESTIMATE">
-      <Tag>BREWER-CONSENSUS MODEL</Tag>
+    <Section title="Flavor estimate">
       <Radar scores={f.scores} target={target} />
       <div className="radar-legend">
-        <span>● Predicted</span>
-        {target && <span>◌ Target</span>}
+        <span className="legend-predicted">Your recipe</span>
+        {target && <span className="legend-target">Your goal</span>}
       </div>
+      {target &&
+        (gaps.length ? (
+          <ul className="flavor-gaps">
+            {gaps.map((g) => (
+              <li key={g.id}>
+                <b>{label(g.id)}</b>{" "}
+                {g.diff < 0 ? "is weaker than" : "is stronger than"} your goal
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="muted">Close to your flavor goals.</p>
+        ))}
       {readOnly ? (
         <p className="muted">
-          Estimated sensory profile from this recipe’s ingredients and process.
+          An estimate from the ingredients and process, not a measurement.
         </p>
       ) : (
-        explanation
+        <details className="advanced">
+          <summary>What's behind each flavor?</summary>
+          <p className="muted">
+            An estimate from brewer reports about each ingredient, not a
+            measurement.
+          </p>
+          <select
+            aria-label="Explain flavor axis"
+            value={axis}
+            onChange={(e) => setAxis(e.target.value)}
+          >
+            {c.vocabulary.map((v) => (
+              <option value={v.id} key={v.id}>
+                {v.label} · {(f.scores[v.id] ?? 0).toFixed(1)}/5
+              </option>
+            ))}
+          </select>
+          <div className="flavor-explanation">
+            {rows.length === 0 ? (
+              <p className="muted">
+                Nothing in this recipe is known to add this flavor.
+              </p>
+            ) : (
+              rows.map((r, i) => (
+                <div key={i}>
+                  <b>
+                    {r.ingredient} <span>+{r.score.toFixed(2)}</span>
+                  </b>
+                  <p>{r.reason}</p>
+                  {r.descriptorIds.map((id) => {
+                    const d = c.descriptors.find((d) => d.id === id);
+                    return (
+                      d && (
+                        <details key={id}>
+                          <summary>
+                            {d.sourceType} · {d.confidence} confidence ·{" "}
+                            {d.intensity}/5
+                          </summary>
+                          <p>
+                            {d.usageContext} · {d.note}
+                          </p>
+                          <a
+                            href={d.source.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {d.source.title} ↗
+                          </a>
+                        </details>
+                      )
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
+        </details>
       )}
     </Section>
   );

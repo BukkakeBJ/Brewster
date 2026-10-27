@@ -1,11 +1,9 @@
 import { useMemo, useState } from "react";
 import {
   Search,
-  BookOpen,
   Copy,
   ArrowUpRight,
   Download,
-  Plus,
 } from "lucide-react";
 import BrandMark from "./BrandMark";
 import type { Catalog, Recipe } from "../engine/types";
@@ -49,7 +47,7 @@ export default function RecipeBook({
   onNew: () => void;
 }) {
   const [query, setQuery] = useState(""),
-    [collection, setCollection] = useState("starter"),
+    [chosenCollection, setCollection] = useState(""),
     [brewery, setBrewery] = useState(""),
     [originKind, setOriginKind] = useState(""),
     [styleId, setStyleId] = useState(""),
@@ -59,6 +57,8 @@ export default function RecipeBook({
     () => recipeBookEntries(saved, drafts),
     [saved, drafts],
   );
+  const hasOwn = entries.some((e) => e.collection === "mine");
+  const collection = chosenCollection || (hasOwn ? "mine" : "starter");
   const filtered = filterBook(entries, c, {
     query,
     collection,
@@ -109,138 +109,111 @@ export default function RecipeBook({
   };
   return (
     <>
-      <div className="book-intro">
-        <div>
-          <BookOpen size={22} />
-          <p>
-            Explore familiar brewery beers, published clone recipes and
-            independent house approximations. Source badges tell you which is
-            which. Your saved recipes are private unless you choose to share
-            them. Community recipes are public and open as your own editable
-            copies. Every beer style in the catalog has a starting recipe;
-            historical brewery inspirations are labeled separately from
-            published formulas.
-          </p>
-        </div>
-        <button className="button primary" onClick={onNew}>
-          <Plus size={15} /> New recipe
-        </button>
-      </div>
       <div className="book-tabs" role="group" aria-label="Recipe collections">
-        {[
-          ["all", "All recipes"],
-          ["starter", "Style collection"],
-          ["craft", "Craft & clones"],
-          ["mine", "My recipes"],
-          ["community", "Community"],
-          ["draft", "Drafts"],
-        ].map(([key, label]) => (
-          <button
-            key={key}
-            aria-pressed={collection === key}
-            onClick={() => setCollection(key)}
-          >
-            {label}
-            <span>{counts[key as keyof typeof counts]}</span>
-          </button>
-        ))}
-      </div>
-      <details className="panel book-coverage">
-        <summary>
-          {covered} of {coverage.length} beer styles covered · Browse by style
-        </summary>
-        <p className="muted">
-          Coverage includes all beer styles in this app’s legacy reference
-          catalog. Cider, mead, perry and honey hybrids are separate. Known
-          brewery examples are historical inspirations; original house starters
-          fill gaps without claiming a brewery formula.
-        </p>
-        <button className="text-button" onClick={() => browseStyle()}>
-          Show all style recipes
-        </button>
-        <div className="book-style-list">
-          {coverage.map(({ style, recipes }) => (
+        {(
+          [
+            ["mine", "My recipes"],
+            ["draft", "Unsaved drafts"],
+            ["starter", "Starter recipes"],
+            ["craft", "Brewery clones"],
+            ["community", "Community"],
+            ["all", "Everything"],
+          ] as const
+        )
+          .filter(
+            ([key]) =>
+              !["draft", "community"].includes(key) ||
+              counts[key] > 0 ||
+              collection === key,
+          )
+          .map(([key, label]) => (
             <button
-              className="text-button"
-              key={style.id}
-              onClick={() => browseStyle(style.id)}
+              key={key}
+              aria-pressed={collection === key}
+              onClick={() => setCollection(key)}
             >
-              <span className="book-style-name">{style.name}</span>
-              <span className="book-style-count">
-                {recipes.length} recipe{recipes.length === 1 ? "" : "s"}
-              </span>
+              {label}
+              <span>{counts[key]}</span>
             </button>
           ))}
-        </div>
-      </details>
+      </div>
       <div className="book-search">
-        <Search size={17} />
-        <input
-          aria-label="Search recipe book"
-          placeholder="Search recipes, styles, ingredients, or tags…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <label className="search-box">
+          <Search size={17} />
+          <input
+            aria-label="Search recipe book"
+            placeholder="Search by name, style, ingredient…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
         <select
-          aria-label="Sort recipe book"
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
+          aria-label="Filter recipe book by style"
+          value={styleId}
+          onChange={(e) => setStyleId(e.target.value)}
         >
-          <option value="collection">My work first</option>
-          <option value="name">Name A–Z</option>
+          <option value="">All styles</option>
+          {styleIds.map((id) => (
+            <option key={id} value={id}>
+              {c.styles.find((s) => s.id === id)?.name ?? "No particular style"}
+            </option>
+          ))}
         </select>
       </div>
-      <div className="book-filters">
-        <label className="field">
-          <span>Beer style</span>
-          <select
-            aria-label="Filter recipe book by style"
-            value={styleId}
-            onChange={(e) => setStyleId(e.target.value)}
-          >
-            <option value="">All styles</option>
-            {styleIds.map((id) => (
-              <option key={id} value={id}>
-                {c.styles.find((s) => s.id === id)?.name ?? "Freeform"}
+      <details className="advanced book-filters">
+        <summary>More filters</summary>
+        <div className="field-grid">
+          <label className="field">
+            <span>Brewery</span>
+            <select
+              aria-label="Filter recipe book by brewery"
+              value={brewery}
+              onChange={(e) => setBrewery(e.target.value)}
+            >
+              <option value="">All breweries</option>
+              {breweries.map((b) => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="field">
+            <span>Recipe source</span>
+            <select
+              aria-label="Filter recipe book by source type"
+              value={originKind}
+              onChange={(e) => setOriginKind(e.target.value)}
+            >
+              <option value="">All source types</option>
+              <option value="published-adaptation">
+                Brewery recipe · adapted
               </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span>Brewery</span>
-          <select
-            aria-label="Filter recipe book by brewery"
-            value={brewery}
-            onChange={(e) => setBrewery(e.target.value)}
-          >
-            <option value="">All breweries</option>
-            {breweries.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span>Recipe source</span>
-          <select
-            aria-label="Filter recipe book by source type"
-            value={originKind}
-            onChange={(e) => setOriginKind(e.target.value)}
-          >
-            <option value="">All source types</option>
-            <option value="published-adaptation">
-              Brewery recipe · adapted
-            </option>
-            <option value="published-clone">Published clone · adapted</option>
-            <option value="clone-inspired">House clone · approximate</option>
-            <option value="original-starter">Original starter</option>
-          </select>
-        </label>
-      </div>
+              <option value="published-clone">Published clone · adapted</option>
+              <option value="clone-inspired">House clone · approximate</option>
+              <option value="original-starter">Original starter</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Sort</span>
+            <select
+              aria-label="Sort recipe book"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option value="name">Name A–Z</option>
+              <option value="collection">My work first</option>
+            </select>
+          </label>
+        </div>
+        <p className="muted">
+          {covered} of {coverage.length} beer styles have a starter recipe.
+          Brewery clones are adaptations of published recipes, not official
+          formulas.
+        </p>
+      </details>
       <p className="book-count">
-        {filtered.length} recipe{filtered.length === 1 ? "" : "s"} · Numbers are
-        calculated predictions; descriptions are intended flavor directions.
+        {filtered.length} recipe{filtered.length === 1 ? "" : "s"}
       </p>
       <div className="book-grid">
         {filtered.map((entry) => {
@@ -270,23 +243,6 @@ export default function RecipeBook({
               className={"recipe-book-card" + (expanded ? " expanded" : "")}
               key={entry.id}
             >
-              <div className="book-label-art" aria-hidden="true">
-                <span className="label-rule" />
-                <span className="label-kicker">THE BREWMASTER COLLECTION</span>
-                <BrandMark size={92} />
-                <span className="label-title">
-                  {c.styles.find((s) => s.id === r.styleId)?.name ??
-                    "House recipe"}
-                </span>
-                <span className="label-subtitle">
-                  {r.origin?.brewery ?? "YOUR BREWHOUSE"}
-                </span>
-                <span className="label-batch">
-                  {prediction.abv.toFixed(1)}
-                  <small>% ABV · CALCULATED</small>
-                </span>
-                <span className="label-rule" />
-              </div>
               <div className="book-card-heading">
                 <div>
                   <Tag
@@ -299,12 +255,12 @@ export default function RecipeBook({
                     {entry.collection === "starter"
                       ? recipeOriginLabel(r)
                       : entry.collection === "draft"
-                        ? "UNSAVED DRAFT"
+                        ? "Unsaved draft"
                         : entry.collection === "community"
-                          ? "COMMUNITY · PUBLIC RECIPE"
-                          : `${entry.access?.visibility === "public" ? "MY RECIPE · SHARED PUBLICLY" : "MY RECIPE · PRIVATE"}${entry.unsaved ? " · UNSAVED EDITS" : ""}`}
+                          ? "Community"
+                          : `${entry.access?.visibility === "public" ? "Mine · shared" : "Mine · private"}${entry.unsaved ? " · unsaved edits" : ""}`}
                   </Tag>
-                  <h2>{r.name}</h2>
+                  <h3>{r.name}</h3>
                   <p>
                     {r.origin?.brewery && <>{r.origin.brewery} · </>}
                     {c.styles.find((s) => s.id === r.styleId)?.name ??
@@ -360,59 +316,11 @@ export default function RecipeBook({
                   <strong>{prediction.srm.toFixed(1)}</strong>
                   <span>SRM</span>
                 </div>
-                <Tag tone="objective">CALCULATED</Tag>
               </div>
-              <div className="book-hop-profile">
-                <h3>Hop profile</h3>
-                {profile.hops.length ? (
-                  profile.hops.map((hop) => (
-                    <div key={hop.id}>
-                      <b>{hop.name}</b>
-                      <p>
-                        {hop.additions.map((h, i) => (
-                          <span key={i}>
-                            {i > 0 ? " · " : ""}
-                            {(us ? h.grams / G_PER_OZ : h.grams).toFixed(
-                              us ? 2 : 0,
-                            )}{" "}
-                            {us ? "oz" : "g"} · {h.timing}
-                          </span>
-                        ))}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No hop additions.</p>
-                )}
-              </div>
-              <div className="book-flavor-profile">
-                <Tag tone="subjective">SUBJECTIVE · FLAVOR ESTIMATE</Tag>
-                <h3>Flavor & aroma</h3>
-                <div className="book-flavor-chips">
-                  {profile.descriptors.map((d) => (
-                    <span key={d.id}>
-                      {d.label} · {d.score.toFixed(1)}/5
-                    </span>
-                  ))}
-                </div>
-                {!profile.descriptors.length && (
-                  <p>
-                    No matching flavor evidence for this recipe’s ingredient
-                    usage.
-                  </p>
-                )}
-                <p>
-                  Body {(profile.flavor.scores.body ?? 0).toFixed(1)}/5 ·
-                  Dryness {(profile.flavor.scores.dryness ?? 0).toFixed(1)}/5 ·
-                  Perceived bitterness{" "}
-                  {(profile.flavor.scores.bitterness ?? 0).toFixed(1)}/5
-                </p>
-                <small>
-                  Brewer-consensus estimate, not a measurement or a verified
-                  commercial beer profile. View recipe for the full schedule and
-                  radar. Use a copy in the builder to explore ingredient
-                  contributions and descriptor sources.
-                </small>
+              <div className="book-flavor-chips">
+                {profile.descriptors.slice(0, 5).map((d) => (
+                  <span key={d.id}>{d.label}</span>
+                ))}
               </div>
               <div className="book-tags">
                 {r.tags?.map((t) => (
@@ -430,19 +338,19 @@ export default function RecipeBook({
                     <ArrowUpRight size={14} />
                   )}
                   {entry.collection === "starter"
-                    ? "Use a copy"
+                    ? "Brew this"
                     : entry.collection === "community"
-                      ? "Customize a private copy"
+                      ? "Make a copy"
                       : entry.collection === "draft"
-                        ? "Resume draft"
-                        : "Open recipe"}
+                        ? "Resume"
+                        : "Open"}
                 </button>
                 <button
                   className="button secondary"
                   aria-expanded={expanded}
                   onClick={() => setSelected(expanded ? null : entry.id)}
                 >
-                  {expanded ? "Hide details" : "View recipe"}
+                  {expanded ? "Hide" : "Details"}
                 </button>
                 {entry.collection !== "starter" && (
                   <button

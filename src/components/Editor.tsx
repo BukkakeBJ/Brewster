@@ -1,38 +1,48 @@
-import { Plus, Trash2, Wheat, Flower2, Thermometer } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
-import type { Recipe, Catalog } from "../engine/types";
+import type { Recipe, Catalog, Target } from "../engine/types";
 import {
   cToF,
   fToC,
   kgToLb,
   KG_PER_LB,
   G_PER_OZ,
-  scaleRecipe,
-  lToGal,
-  L_PER_GAL,
   midpoint,
+  predict,
 } from "../engine/calculations";
 import { brewingHelp } from "../brewingHelp";
-import IngredientPicker from "./IngredientPicker";
+import IngredientPicker, { IngredientInfo } from "./IngredientPicker";
 import type { BuilderStep } from "../engine/builder";
-import RecipeAdditives from "./RecipeAdditives";
 import Suggestions from "./Suggestions";
-import { Field, Section, Tag, HelpTerm } from "./ui";
+import HopSuggestions from "./HopSuggestions";
+import { Field, Section, HelpTerm } from "./ui";
 import { alphabetical } from "../engine/search";
 import { yeastFamilies, yeastGroups, yeastGuide } from "../engine/yeast";
 import { consensus } from "../engine/flavor";
+import { ingredientMatches } from "../engine/recommendations";
+import { waterSettings } from "../engine/waterPlan";
+
+const GRIST_COLORS = ["#c99a55", "#e2c27f", "#8a6a3c", "#d48558", "#55705a"];
+
 export default function Editor({
   recipe: r,
   onChange: set,
+  onSettings,
   catalog: c,
   us,
   section = "malts",
+  target,
+  userWeight,
 }: {
   recipe: Recipe;
   onChange: (r: Recipe) => void;
+  /** Saves edits to the recipe's water/pitching assumptions without rescaling ingredients. */
+  onSettings: (r: Recipe) => void;
   catalog: Catalog;
   us: boolean;
   section?: BuilderStep;
+  target: Target;
+  userWeight: number;
 }) {
   const update = (patch: Partial<Recipe>) => set({ ...r, ...patch });
   const [yeastType, setYeastType] = useState("");
@@ -51,418 +61,574 @@ export default function Editor({
         { tempC: r.fermentC },
       );
       return traits.length
-        ? `Estimated associations at this temperature: ${traits
+        ? `Tends toward ${traits
             .slice(0, 5)
             .map((d) => d.descriptor.replaceAll("-", " "))
-            .join(
-              ", ",
-            )}. Check the ingredient library for source records and confidence.`
-        : "No established beer flavor profile for this context. Record your own tasting observations.";
+            .join(", ")} at this temperature.`
+        : "No established beer flavor profile yet. Record your own tasting notes in the Brew Log.";
     })();
   const total = r.grains.reduce((s, g) => s + g.kg, 0);
   const temp = (v: number) => (us ? cToF(v) : v),
-    fromTemp = (v: number) => (us ? fToC(v) : v);
+    fromTemp = (v: number) => (us ? fToC(v) : v),
+    tempUnit = us ? "°F" : "°C";
+  const settings = waterSettings(r, c);
+  const p = predict(r, c);
+  const dry = yeast.form === "dry";
+  const useLabel = (use: string) =>
+    use === "dry hop" ? "Dry hop" : use === "whirlpool" ? "Whirlpool" : "Boil";
   return (
     <div className="editor-stack">
-      <Section
-        hidden={section !== "malts"}
-        title="Malt build"
-        eyebrow="COLOR · MALT CHARACTER · GRAVITY"
-        action={<Wheat size={22} />}
-      >
-        <div className="ingredient-header">
-          <span>Fermentable</span>
-          <span>Amount · {us ? "lb" : "kg"}</span>
-          <span>
-            <HelpTerm label="Grist" />
-          </span>
-        </div>
-        {r.grains.map((g, i) => {
-          const m = c.malts.find((m) => m.id === g.ingredientId)!;
-          return (
-            <div className="grain-row" key={i}>
-              <div>
-                <IngredientPicker
-                  label={`Fermentable ${i + 1}`}
-                  items={c.malts}
-                  selectedId={g.ingredientId}
-                  catalog={c}
-                  us={us}
-                  usage={{ percent: total ? (100 * g.kg) / total : 0 }}
-                  onChange={(id) =>
-                    update({
-                      grains: r.grains.map((row, j) =>
-                        j === i ? { ...row, ingredientId: id } : row,
-                      ),
-                    })
-                  }
-                />
-                <small>
-                  {m.type} · {m.lovibond} °L ·{" "}
-                  <HelpTerm
-                    label={`${m.ppg.toFixed(1)} PPG`}
-                    helpKey="Potential"
-                  />
-                </small>
-              </div>
-              <Field
-                label="Amount"
-                inputLabel={`${m.name} amount, fermentable ${i + 1}`}
-                suffix={us ? "lb" : "kg"}
-                value={us ? kgToLb(g.kg) : g.kg}
-                min={0}
-                step={0.05}
-                onChange={(n) =>
-                  update({
-                    grains: r.grains.map((g, j) =>
-                      j === i ? { ...g, kg: us ? n * KG_PER_LB : n } : g,
-                    ),
-                  })
-                }
-              />
-              <span className="percent">
-                {total ? ((g.kg / total) * 100).toFixed(1) : 0}%
+      {section === "malts" && (
+        <>
+          <Section
+            title="Malts & sugars"
+            action={
+              <span className="muted">
+                Total {(us ? kgToLb(total) : total).toFixed(2)}{" "}
+                {us ? "lb" : "kg"}
               </span>
-              <button
-                className="icon-button"
-                aria-label={`Remove grain ${i + 1}`}
-                onClick={() =>
-                  update({ grains: r.grains.filter((_, j) => i !== j) })
-                }
-              >
-                <Trash2 size={15} />
-              </button>
-            </div>
-          );
-        })}
-        <button
-          className="text-button"
-          onClick={() =>
-            update({
-              grains: [...r.grains, { ingredientId: c.malts[0].id, kg: 0.25 }],
-            })
-          }
-        >
-          <Plus size={15} /> Add fermentable
-        </button>
-        <div className="grist-bar">
-          {r.grains.map((g, i) => (
-            <span
-              key={i}
-              style={{
-                width: `${total ? (100 * g.kg) / total : 0}%`,
-                background: [
-                  "#bd8e4c",
-                  "#dfb977",
-                  "#72694e",
-                  "#d48558",
-                  "#465d4a",
-                ][i % 5],
-              }}
-            />
-          ))}
-        </div>
-        <small className="muted">
-          Total grist: {(us ? kgToLb(total) : total).toFixed(2)}{" "}
-          {us ? "lb" : "kg"}
-        </small>
-        <div className="field-grid">
-          <Field
-            label="Mash temperature"
-            suffix={us ? "°F" : "°C"}
-            value={temp(r.mashC)}
-            min={temp(40)}
-            max={temp(85)}
-            onChange={(n) => update({ mashC: fromTemp(n) })}
-          />
-          <Field
-            label="Mash duration"
-            suffix="min"
-            value={r.mashMinutes}
-            min={1}
-            max={240}
-            step={1}
-            onChange={(n) => update({ mashMinutes: n })}
-          />
-        </div>
-        <Suggestions
-          kind="malt"
-          recipe={r}
-          catalog={c}
-          onChange={set}
-          us={us}
-        />
-      </Section>
-      <Section
-        hidden={section !== "hops"}
-        title="Hop schedule"
-        eyebrow="02 / BITTERNESS & AROMA"
-        action={<Flower2 size={22} />}
-      >
-        {r.hops.map((h, i) => {
-          const hop = c.hops.find((a) => a.id === h.ingredientId)!;
-          const use =
-            h.use === "dry hop"
-              ? "Dry hopping"
-              : h.use === "whirlpool"
-                ? "Whirlpool"
-                : "Boil";
-          return (
-            <article
-              className="hop-addition"
-              key={i}
-              aria-label={`${hop.name} · ${use} · addition ${i + 1}`}
-            >
-              <header className="hop-addition-heading">
-                <div>
-                  <h3>{hop.name}</h3>
-                  <span>{use}</span>
-                </div>
-                <button
-                  className="icon-button"
-                  aria-label={`Remove ${hop.name} ${use.toLowerCase()} addition ${i + 1}`}
-                  onClick={() =>
-                    update({ hops: r.hops.filter((_, j) => j !== i) })
-                  }
-                >
-                  <Trash2 size={17} />
-                </button>
-              </header>
-              <div className="hop-row">
-                <div className="field">
-                  <span>Hop variety</span>
-                  <IngredientPicker
-                    label={`Hop variety for addition ${i + 1}`}
-                    items={c.hops}
-                    selectedId={h.ingredientId}
-                    catalog={c}
-                    usage={{ use: h.use }}
-                    us={us}
-                    onChange={(id) =>
-                      update({
-                        hops: r.hops.map((row, j) =>
-                          j === i
-                            ? { ...row, ingredientId: id, alpha: undefined }
-                            : row,
-                        ),
-                      })
-                    }
-                  />
-                </div>
-                <Field
-                  label="Amount"
-                  inputLabel={`${hop.name} ${use.toLowerCase()} amount, addition ${i + 1}`}
-                  suffix={us ? "oz" : "g"}
-                  value={us ? h.grams / G_PER_OZ : h.grams}
-                  min={0}
-                  step={us ? 0.1 : 1}
-                  onChange={(n) =>
-                    update({
-                      hops: r.hops.map((h, j) =>
-                        j === i ? { ...h, grams: us ? n * G_PER_OZ : n } : h,
-                      ),
-                    })
-                  }
+            }
+          >
+            <div className="grist-bar" aria-hidden="true">
+              {r.grains.map((g, i) => (
+                <span
+                  key={i}
+                  style={{
+                    width: `${total ? (100 * g.kg) / total : 0}%`,
+                    background: GRIST_COLORS[i % GRIST_COLORS.length],
+                  }}
                 />
-                <label className="field">
-                  <span>Add during</span>
-                  <select
-                    aria-label={`Addition stage for ${hop.name}, addition ${i + 1}`}
-                    value={h.use}
-                    onChange={(e) =>
-                      update({
-                        hops: r.hops.map((h, j) =>
-                          j === i
-                            ? {
-                                ...h,
-                                use: e.target.value as typeof h.use,
-                                minutes:
-                                  e.target.value === "dry hop" ? 4320 : 20,
-                              }
-                            : h,
-                        ),
-                      })
-                    }
+              ))}
+            </div>
+            <div className="ingredient-list">
+              {r.grains.map((g, i) => {
+                const m = c.malts.find((m) => m.id === g.ingredientId)!;
+                return (
+                  <div className="grain-row" key={i}>
+                    <i
+                      className="grain-key"
+                      style={{
+                        background: GRIST_COLORS[i % GRIST_COLORS.length],
+                      }}
+                    />
+                    <div className="grain-name">
+                      <IngredientPicker
+                        label={`Fermentable ${i + 1}`}
+                        items={c.malts}
+                        selectedId={g.ingredientId}
+                        catalog={c}
+                        us={us}
+                        usage={{ percent: total ? (100 * g.kg) / total : 0 }}
+                        onChange={(id) =>
+                          update({
+                            grains: r.grains.map((row, j) =>
+                              j === i ? { ...row, ingredientId: id } : row,
+                            ),
+                          })
+                        }
+                      />
+                      <small>
+                        {m.type} · {m.lovibond} °L ·{" "}
+                        {total ? ((g.kg / total) * 100).toFixed(0) : 0}% of
+                        grain bill
+                      </small>
+                    </div>
+                    <Field
+                      label="Amount"
+                      inputLabel={`${m.name} amount, fermentable ${i + 1}`}
+                      suffix={us ? "lb" : "kg"}
+                      value={us ? kgToLb(g.kg) : g.kg}
+                      min={0}
+                      step={0.05}
+                      decimals={2}
+                      help=""
+                      onChange={(n) =>
+                        update({
+                          grains: r.grains.map((g, j) =>
+                            j === i ? { ...g, kg: us ? n * KG_PER_LB : n } : g,
+                          ),
+                        })
+                      }
+                    />
+                    <button
+                      className="icon-button"
+                      aria-label={`Remove ${m.name}`}
+                      onClick={() =>
+                        update({ grains: r.grains.filter((_, j) => i !== j) })
+                      }
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                );
+              })}
+              {!r.grains.length && (
+                <p className="empty-row">
+                  No malts yet. Most beers start with a base malt such as 2-Row
+                  or Pilsner.
+                </p>
+              )}
+            </div>
+            <IngredientPicker
+              label="Add a malt or sugar"
+              addLabel="Add malt"
+              items={c.malts}
+              selectedId=""
+              catalog={c}
+              us={us}
+              onChange={(id) =>
+                update({
+                  grains: [
+                    ...r.grains,
+                    { ingredientId: id, kg: us ? 0.5 * KG_PER_LB : 0.25 },
+                  ],
+                })
+              }
+            />
+          </Section>
+          <Section title="Mash">
+            <p className="muted">
+              Mash cooler ({us ? "148–150 °F" : "64–65 °C"}) for a drier,
+              crisper beer, or warmer ({us ? "154–158 °F" : "68–70 °C"}) for
+              more body and sweetness.
+            </p>
+            <div className="field-grid">
+              <Field
+                label="Mash temperature"
+                suffix={tempUnit}
+                value={temp(r.mashC)}
+                decimals={1}
+                min={temp(40)}
+                max={temp(85)}
+                onChange={(n) => update({ mashC: fromTemp(n) })}
+              />
+              <Field
+                label="Mash duration"
+                suffix="min"
+                value={r.mashMinutes}
+                min={1}
+                max={240}
+                step={1}
+                onChange={(n) => update({ mashMinutes: n })}
+              />
+            </div>
+          </Section>
+          <Suggestions
+            kind="malt"
+            recipe={r}
+            catalog={c}
+            onChange={set}
+            us={us}
+          />
+        </>
+      )}
+      {section === "hops" && (
+        <>
+          <Section title="Hop schedule">
+            <div className="ingredient-list">
+              {r.hops.map((h, i) => {
+                const hop = c.hops.find((a) => a.id === h.ingredientId)!;
+                const use = useLabel(h.use);
+                return (
+                  <article
+                    className="hop-addition"
+                    key={i}
+                    aria-label={`${hop.name} · ${use} · addition ${i + 1}`}
                   >
-                    <option value="boil">Boil</option>
-                    <option value="dry hop">Dry hopping</option>
-                    <option value="whirlpool">Whirlpool</option>
-                  </select>
-                </label>
+                    <div className="hop-addition-head">
+                      <span className={`use-badge ${h.use.replace(" ", "-")}`}>
+                        {use}
+                      </span>
+                      <IngredientPicker
+                        label={`Hop variety for addition ${i + 1}`}
+                        items={c.hops}
+                        selectedId={h.ingredientId}
+                        catalog={c}
+                        usage={{ use: h.use }}
+                        us={us}
+                        onChange={(id) =>
+                          update({
+                            hops: r.hops.map((row, j) =>
+                              j === i
+                                ? { ...row, ingredientId: id, alpha: undefined }
+                                : row,
+                            ),
+                          })
+                        }
+                      />
+                      <button
+                        className="icon-button"
+                        aria-label={`Remove ${hop.name} ${use.toLowerCase()} addition ${i + 1}`}
+                        onClick={() =>
+                          update({ hops: r.hops.filter((_, j) => j !== i) })
+                        }
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="hop-row">
+                      <Field
+                        label="Amount"
+                        inputLabel={`${hop.name} ${use.toLowerCase()} amount, addition ${i + 1}`}
+                        suffix={us ? "oz" : "g"}
+                        value={us ? h.grams / G_PER_OZ : h.grams}
+                        min={0}
+                        step={us ? 0.1 : 1}
+                        decimals={us ? 2 : 0}
+                        help=""
+                        onChange={(n) =>
+                          update({
+                            hops: r.hops.map((h, j) =>
+                              j === i
+                                ? { ...h, grams: us ? n * G_PER_OZ : n }
+                                : h,
+                            ),
+                          })
+                        }
+                      />
+                      <label className="field">
+                        <span>When</span>
+                        <select
+                          aria-label={`Addition stage for ${hop.name}, addition ${i + 1}`}
+                          value={h.use}
+                          onChange={(e) =>
+                            update({
+                              hops: r.hops.map((h, j) =>
+                                j === i
+                                  ? {
+                                      ...h,
+                                      use: e.target.value as typeof h.use,
+                                      minutes:
+                                        e.target.value === "dry hop"
+                                          ? 4320
+                                          : 20,
+                                    }
+                                  : h,
+                              ),
+                            })
+                          }
+                        >
+                          <option value="boil">Boil</option>
+                          <option value="whirlpool">Whirlpool</option>
+                          <option value="dry hop">Dry hop</option>
+                        </select>
+                      </label>
+                      <Field
+                        label={
+                          h.use === "boil"
+                            ? "Minutes left in boil"
+                            : h.use === "whirlpool"
+                              ? "Whirlpool minutes"
+                              : "Dry hop days"
+                        }
+                        inputLabel={`${hop.name} ${use.toLowerCase()} time, addition ${i + 1}`}
+                        suffix={h.use === "dry hop" ? "days" : "min"}
+                        help={brewingHelp(
+                          h.use === "dry hop" ? "Hop days" : "Hop minutes",
+                        )}
+                        value={
+                          h.use === "dry hop" ? h.minutes / 1440 : h.minutes
+                        }
+                        decimals={1}
+                        min={0}
+                        step={1}
+                        onChange={(n) =>
+                          update({
+                            hops: r.hops.map((h, j) =>
+                              j === i
+                                ? {
+                                    ...h,
+                                    minutes:
+                                      n * (h.use === "dry hop" ? 1440 : 1),
+                                  }
+                                : h,
+                            ),
+                          })
+                        }
+                      />
+                      <Field
+                        label="Alpha acids"
+                        inputLabel={`${hop.name} alpha acids, addition ${i + 1}`}
+                        suffix="%"
+                        value={h.alpha ?? midpoint(hop.alpha)}
+                        decimals={1}
+                        min={0}
+                        max={100}
+                        onChange={(n) =>
+                          update({
+                            hops: r.hops.map((h, j) =>
+                              j === i ? { ...h, alpha: n } : h,
+                            ),
+                          })
+                        }
+                      />
+                    </div>
+                  </article>
+                );
+              })}
+              {!r.hops.length && (
+                <p className="empty-row">
+                  No hops yet. Add one below, or pick from the suggestions.
+                </p>
+              )}
+            </div>
+            <IngredientPicker
+              label="Add a hop"
+              addLabel="Add hop"
+              items={c.hops}
+              selectedId=""
+              catalog={c}
+              us={us}
+              onChange={(id) =>
+                update({
+                  hops: [
+                    ...r.hops,
+                    {
+                      ingredientId: id,
+                      grams: r.batchL * 0.75,
+                      use: "boil",
+                      minutes: r.hops.some((h) => h.use === "boil") ? 15 : 60,
+                    },
+                  ],
+                })
+              }
+            />
+            <details className="advanced">
+              <summary>Whirlpool bitterness assumption</summary>
+              <Field
+                label="Whirlpool utilization factor"
+                value={r.whirlpoolFactor}
+                min={0}
+                max={1}
+                step={0.01}
+                onChange={(n) => update({ whirlpoolFactor: n })}
+              />
+            </details>
+          </Section>
+          <HopSuggestions
+            recipe={r}
+            catalog={c}
+            target={target}
+            userWeight={userWeight}
+            us={us}
+            onChange={set}
+          />
+        </>
+      )}
+      {section === "yeast" && (
+        <>
+          <Section title="Your yeast">
+            <div className="yeast-current">
+              <div className="ingredient-name-with-info">
+                <h3>{yeast.name}</h3>
+                <IngredientInfo
+                  item={yeast}
+                  catalog={c}
+                  usage={{ tempC: r.fermentC }}
+                  us={us}
+                />
+              </div>
+              <p className="muted">
+                {yeast.lab}
+                {yeast.code ? ` · ${yeast.code}` : ""} · {yeast.form}
+              </p>
+              <p>{yeastFlavor}</p>
+              <dl className="mini-specs">
+                <div>
+                  <dt>
+                    <HelpTerm label="Attenuation" />
+                  </dt>
+                  <dd>
+                    {yeast.attenuation
+                      ? `${yeast.attenuation.join("–")}%`
+                      : "Unknown"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Best temperature</dt>
+                  <dd>
+                    {yeast.tempC
+                      ? `${yeast.tempC.map((t) => temp(t).toFixed(0)).join("–")} ${tempUnit}`
+                      : "Not published"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>
+                    <HelpTerm label="Alcohol tolerance" />
+                  </dt>
+                  <dd>
+                    {yeast.alcoholTolerance === null
+                      ? "Unknown"
+                      : `Up to ${yeast.alcoholTolerance}%`}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="yeast-change">
+              <label className="field">
+                <span>Yeast type</span>
+                <select
+                  value={yeastType}
+                  onChange={(e) => setYeastType(e.target.value)}
+                >
+                  <option value="">All types</option>
+                  {alphabetical(yeastFamilies, (f) => f.label).map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="field">
+                <span>Change strain</span>
+                <IngredientPicker
+                  label="Yeast strain"
+                  items={yeastOptions}
+                  selectedId={r.yeastId}
+                  catalog={c}
+                  usage={{ tempC: r.fermentC }}
+                  us={us}
+                  onChange={(id) => update({ yeastId: id })}
+                />
+              </div>
+            </div>
+          </Section>
+          <Section title="Good matches for your goals">
+            <div className="yeast-suggestion-list">
+              {ingredientMatches(target, c, userWeight)
+                .yeasts.slice(0, 3)
+                .map((match) => {
+                  const option = c.yeasts.find((y) => y.id === match.id)!;
+                  const estimate = predict({ ...r, yeastId: option.id }, c);
+                  const chosen = r.yeastId === option.id;
+                  return (
+                    <article
+                      key={option.id}
+                      className={chosen ? "selected" : ""}
+                    >
+                      <div className="ingredient-name-with-info">
+                        <h3>{option.name}</h3>
+                        <IngredientInfo item={option} catalog={c} us={us} />
+                      </div>
+                      <p className="muted">
+                        {option.lab} {option.code}
+                      </p>
+                      <p>
+                        {match.descriptors
+                          .slice(0, 3)
+                          .map((d) => d.label)
+                          .join(" · ") || "Neutral character"}
+                      </p>
+                      <p className="yeast-estimate">
+                        <strong>{estimate.abv.toFixed(1)}% ABV</strong> · FG{" "}
+                        {estimate.fg.toFixed(3)}
+                      </p>
+                      <button
+                        className={`button ${chosen ? "ghost" : "secondary"}`}
+                        type="button"
+                        disabled={chosen}
+                        onClick={() =>
+                          set({
+                            ...r,
+                            yeastId: option.id,
+                            fermentC: option.tempC
+                              ? Math.min(
+                                  option.tempC[1],
+                                  Math.max(option.tempC[0], r.fermentC),
+                                )
+                              : r.fermentC,
+                          })
+                        }
+                      >
+                        {chosen ? "In your recipe" : "Use this yeast"}
+                      </button>
+                    </article>
+                  );
+                })}
+            </div>
+          </Section>
+          <Section title="Fermentation">
+            <div className="field-grid">
+              <Field
+                label="Fermentation temperature"
+                suffix={tempUnit}
+                value={temp(r.fermentC)}
+                decimals={1}
+                min={temp(0)}
+                max={temp(45)}
+                onChange={(n) => update({ fermentC: fromTemp(n) })}
+              />
+              <Field
+                label="Carbonation"
+                suffix="vol"
+                value={r.carbonation}
+                min={0}
+                max={5}
+                onChange={(n) => update({ carbonation: n })}
+              />
+            </div>
+            <p className="muted">
+              Pitch about <strong>{p.pitchBillion.toFixed(0)} billion</strong>{" "}
+              healthy cells:{" "}
+              {dry
+                ? `≈ ${(p.pitchBillion / settings.dryCellsBillionPerG).toFixed(1)} g, or ${Math.ceil(p.pitchBillion / settings.dryCellsBillionPerG / settings.dryPackGrams)} packet(s) of ${settings.dryPackGrams} g`
+                : `≈ ${Math.ceil(p.pitchBillion / settings.liquidCellsBillionPerPack)} fresh liquid pack(s), or a starter`}
+              .
+            </p>
+            <details className="advanced">
+              <summary>Pitching assumptions</summary>
+              <div className="field-grid">
+                <Field
+                  label="Pitch multiplier"
+                  suffix="×"
+                  value={r.pitchMultiplier}
+                  min={0.1}
+                  max={3}
+                  onChange={(n) => update({ pitchMultiplier: n })}
+                />
                 <Field
                   label={
-                    h.use === "boil" ? "Time before boil ends" : "Contact time"
+                    dry ? "Viable cells per gram" : "Viable cells per pack"
                   }
-                  inputLabel={`${hop.name} ${use.toLowerCase()} time, addition ${i + 1}`}
-                  suffix={h.use === "dry hop" ? "days" : "min"}
-                  help={brewingHelp(
-                    h.use === "dry hop" ? "Hop days" : "Hop minutes",
-                  )}
-                  value={h.use === "dry hop" ? h.minutes / 1440 : h.minutes}
-                  min={0}
-                  step={1}
+                  suffix="billion"
+                  value={
+                    dry
+                      ? settings.dryCellsBillionPerG
+                      : settings.liquidCellsBillionPerPack
+                  }
+                  min={0.1}
+                  help="Use the cell count your supplier lists, allowing for age and storage."
                   onChange={(n) =>
-                    update({
-                      hops: r.hops.map((h, j) =>
-                        j === i
-                          ? {
-                              ...h,
-                              minutes: n * (h.use === "dry hop" ? 1440 : 1),
-                            }
-                          : h,
-                      ),
+                    onSettings({
+                      ...r,
+                      waterPlan: {
+                        ...settings,
+                        ...(dry
+                          ? { dryCellsBillionPerG: n }
+                          : { liquidCellsBillionPerPack: n }),
+                      },
                     })
                   }
                 />
-                <Field
-                  label="Alpha acids"
-                  inputLabel={`${hop.name} alpha acids, addition ${i + 1}`}
-                  suffix="%"
-                  value={h.alpha ?? midpoint(hop.alpha)}
-                  min={0}
-                  max={100}
-                  onChange={(n) =>
-                    update({
-                      hops: r.hops.map((h, j) =>
-                        j === i ? { ...h, alpha: n } : h,
-                      ),
-                    })
-                  }
-                />
+                {dry && (
+                  <Field
+                    label="Dry yeast packet size"
+                    suffix="g"
+                    value={settings.dryPackGrams}
+                    min={0.1}
+                    onChange={(n) =>
+                      onSettings({
+                        ...r,
+                        waterPlan: { ...settings, dryPackGrams: n },
+                      })
+                    }
+                  />
+                )}
               </div>
-            </article>
-          );
-        })}
-        <button
-          className="text-button"
-          onClick={() =>
-            update({
-              hops: [
-                ...r.hops,
-                {
-                  ingredientId: c.hops.find((h) => h.name === "Cascade")!.id,
-                  grams: r.batchL * 0.75,
-                  use: "boil",
-                  minutes: 15,
-                },
-              ],
-            })
-          }
-        >
-          <Plus size={15} /> Add hop addition
-        </button>
-        <details className="advanced">
-          <summary>Whirlpool utilization assumption</summary>{" "}
-          <Field
-            label="Whirlpool utilization factor"
-            value={r.whirlpoolFactor}
-            min={0}
-            max={1}
-            step={0.01}
-            onChange={(n) => update({ whirlpoolFactor: n })}
-          />
-        </details>
-        <Suggestions kind="hop" recipe={r} catalog={c} onChange={set} us={us} />
-      </Section>
-      <Section
-        hidden={section !== "yeast"}
-        title="Yeast & fermentation"
-        eyebrow="03 / THE FERMENTATION"
-        action={<Thermometer size={22} />}
-      >
-        <label className="field">
-          <span>Yeast type</span>
-          <select
-            value={yeastType}
-            onChange={(e) => setYeastType(e.target.value)}
-          >
-            <option value="">All yeast types</option>
-            {alphabetical(yeastFamilies, (f) => f.label).map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <p className="muted">
-          Type filters narrow the strain list. Choose a strain to change the
-          recipe; your current strain stays available.
-        </p>
-        <div className="field">
-          <span>Yeast strain</span>
-          <IngredientPicker
-            label="Yeast strain"
-            items={yeastOptions}
-            selectedId={r.yeastId}
-            catalog={c}
-            usage={{ tempC: r.fermentC }}
-            us={us}
-            onChange={(id) => update({ yeastId: id })}
-          />
-        </div>
-        <div className="yeast-selection-profile">
-          <h3>{yeast.name}</h3>
-          <p className="muted">
-            {yeast.lab}
-            {yeast.code ? ` · ${yeast.code}` : ""}
-          </p>
-          <p>
-            <Tag tone="objective">REFERENCE SPECS</Tag> Alcohol tolerance:{" "}
-            <strong>
-              {yeast.alcoholTolerance === null
-                ? "Unknown for brewing"
-                : `up to ${yeast.alcoholTolerance}% ABV`}
-            </strong>
-            .{" "}
-            {yeast.attenuation
-              ? `Apparent attenuation ${yeast.attenuation.join("–")}%.`
-              : "Beer-wort attenuation unknown; FG/ABV use a labeled model assumption."}
-          </p>
-          <Tag>FLAVOR PROFILE · SUBJECTIVE</Tag>
-          <p>{yeastFlavor}</p>
-          <a href={yeast.source.url} target="_blank" rel="noreferrer">
-            Strain source & specifications ↗
-          </a>
-        </div>
-        <div className="field-grid">
-          <Field
-            label="Fermentation temperature"
-            suffix={us ? "°F" : "°C"}
-            value={temp(r.fermentC)}
-            min={temp(0)}
-            max={temp(45)}
-            onChange={(n) => update({ fermentC: fromTemp(n) })}
-          />
-          <Field
-            label="Pitch multiplier"
-            suffix="×"
-            value={r.pitchMultiplier}
-            min={0.1}
-            max={3}
-            onChange={(n) => update({ pitchMultiplier: n })}
-          />
-          <Field
-            label="Carbonation"
-            suffix="vol"
-            value={r.carbonation}
-            min={0}
-            max={5}
-            onChange={(n) => update({ carbonation: n })}
-          />
-        </div>
-        <Tag tone="objective">Strain specs</Tag>
-        <p className="muted">
-          <HelpTerm label="Attenuation" />{" "}
-          {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation?.join("–") ??
-            "Unknown for malt wort"}
-          {c.yeasts.find((y) => y.id === r.yeastId)!.attenuation ? "%" : ""} ·
-          Verify <HelpTerm label="POF" /> and <HelpTerm label="diastaticus" />{" "}
-          status with the lab.
-        </p>
-      </Section>
-      <div hidden={section !== "additives"}>
-        <RecipeAdditives recipe={r} onChange={set} us={us} />
-      </div>
+            </details>
+          </Section>
+        </>
+      )}
     </div>
   );
 }

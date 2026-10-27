@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { ChevronDown, Info, Search, X } from "lucide-react";
+import { ChevronDown, Info, Plus, Search, X } from "lucide-react";
 import type { Catalog } from "../engine/types";
 import type { Usage } from "../engine/flavor";
 import {
@@ -36,6 +36,7 @@ export default function IngredientPicker({
   usage,
   us,
   onChange,
+  addLabel,
 }: {
   label: string;
   items: SelectableIngredient[];
@@ -44,6 +45,8 @@ export default function IngredientPicker({
   usage?: Usage;
   us: boolean;
   onChange: (id: string) => void;
+  /** Render the trigger as an "add" button instead of the current choice. */
+  addLabel?: string;
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -51,7 +54,7 @@ export default function IngredientPicker({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [highlighted, setHighlighted] = useState(selectedId);
-  const selected = items.find((item) => item.id === selectedId)!;
+  const selected = items.find((item) => item.id === selectedId);
   const filtered = useMemo(
     () =>
       searchByName(
@@ -97,7 +100,9 @@ export default function IngredientPicker({
       <div className="ingredient-picker-control">
         <button
           type="button"
-          className="ingredient-picker-trigger"
+          className={
+            addLabel ? "button secondary add-ingredient" : "ingredient-picker-trigger"
+          }
           aria-label={label}
           aria-haspopup="dialog"
           ref={opener}
@@ -107,20 +112,30 @@ export default function IngredientPicker({
             setOpen(true);
           }}
         >
-          <span>
-            {selected.kind === "yeast"
-              ? `${selected.lab} ${selected.code} · `
-              : ""}
-            {selected.name}
-          </span>
-          <ChevronDown size={17} />
+          {addLabel ? (
+            <>
+              <Plus size={16} /> {addLabel}
+            </>
+          ) : (
+            <>
+              <span>
+                {selected?.kind === "yeast"
+                  ? `${selected.lab} ${selected.code} · `
+                  : ""}
+                {selected?.name ?? "Choose…"}
+              </span>
+              <ChevronDown size={17} />
+            </>
+          )}
         </button>
-        <IngredientInfo
-          item={selected}
-          catalog={catalog}
-          usage={usage}
-          us={us}
-        />
+        {!addLabel && selected && (
+          <IngredientInfo
+            item={selected}
+            catalog={catalog}
+            usage={usage}
+            us={us}
+          />
+        )}
       </div>
       {open && (
         <dialog
@@ -159,8 +174,7 @@ export default function IngredientPicker({
             />
           </label>
           <p className="muted picker-instruction">
-            Highlight a name to preview it. Select the name to use it in your
-            recipe.
+            Tap a name to choose it, or the ⓘ button to read about it first.
           </p>
           <div className="ingredient-picker-body">
             <div

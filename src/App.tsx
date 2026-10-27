@@ -6,19 +6,21 @@ import {
   Copy,
   FlaskConical,
   Download,
+  Home as HomeIcon,
   Save,
   Printer,
   Upload,
-  ArrowUpRight,
   Check,
   Plus,
+  Wand2,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { ensureWorkspace, getJson } from "./api";
 import RecipeSharing from "./components/RecipeSharing";
 import type { SavedRecipe, SavedBrewLog, Visibility } from "./sharing";
 import { catalog as baseCatalog } from "./catalog";
 import BrandMark from "./components/BrandMark";
-import StudioHero from "./components/StudioHero";
 import BuilderHeader from "./components/BuilderHeader";
 import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
@@ -26,6 +28,7 @@ import { recipeSchema } from "./validation";
 import RecipeBook from "./components/RecipeBook";
 import { createAdditiveAddition } from "./engine/additives";
 import RecipeNotes from "./components/RecipeNotes";
+import RecipeAdditives from "./components/RecipeAdditives";
 import { readDraftBank, copyBookRecipe } from "./engine/recipeBook";
 import {
   defaultRecipe,
@@ -36,16 +39,19 @@ import type {
   Recipe,
   Prediction,
   Target,
-  BrewLog as Log,
+  Style,
+  Catalog,
 } from "./engine/types";
-import { beerColor, predict, lToGal } from "./engine/calculations";
+import { predict, lToGal } from "./engine/calculations";
 import { download, exportBeerXML, importRecipe } from "./io";
 import Editor from "./components/Editor";
 import Library from "./components/Library";
 import Design from "./components/Design";
 import FlavorPanel from "./components/FlavorPanel";
+import Home from "./components/Home";
+import PredictionBar from "./components/PredictionBar";
 import { flavorPredict } from "./engine/flavor";
-import { Section, Tag, HelpTerm } from "./components/ui";
+import { Section, HelpTerm } from "./components/ui";
 import { alphabetical } from "./engine/search";
 import {
   builderSteps,
@@ -53,16 +59,30 @@ import {
   recipeAtFixedWater,
   type BuilderStep,
 } from "./engine/builder";
-import { waterSettings } from "./engine/waterPlan";
+import { planFromWater, waterSettings } from "./engine/waterPlan";
 import WaterPlanner from "./components/WaterPlanner";
-import HopSuggestions from "./components/HopSuggestions";
 import RecipeSummary from "./components/RecipeSummary";
-import { ingredientMatches } from "./engine/recommendations";
-import { IngredientInfo } from "./components/IngredientPicker";
+import {
+  guidance,
+  matchTargetAbv,
+  matchTargetIbu,
+  type Tip,
+} from "./engine/guidance";
+
+type View = "home" | "build" | "book" | "log" | "library";
+const views: { id: View; label: string; icon: typeof HomeIcon }[] = [
+  { id: "home", label: "Home", icon: HomeIcon },
+  { id: "build", label: "Build", icon: FlaskConical },
+  { id: "book", label: "Recipes", icon: BookMarked },
+  { id: "log", label: "Brew Log", icon: NotebookPen },
+  { id: "library", label: "Ingredients", icon: BookOpen },
+];
+const isView = (v: string | null): v is View => views.some((x) => x.id === v);
+
 function printBrewSheet() {
   const panels = [
     ...document.querySelectorAll<HTMLDetailsElement>(
-      "#builder-recipe details.builder-optional:not([open])",
+      "#builder-recipe details:not([open])",
     ),
   ];
   const restore = () =>
@@ -75,24 +95,87 @@ function printBrewSheet() {
   window.addEventListener("afterprint", restore, { once: true });
   window.print();
 }
+
+/** The numbers each builder step can move, so tips stay relevant to the page. */
+const stepTips: Partial<Record<BuilderStep, Tip["key"][]>> = {
+  malts: ["abv", "srm", "fg"],
+  hops: ["ibu"],
+  yeast: ["abv", "fg"],
+};
+
+function StyleCheck({
+  p,
+  style,
+}: {
+  p: Prediction;
+  style?: Style;
+}) {
+  if (!style) return null;
+  return (
+    <Section title="Style check">
+      <p className="muted">How this recipe compares with {style.name}.</p>
+      {(["og", "fg", "abv", "ibu", "srm"] as const).map((k) => {
+        const range = style[k];
+        const value = p[k];
+        const status =
+          value < range[0] ? "low" : value > range[1] ? "high" : "ok";
+        return (
+          <div className={`style-row ${status}`} key={k}>
+            <div>
+              <b>
+                <HelpTerm label={k.toUpperCase()} />
+              </b>
+              <span>
+                {value.toFixed(k === "og" || k === "fg" ? 3 : 1)}
+                <small>
+                  {status === "ok"
+                    ? "In range"
+                    : status === "low"
+                      ? "Below"
+                      : "Above"}
+                </small>
+              </span>
+            </div>
+            <div className="range-meter">
+              <i
+                style={{
+                  left: `${Math.max(0, Math.min(100, ((value - range[0]) / (range[1] - range[0] || 1)) * 60 + 20))}%`,
+                }}
+              />
+            </div>
+            <small>
+              {range
+                .map((n) => n.toFixed(k === "og" || k === "fg" ? 3 : 1))
+                .join(" – ")}
+            </small>
+          </div>
+        );
+      })}
+    </Section>
+  );
+}
+
 export default function App() {
   const sharedWorkspace = !["localhost", "127.0.0.1", "[::1]"].includes(
     window.location.hostname,
   );
   const [builderStep, setBuilderStep] = useState<BuilderStep>(() => {
     const savedStep = localStorage.getItem("brew-builder-step");
-    return isBuilderStep(savedStep) ? savedStep : "water";
+    return savedStep === "additives"
+      ? "summary"
+      : isBuilderStep(savedStep)
+        ? savedStep
+        : "water";
   });
   const [goalResetKey, setGoalResetKey] = useState(0);
   const [designTarget, setDesignTarget] = useState<Target>(
     structuredClone(defaultTarget),
   );
-  const [tab, setActiveTab] = useState(() =>
-      localStorage.getItem("brew-builder-step") === "goals"
-        ? "Design"
-        : "Recipe Editor",
-    ),
-    [recipe, setRecipe] = useState<Recipe>(() => {
+  const [view, setActiveView] = useState<View>(() => {
+    const stored = localStorage.getItem("brew-view");
+    return isView(stored) ? stored : "home";
+  });
+  const [recipe, setRecipe] = useState<Recipe>(() => {
       try {
         return recipeSchema.parse(
           JSON.parse(localStorage.getItem("brew-draft") ?? "null"),
@@ -102,7 +185,7 @@ export default function App() {
       }
     }),
     [saved, setSaved] = useState<SavedRecipe[]>([]),
-    [us, setUs] = useState(() => localStorage.getItem("brew-units") === "us"),
+    [us, setUs] = useState(() => localStorage.getItem("brew-units") !== "metric"),
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
   const [logs, setLogs] = useState<SavedBrewLog[]>([]);
@@ -114,6 +197,9 @@ export default function App() {
     [logs],
   );
   const [designFromRecipe, setDesignFromRecipe] = useState<Recipe>();
+  const [returning, setReturning] = useState(
+    () => localStorage.getItem("brew-draft") !== null,
+  );
   const [drafts, setDrafts] = useState<Record<string, Recipe>>(() => {
     try {
       return readDraftBank(localStorage.getItem("brew-drafts"));
@@ -134,7 +220,7 @@ export default function App() {
       return { personalize: false, userWeight: 2, calibrateYeast: false };
     }
   });
-  const libraryCatalog = useMemo(
+  const libraryCatalog = useMemo<Catalog>(
     () => ({
       ...baseCatalog,
       descriptors: [
@@ -160,21 +246,23 @@ export default function App() {
       .catch(() => setError("Brew log API unavailable."));
   }, []);
   const scrollPositions = useRef<Record<string, number>>({});
-  const inBuilder = tab === "Design" || tab === "Recipe Editor";
-  const activeNavigation = inBuilder ? "Recipe Builder" : tab;
-  const scrollKey = inBuilder ? `builder:${builderStep}` : tab;
-  const setTab = (next: string) => {
+  const scrollKey = view === "build" ? `build:${builderStep}` : view;
+  const setView = (next: View) => {
     scrollPositions.current[scrollKey] = window.scrollY;
-    setActiveTab(next);
+    setActiveView(next);
   };
   const goToStep = (step: BuilderStep) => {
     scrollPositions.current[scrollKey] = window.scrollY;
+    setReturning(true);
     setBuilderStep(step);
-    setActiveTab(step === "goals" ? "Design" : "Recipe Editor");
+    setActiveView("build");
   };
   useEffect(() => {
     localStorage.setItem("brew-builder-step", builderStep);
   }, [builderStep]);
+  useEffect(() => {
+    localStorage.setItem("brew-view", view);
+  }, [view]);
   useLayoutEffect(() => {
     window.scrollTo(0, scrollPositions.current[scrollKey] ?? 0);
   }, [scrollKey]);
@@ -205,6 +293,12 @@ export default function App() {
     scrollPositions.current = {};
     goToStep("water");
   };
+  const openRecipe = (r: Recipe, step: BuilderStep = "summary") => {
+    setRecipe(r);
+    setDesignFromRecipe(r);
+    scrollPositions.current[`build:${step}`] = 0;
+    goToStep(step);
+  };
   useLayoutEffect(() => {
     try {
       localStorage.setItem("brew-draft", JSON.stringify(recipe));
@@ -214,7 +308,7 @@ export default function App() {
       setDrafts(next);
     } catch {
       setError(
-        "Draft backup unavailable; save the recipe to SQLite before leaving.",
+        "Draft backup unavailable; save the recipe before leaving this page.",
       );
     }
   }, [recipe]);
@@ -229,15 +323,13 @@ export default function App() {
     const id = new URLSearchParams(window.location.search).get("recipe");
     if (!id) return;
     getJson<SavedRecipe>("/api/recipes/" + encodeURIComponent(id))
-      .then((r) => {
-        setRecipe(
+      .then((r) =>
+        openRecipe(
           r.access.owned
             ? recipeSchema.parse(r)
             : copyBookRecipe(r, crypto.randomUUID()),
-        );
-        setDesignFromRecipe(recipeSchema.parse(r));
-        goToStep("summary");
-      })
+        ),
+      )
       .catch(() => setError("This recipe is private or no longer shared."));
   }, []);
   const notify = (s: string) => {
@@ -257,6 +349,19 @@ export default function App() {
   } catch (e) {
     calculationError = String(e);
   }
+  const style = catalog.styles.find((s) => s.id === recipe.styleId);
+  let bottles: number | undefined;
+  try {
+    const plan = waterSettings(recipe, catalog);
+    bottles = planFromWater(
+      recipe,
+      catalog,
+      plan.startingWaterL,
+      plan.absorptionLPerKg,
+      plan.packagingLossL,
+      plan.bottleMl,
+    ).bottles;
+  } catch {}
   async function save(
     asCopy = false,
     requestedVisibility?: Visibility,
@@ -299,7 +404,7 @@ export default function App() {
       notify(
         visibility === "public"
           ? "Recipe shared publicly"
-          : "Recipe saved privately in My recipes",
+          : "Saved to your Recipe Book",
       );
       return true;
     } catch (e) {
@@ -309,660 +414,141 @@ export default function App() {
       setSaving(false);
     }
   }
-  const tabs = [
-    { label: "Recipe Builder", icon: FlaskConical },
-    { label: "Ingredient Library", icon: BookOpen },
-    { label: "Recipe Book", icon: BookMarked },
-    { label: "Brew Log", icon: NotebookPen },
-  ];
+  const matchGoal = (kind: "abv" | "ibu") => {
+    try {
+      setRecipe(
+        kind === "abv"
+          ? matchTargetAbv(recipe, catalog, designTarget.abv)
+          : matchTargetIbu(recipe, catalog, designTarget.ibu),
+      );
+      setError("");
+      notify(
+        kind === "abv"
+          ? `Malts adjusted for ${designTarget.abv}% ABV`
+          : `Boil hops adjusted for ${designTarget.ibu} IBU`,
+      );
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+  const stepIndex = builderSteps.findIndex((s) => s.id === builderStep);
+  const nextStep = builderSteps[stepIndex + 1];
+  const prevStep = builderSteps[stepIndex - 1];
+  const tips =
+    p && stepTips[builderStep]
+      ? guidance(p, designTarget, style).filter((t) =>
+          stepTips[builderStep]!.includes(t.key),
+        )
+      : [];
+  const flavor = p
+    ? flavorPredict(recipe, catalog, p, prefs.userWeight)
+    : undefined;
+  const unitToggle = (
+    <div className="unit-toggle" role="group" aria-label="Measurement units">
+      {([true, false] as const).map((imperial) => (
+        <button
+          type="button"
+          key={String(imperial)}
+          aria-pressed={us === imperial}
+          title={
+            imperial
+              ? "US gallons, pounds, ounces and °F"
+              : "Liters, kilograms, grams and °C"
+          }
+          onClick={() => {
+            setUs(imperial);
+            localStorage.setItem("brew-units", imperial ? "us" : "metric");
+          }}
+        >
+          {imperial ? "US" : "Metric"}
+        </button>
+      ))}
+    </div>
+  );
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <a
+      <header className="app-header">
+        <button
           className="brand"
-          href="#"
-          aria-label="BrewMaster"
-          onClick={(e) => e.preventDefault()}
+          aria-label="BrewMaster home"
+          onClick={() => setView("home")}
         >
-          <span className="brand-icon">
-            <BrandMark size={60} />
-          </span>
-          <span>
-            Brew<span className="brand-light">Master</span>
-            <small>FROM IDEA TO FIRST POUR</small>
-          </span>
-        </a>
-        <div className="sidebar-label">WORKBENCH</div>
-        <nav>
-          {tabs.map(({ label, icon: Icon }) => (
+          <BrandMark size={40} />
+          <span>BrewMaster</span>
+        </button>
+        <nav className="top-nav" aria-label="Main">
+          {views.map(({ id, label, icon: Icon }) => (
             <button
-              className={
-                activeNavigation === label ? "nav-item active" : "nav-item"
-              }
-              key={label}
-              aria-label={label}
-              aria-current={activeNavigation === label ? "page" : undefined}
-              onClick={() =>
-                setTab(
-                  label === "Recipe Builder"
-                    ? builderStep === "goals"
-                      ? "Design"
-                      : "Recipe Editor"
-                    : label,
-                )
-              }
+              key={id}
+              aria-current={view === id ? "page" : undefined}
+              onClick={() => setView(id)}
             >
-              <Icon size={19} />
-              <span className="nav-label">{label}</span>
-              {activeNavigation === label && <span className="nav-dot" />}
+              <Icon size={18} />
+              <span>{label}</span>
             </button>
           ))}
         </nav>
-        <div className="sidebar-label saved-label">
-          YOUR RECIPES <span>{ownedRecipes.length}</span>
-        </div>
-        {alphabetical(ownedRecipes, (r) => r.name)
-          .slice(0, 6)
-          .map((r) => (
-            <button
-              className="saved-recipe"
-              key={r.id}
-              onClick={() => {
-                setRecipe(drafts[r.id] ?? recipeSchema.parse(r));
-                setDesignFromRecipe(drafts[r.id] ?? recipeSchema.parse(r));
-                goToStep("summary");
-              }}
-            >
-              <span className="mini-dot" />
-              {r.name}
+        {unitToggle}
+      </header>
+      <main className="page">
+        {(error || calculationError) && (
+          <div className="alert" role="alert">
+            <span>{error || calculationError}</span>
+            <button className="text-button" onClick={() => setError("")}>
+              Dismiss
             </button>
-          ))}
-        <button className="text-button new-recipe" onClick={startNewRecipe}>
-          <Plus size={15} /> New recipe
-        </button>
-        <div className="sidebar-botanical" aria-hidden="true">
-          <BrandMark size={190} />
-          <span>
-            BREW SOMETHING
-            <br />
-            <em>worth sharing.</em>
-          </span>
-        </div>
-        <div className="sidebar-bottom">
-          <span className="tiny-dot" />{" "}
-          {sharedWorkspace
-            ? "Your brewing workspace"
-            : "Local brewing workspace"}
-          <small>
-            {sharedWorkspace
-              ? "Private by default. Sharing is optional."
-              : "Recipes stay on this Mac."}
-          </small>
-        </div>
-      </aside>
-      <main>
-        <header className="topbar">
-          <span>
-            YOUR BREWING WORKBENCH{" "}
-            <span className="breadcrumb">/ {activeNavigation}</span>
-          </span>
-          <div
-            className="unit-toggle"
-            role="group"
-            aria-label="Measurement units"
-          >
-            {([false, true] as const).map((imperial) => (
-              <button
-                type="button"
-                key={String(imperial)}
-                aria-pressed={us === imperial}
-                className={us === imperial ? "selected" : ""}
-                title={
-                  imperial
-                    ? "US gallons, pounds, ounces and °F"
-                    : "Liters, kilograms, grams and °C"
-                }
-                onClick={() => {
-                  setUs(imperial);
-                  localStorage.setItem(
-                    "brew-units",
-                    imperial ? "us" : "metric",
-                  );
-                }}
-              >
-                {imperial ? "Imperial" : "Metric"}
-              </button>
-            ))}
           </div>
-        </header>
-        <div className="page-content">
-          {inBuilder ? (
-            <BuilderHeader stage={builderStep} onStage={goToStep} />
-          ) : (
-            <StudioHero
-              screen={tab}
+        )}
+        {message && (
+          <div className="toast" role="status">
+            <Check size={17} />
+            {message}
+          </div>
+        )}
+        {view === "home" && (
+          <Home
+            recipe={recipe}
+            prediction={returning ? p : undefined}
+            step={builderStep}
+            saved={alphabetical(ownedRecipes, (r) => r.name)}
+            catalog={baseCatalog}
+            onContinue={() => goToStep(builderStep)}
+            onNew={startNewRecipe}
+            onOpen={(r) =>
+              openRecipe(drafts[r.id] ?? recipeSchema.parse(r), "summary")
+            }
+            onBook={() => setView("book")}
+            onLog={() => setView("log")}
+          />
+        )}
+        <div hidden={view !== "build"} className="builder">
+          <BuilderHeader
+            stage={builderStep}
+            onStage={goToStep}
+            recipeName={recipe.name}
+          />
+          {p && builderStep !== "water" && builderStep !== "goals" && (
+            <PredictionBar
+              p={p}
+              target={designTarget}
+              style={style}
+              bottles={bottles}
+              us={us}
+            />
+          )}
+          {builderStep === "water" && (
+            <WaterPlanner
+              recipe={recipe}
               catalog={catalog}
-              prediction={tab === "Recipe Editor" ? p : undefined}
-            />
-          )}
-          {(error || calculationError) && (
-            <div className="alert" role="alert">
-              {error || calculationError}
-              <button onClick={() => setError("")}>Dismiss</button>
-            </div>
-          )}
-          {message && (
-            <div className="toast" role="status">
-              <Check size={17} />
-              {message}
-            </div>
-          )}
-          <div id="builder-recipe" hidden={tab !== "Recipe Editor"}>
-            <div hidden={builderStep !== "summary"}>
-              <div className="recipe-title-row">
-                <div>
-                  <div className="recipe-name-label">YOUR WORKING RECIPE</div>
-                  <input
-                    className="recipe-name"
-                    aria-label="Recipe name"
-                    value={recipe.name}
-                    onChange={(e) =>
-                      setRecipe({ ...recipe, name: e.target.value })
-                    }
-                  />
-                  <div className="recipe-meta">
-                    <select
-                      aria-label="Beer style"
-                      value={recipe.styleId}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, styleId: e.target.value })
-                      }
-                    >
-                      <option value="">No style constraint</option>
-                      {alphabetical(catalog.styles, (s) => s.name).map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name}
-                        </option>
-                      ))}
-                    </select>
-                    <span>•</span>
-                    <span>
-                      {(us ? lToGal(recipe.batchL) : recipe.batchL).toFixed(1)}{" "}
-                      {us ? "gal" : "L"} batch
-                    </span>
-                    <Tag tone="neutral">ALL GRAIN</Tag>
-                  </div>
-                </div>
-                <div className="actions">
-                  <details className="recipe-more-actions">
-                    <summary className="button secondary">More actions</summary>
-                    <div className="recipe-extra-actions">
-                      <label className="button secondary">
-                        <Upload size={15} /> Import
-                        <input
-                          type="file"
-                          accept=".json,.xml"
-                          hidden
-                          onChange={async (e) => {
-                            try {
-                              const f = e.target.files?.[0];
-                              if (f) {
-                                const imported = importRecipe(
-                                  await f.text(),
-                                  catalog,
-                                  defaultRecipe,
-                                );
-                                setRecipe(imported);
-                                setDesignFromRecipe(imported);
-                              }
-                              notify("Recipe imported");
-                            } catch (err) {
-                              setError(String(err));
-                            }
-                            e.target.value = "";
-                          }}
-                        />
-                      </label>
-                      <button
-                        className="button secondary"
-                        disabled={saving}
-                        onClick={() => save(true)}
-                      >
-                        <Copy size={15} /> Save a copy
-                      </button>
-                    </div>
-                  </details>
-                  <button
-                    className="button primary"
-                    disabled={saving}
-                    onClick={() => save()}
-                  >
-                    <Save size={15} />{" "}
-                    {saving
-                      ? "Saving…"
-                      : storedRecipe?.access.owned &&
-                          storedRecipe.access.visibility === "public"
-                        ? "Update public recipe"
-                        : "Save privately"}
-                  </button>
-                </div>
-              </div>
-              <RecipeSharing
-                recipe={recipe}
-                stored={storedRecipe}
-                busy={saving}
-                error={error}
-                onVisibility={(visibility) => save(false, visibility)}
-              />
-            </div>
-            {p && builderStep !== "water" && (
-              <>
-                <div
-                  className={`metrics ${builderStep === "summary" ? "" : "step-live-metrics"}`}
-                >
-                  {[
-                    ["ABV", p.abv.toFixed(1), "%"],
-                    ["BITTERNESS", p.ibu.toFixed(0), "IBU"],
-                    ["COLOR", p.srm.toFixed(1), "SRM"],
-                    ["ORIGINAL GRAVITY", p.og.toFixed(3), "SG"],
-                    ["FINAL GRAVITY", p.fg.toFixed(3), "SG"],
-                  ].map(([label, value, unit], i) => (
-                    <div className="metric" key={label}>
-                      <span>
-                        <HelpTerm label={label} />
-                      </span>
-                      <div>
-                        {i === 2 && (
-                          <i
-                            className="beer-swatch"
-                            style={{ background: beerColor(p!.srm) }}
-                          />
-                        )}
-                        <strong>{value}</strong>
-                        <small>{unit}</small>
-                      </div>
-                      <span className="metric-foot">
-                        {i === 0
-                          ? "Gravity-derived estimate"
-                          : i === 1
-                            ? "Tinseth calculation"
-                            : i === 2
-                              ? `${p!.ebc.toFixed(1)} EBC · Morey`
-                              : "Calculated estimate"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="legend-line">
-                  <Tag tone="objective">CALCULATED</Tag>
-                  <span>
-                    Established brewing math · predictions, not measurements
-                    {prefs.calibrateYeast && calibration.yeasts[recipe.yeastId]
-                      ? " · personal attenuation active"
-                      : ""}
-                  </span>
-                  {builderStep === "summary" ? (
-                    <a href="#brew-details">
-                      View calculations <ArrowUpRight size={13} />
-                    </a>
-                  ) : (
-                    <button
-                      className="text-button"
-                      type="button"
-                      onClick={() => goToStep("summary")}
-                    >
-                      View complete recipe <ArrowUpRight size={13} />
-                    </button>
-                  )}
-                </div>
-                {p.warnings
-                  .filter((w) => w.startsWith("Beer-wort attenuation"))
-                  .map((w) => (
-                    <p className="notice" role="note" key={w}>
-                      <strong>Experimental yeast estimate:</strong> {w}
-                    </p>
-                  ))}
-              </>
-            )}
-            <div hidden={builderStep !== "summary"}>
-              <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
-            </div>
-            <div hidden={builderStep !== "water"}>
-              <p className="muted">
-                Recipe: <strong>{recipe.name}</strong>
-              </p>
-              <WaterPlanner
-                recipe={recipe}
-                catalog={catalog}
-                us={us}
-                onChange={setRecipe}
-                expanded
-              />
-            </div>
-            {p && (
-              <>
-                <div
-                  className={`workbench-grid guided-workbench ${builderStep === "water" ? "guided-water-workbench" : ""}`}
-                >
-                  <div
-                    className="guided-step-content"
-                    hidden={builderStep === "water"}
-                  >
-                    {builderStep === "hops" && (
-                      <HopSuggestions
-                        recipe={recipe}
-                        catalog={catalog}
-                        target={designTarget}
-                        userWeight={prefs.userWeight}
-                        us={us}
-                        onChange={changeIngredients}
-                      />
-                    )}
-                    {builderStep === "yeast" && (
-                      <Section
-                        title="Suggested yeast"
-                        eyebrow="FERMENTATION CHARACTER & ATTENUATION"
-                      >
-                        <p className="muted">
-                          These strains fit your style, flavor targets and
-                          alcohol goal. Alcohol comes from fermentable sugars
-                          and attenuation; tolerance describes a strain’s limit.
-                        </p>
-                        <div className="yeast-suggestion-list">
-                          {ingredientMatches(
-                            designTarget,
-                            catalog,
-                            prefs.userWeight,
-                          )
-                            .yeasts.slice(0, 3)
-                            .sort((a, b) => a.name.localeCompare(b.name))
-                            .map((match) => {
-                              const yeast = catalog.yeasts.find(
-                                (y) => y.id === match.id,
-                              )!;
-                              const estimate = predict(
-                                { ...recipe, yeastId: yeast.id },
-                                catalog,
-                              );
-                              return (
-                                <article key={yeast.id}>
-                                  <div className="ingredient-name-with-info">
-                                    <h3>{yeast.name}</h3>
-                                    <IngredientInfo
-                                      item={yeast}
-                                      catalog={catalog}
-                                      us={us}
-                                    />
-                                  </div>
-                                  <Tag>FLAVOR ESTIMATE</Tag>
-                                  <p>
-                                    {match.descriptors
-                                      .slice(0, 3)
-                                      .map((d) => d.label)
-                                      .join(" · ")}
-                                  </p>
-                                  <p className="muted">
-                                    {yeast.attenuation
-                                      ? `${yeast.attenuation.join("–")}% attenuation`
-                                      : "Attenuation unknown"}{" "}
-                                    ·{" "}
-                                    {yeast.alcoholTolerance === null
-                                      ? "Alcohol tolerance unknown"
-                                      : `Up to ${yeast.alcoholTolerance}% ABV tolerance`}
-                                  </p>
-                                  <Tag tone="objective">
-                                    CALCULATED FOR THIS RECIPE
-                                  </Tag>
-                                  <p>
-                                    {estimate.abv.toFixed(1)}% ABV · FG{" "}
-                                    {estimate.fg.toFixed(3)}
-                                  </p>
-                                  <button
-                                    className="button secondary"
-                                    type="button"
-                                    disabled={recipe.yeastId === yeast.id}
-                                    onClick={() =>
-                                      changeIngredients({
-                                        ...recipe,
-                                        yeastId: yeast.id,
-                                      })
-                                    }
-                                  >
-                                    {recipe.yeastId === yeast.id
-                                      ? "Selected"
-                                      : "Choose strain"}
-                                  </button>
-                                </article>
-                              );
-                            })}
-                        </div>
-                      </Section>
-                    )}
-                    {builderStep === "summary" && (
-                      <RecipeSummary
-                        recipe={recipe}
-                        catalog={catalog}
-                        us={us}
-                        target={designTarget}
-                        onEdit={goToStep}
-                      />
-                    )}
-                    <div hidden={builderStep === "summary"}>
-                      <Editor
-                        recipe={recipe}
-                        onChange={changeIngredients}
-                        catalog={catalog}
-                        us={us}
-                        section={builderStep}
-                      />
-                    </div>
-                  </div>
-                  <aside
-                    className="recipe-aside"
-                    hidden={
-                      builderStep === "water" || builderStep === "additives"
-                    }
-                  >
-                    <FlavorPanel
-                      target={designTarget.flavors}
-                      flavor={flavorPredict(
-                        recipe,
-                        catalog,
-                        p,
-                        prefs.userWeight,
-                      )}
-                      catalog={catalog}
-                    />
-                    <Section
-                      title="Style check"
-                      eyebrow="REFERENCE RANGES"
-                      hidden={
-                        builderStep !== "malts" && builderStep !== "summary"
-                      }
-                    >
-                      <p className="muted">
-                        Legacy reference ranges. A guide for your recipe.
-                      </p>
-                      {(["og", "fg", "abv", "ibu", "srm"] as const).map((k) => {
-                        const s = catalog.styles.find(
-                            (s) => s.id === recipe.styleId,
-                          ),
-                          range = s?.[k];
-                        return (
-                          <div className="style-row" key={k}>
-                            <div>
-                              <b>
-                                <HelpTerm label={k.toUpperCase()} />
-                              </b>
-                              <span>
-                                {p![k].toFixed(
-                                  k === "og" || k === "fg" ? 3 : 1,
-                                )}
-                              </span>
-                            </div>
-                            {range && (
-                              <>
-                                <div className="range-track">
-                                  <i
-                                    style={{
-                                      left: `${Math.max(0, Math.min(100, ((p![k] - range[0]) / (range[1] - range[0] || 1)) * 100))}%`,
-                                    }}
-                                  />
-                                </div>
-                                <small>
-                                  {range.join(" – ")}
-                                  {p![k] < range[0]
-                                    ? " · Below range"
-                                    : p![k] > range[1]
-                                      ? " · Above range"
-                                      : " · In range"}
-                                </small>
-                              </>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </Section>
-                    <Section
-                      hidden={builderStep !== "summary"}
-                      title="Brew-day numbers"
-                      eyebrow="CALCULATED ESTIMATES"
-                    >
-                      <dl className="details" id="brew-details">
-                        {[
-                          ["ABV · standard", p.abvStandard.toFixed(2) + "%"],
-                          ["ABV · accurate", p.abv.toFixed(2) + "%"],
-                          ["BU:GU", p.bugu.toFixed(2)],
-                          ["Calories / 12 oz", p.calories12oz.toFixed(0)],
-                          ["Calories / 330 mL", p.calories330.toFixed(0)],
-                          ["Pre-boil gravity", p.preBoilGravity.toFixed(3)],
-                          [
-                            "Pre-boil volume",
-                            (us ? lToGal(p.preBoilL) : p.preBoilL).toFixed(2) +
-                              (us ? " gal" : " L"),
-                          ],
-                          [
-                            "Cells to pitch",
-                            p.pitchBillion.toFixed(0) + " billion",
-                          ],
-                          ["Attenuation", p.attenuation.toFixed(1) + "%"],
-                        ].map(([k, v]) => (
-                          <div key={k}>
-                            <dt>
-                              <HelpTerm label={k} />
-                            </dt>
-                            <dd>{v}</dd>
-                          </div>
-                        ))}
-                      </dl>
-                    </Section>
-                    <Section
-                      title="Take it to the brewery"
-                      hidden={builderStep !== "summary"}
-                    >
-                      <div className="export-buttons">
-                        <button
-                          onClick={() =>
-                            download(
-                              recipe.name + ".json",
-                              JSON.stringify(recipe, null, 2),
-                            )
-                          }
-                        >
-                          <Download size={16} /> Recipe JSON
-                        </button>
-                        <button
-                          onClick={() =>
-                            download(
-                              recipe.name + ".xml",
-                              exportBeerXML(recipe, catalog),
-                              "application/xml",
-                            )
-                          }
-                        >
-                          <Download size={16} /> BeerXML
-                        </button>
-                        <button onClick={printBrewSheet}>
-                          <Printer size={16} /> Print brew sheet
-                        </button>
-                      </div>
-                    </Section>
-                  </aside>
-                </div>
-                {builderStep !== "water" && p.warnings.length > 0 && (
-                  <div className="notice">
-                    <b>Before you brew</b>
-                    {p.warnings.map((w) => (
-                      <p key={w}>{w}</p>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          <div hidden={tab !== "Recipe Book"}>
-            <RecipeBook
-              saved={saved}
-              drafts={drafts}
-              catalog={baseCatalog}
               us={us}
-              onOpen={(r, startAtWater) => {
-                setRecipe(recipeSchema.parse(r));
-                setDesignFromRecipe(recipeSchema.parse(r));
-                if (startAtWater) scrollPositions.current["builder:water"] = 0;
-                goToStep(startAtWater ? "water" : "summary");
-              }}
-              onNew={startNewRecipe}
+              onChange={setRecipe}
             />
-          </div>
-          <div hidden={tab !== "Ingredient Library"}>
-            <Library
-              catalog={libraryCatalog}
-              us={us}
-              batchL={recipe.batchL}
-              selectedYeastId={recipe.yeastId}
-              onChooseYeast={(yeastId) => {
-                setRecipe({ ...recipe, yeastId });
-                notify("Yeast updated in the current recipe.");
-              }}
-              onAddCustomAdditive={(addition) => {
-                setRecipe({
-                  ...recipe,
-                  additives: [...(recipe.additives ?? []), addition],
-                });
-                notify("Custom additive added to the current recipe.");
-              }}
-              onAddAdditive={(id) => {
-                setRecipe({
-                  ...recipe,
-                  additives: [
-                    ...(recipe.additives ?? []),
-                    createAdditiveAddition(
-                      id,
-                      recipe.batchL,
-                      crypto.randomUUID(),
-                    ),
-                  ],
-                });
-                notify(
-                  "Additive added to the current recipe. Edit its amount, stage and notes in Recipe Editor.",
-                );
-              }}
-            />
-          </div>
-          <div id="builder-goals" hidden={tab !== "Design"}>
+          )}
+          <div hidden={builderStep !== "goals"}>
             <Design
               fromRecipe={designFromRecipe}
               waterRecipe={recipe}
               onTargetChange={setDesignTarget}
-              onConfirm={(target) => {
-                setRecipe({
-                  ...recipe,
-                  styleId: target.styleId,
-                  designTargets: target,
-                });
-                goToStep("malts");
-              }}
               resetKey={goalResetKey}
               catalog={catalog}
               userWeight={prefs.userWeight}
@@ -970,7 +556,8 @@ export default function App() {
               onOpen={(r) => {
                 setRecipe({
                   ...r,
-                  name: recipe.name,
+                  name:
+                    recipe.name === "Untitled recipe" ? r.name : recipe.name,
                   notes: recipe.notes,
                   processNotes: recipe.processNotes,
                   additives: r.additives ?? recipe.additives,
@@ -979,116 +566,446 @@ export default function App() {
               }}
             />
           </div>
-          <div hidden={tab !== "Brew Log"}>
-            {p && (
-              <BrewLog
-                recipe={recipe}
-                prediction={p}
-                flavor={flavorPredict(recipe, catalog, p, prefs.userWeight)}
-                catalog={catalog}
-                logs={logs}
-                onSaved={(l) => {
-                  setLogs((a) => [l, ...a.filter((b) => b.id !== l.id)]);
-                }}
-                us={us}
-                prefs={prefs}
-                setPrefs={setPrefs}
-                onEfficiency={(efficiency) => {
-                  setRecipe({ ...recipe, efficiency });
-                  notify("Efficiency applied; ingredient amounts retained");
-                }}
-              />
+          {p &&
+            flavor &&
+            (builderStep === "malts" ||
+              builderStep === "hops" ||
+              builderStep === "yeast") && (
+              <div className="builder-grid">
+                <div className="builder-main">
+                  <div className={`guide ${tips.length ? "" : "ok"}`}>
+                    {tips.length ? (
+                      <>
+                        <ul>
+                          {tips.map((t) => (
+                            <li key={t.key}>{t.text}</li>
+                          ))}
+                        </ul>
+                        {builderStep === "malts" &&
+                          tips.some((t) => t.key === "abv") && (
+                            <button
+                              className="button primary small"
+                              onClick={() => matchGoal("abv")}
+                            >
+                              <Wand2 size={15} /> Adjust malts to{" "}
+                              {designTarget.abv}% ABV
+                            </button>
+                          )}
+                        {builderStep === "hops" &&
+                          tips.some((t) => t.key === "ibu") && (
+                            <button
+                              className="button primary small"
+                              onClick={() => matchGoal("ibu")}
+                            >
+                              <Wand2 size={15} /> Adjust boil hops to{" "}
+                              {designTarget.ibu} IBU
+                            </button>
+                          )}
+                      </>
+                    ) : (
+                      <p>
+                        <Check size={16} /> On track with your goals. Keep
+                        going, or fine-tune below.
+                      </p>
+                    )}
+                  </div>
+                  <Editor
+                    recipe={recipe}
+                    onChange={changeIngredients}
+                    onSettings={setRecipe}
+                    catalog={catalog}
+                    us={us}
+                    section={builderStep}
+                    target={designTarget}
+                    userWeight={prefs.userWeight}
+                  />
+                  {builderStep === "yeast" &&
+                    p.warnings
+                      .filter((w) => /Fermentation|tolerance/.test(w))
+                      .map((w) => (
+                        <p className="notice" role="note" key={w}>
+                          {w}
+                        </p>
+                      ))}
+                </div>
+                <aside className="builder-aside">
+                  <FlavorPanel
+                    target={designTarget.flavors}
+                    flavor={flavor}
+                    catalog={catalog}
+                  />
+                  {builderStep === "malts" && (
+                    <StyleCheck p={p} style={style} />
+                  )}
+                </aside>
+              </div>
             )}
-          </div>
-          {inBuilder && (
-            <nav
-              className="guided-step-footer"
-              aria-label="Continue recipe builder"
-            >
-              {builderStep !== "water" ? (
-                <button
-                  type="button"
-                  className="button secondary"
-                  onClick={() =>
-                    goToStep(
-                      builderSteps[
-                        builderSteps.findIndex(
-                          (step) => step.id === builderStep,
-                        ) - 1
-                      ].id,
-                    )
-                  }
-                >
-                  ← Back
-                </button>
-              ) : (
-                <span />
-              )}
-              <span>
-                Step{" "}
-                {builderSteps.findIndex((step) => step.id === builderStep) + 1}{" "}
-                of {builderSteps.length}
-              </span>
-              {builderStep === "goals" ? (
-                <button
-                  type="button"
-                  className="text-button"
-                  onClick={() => {
+          {p && flavor && builderStep === "summary" && (
+            <div id="builder-recipe" className="review-grid">
+              <div className="review-main">
+                <Section title="Name your beer">
+                  <label className="field">
+                    <span>Recipe name</span>
+                    <input
+                      className="recipe-name"
+                      aria-label="Recipe name"
+                      value={recipe.name}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, name: e.target.value })
+                      }
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Style</span>
+                    <select
+                      aria-label="Beer style"
+                      value={recipe.styleId}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, styleId: e.target.value })
+                      }
+                    >
+                      <option value="">No particular style</option>
+                      {alphabetical(catalog.styles, (s) => s.name).map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <div className="save-row">
+                    <button
+                      className="button primary large"
+                      disabled={saving}
+                      onClick={() => save()}
+                    >
+                      <Save size={17} />{" "}
+                      {saving
+                        ? "Saving…"
+                        : storedRecipe?.access.owned
+                          ? storedRecipe.access.visibility === "public"
+                            ? "Update public recipe"
+                            : "Save changes"
+                          : "Save recipe"}
+                    </button>
+                    <button
+                      className="button secondary"
+                      disabled={saving}
+                      onClick={() => save(true)}
+                    >
+                      <Copy size={15} /> Save a copy
+                    </button>
+                  </div>
+                  <RecipeSharing
+                    recipe={recipe}
+                    stored={storedRecipe}
+                    busy={saving}
+                    error={error}
+                    onVisibility={(visibility) => save(false, visibility)}
+                  />
+                </Section>
+                <RecipeSummary
+                  recipe={recipe}
+                  catalog={catalog}
+                  us={us}
+                  target={designTarget}
+                  onEdit={goToStep}
+                />
+                <details id="extras" className="panel advanced-panel">
+                  <summary>
+                    Extras: fruit, spices, oak & more
+                    {recipe.additives?.length
+                      ? ` · ${recipe.additives.length} added`
+                      : " (optional)"}
+                  </summary>
+                  <RecipeAdditives
+                    recipe={recipe}
+                    onChange={setRecipe}
+                    us={us}
+                  />
+                  <p className="muted">
+                    Browse every extra, with suggested amounts, under{" "}
+                    <button
+                      className="text-button"
+                      onClick={() => setView("library")}
+                    >
+                      Ingredients
+                    </button>
+                    .
+                  </p>
+                </details>
+                <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
+                {p.warnings.length > 0 && (
+                  <div className="notice">
+                    <b>Before you brew</b>
+                    <ul>
+                      {p.warnings.map((w) => (
+                        <li key={w}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <aside className="builder-aside">
+                <FlavorPanel
+                  target={designTarget.flavors}
+                  flavor={flavor}
+                  catalog={catalog}
+                  readOnly
+                />
+                <StyleCheck p={p} style={style} />
+                <Section title="Brew-day numbers">
+                  <dl className="details" id="brew-details">
+                    {[
+                      ["Pre-boil gravity", p.preBoilGravity.toFixed(3)],
+                      [
+                        "Pre-boil volume",
+                        (us ? lToGal(p.preBoilL) : p.preBoilL).toFixed(2) +
+                          (us ? " gal" : " L"),
+                      ],
+                      ["Attenuation", p.attenuation.toFixed(1) + "%"],
+                      ["BU:GU", p.bugu.toFixed(2)],
+                      [
+                        "Cells to pitch",
+                        p.pitchBillion.toFixed(0) + " billion",
+                      ],
+                      ["Calories / 12 oz", p.calories12oz.toFixed(0)],
+                      ["ABV · standard", p.abvStandard.toFixed(2) + "%"],
+                    ].map(([k, v]) => (
+                      <div key={k}>
+                        <dt>
+                          <HelpTerm label={k} />
+                        </dt>
+                        <dd>{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {prefs.calibrateYeast &&
+                    calibration.yeasts[recipe.yeastId] && (
+                      <p className="muted">
+                        Using your own attenuation from past brews.
+                      </p>
+                    )}
+                </Section>
+                <Section title="Print & export">
+                  <div className="export-buttons">
+                    <button className="button secondary" onClick={printBrewSheet}>
+                      <Printer size={16} /> Print brew sheet
+                    </button>
+                    <button
+                      className="button secondary"
+                      onClick={() =>
+                        download(
+                          recipe.name + ".xml",
+                          exportBeerXML(recipe, catalog),
+                          "application/xml",
+                        )
+                      }
+                    >
+                      <Download size={16} /> BeerXML
+                    </button>
+                    <button
+                      className="button secondary"
+                      onClick={() =>
+                        download(
+                          recipe.name + ".json",
+                          JSON.stringify(recipe, null, 2),
+                        )
+                      }
+                    >
+                      <Download size={16} /> JSON
+                    </button>
+                    <label className="button secondary">
+                      <Upload size={16} /> Import a recipe
+                      <input
+                        type="file"
+                        accept=".json,.xml"
+                        hidden
+                        onChange={async (e) => {
+                          try {
+                            const f = e.target.files?.[0];
+                            if (f) {
+                              const imported = importRecipe(
+                                await f.text(),
+                                catalog,
+                                defaultRecipe,
+                              );
+                              openRecipe(imported);
+                              notify("Recipe imported");
+                            }
+                          } catch (err) {
+                            setError(String(err));
+                          }
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
+                </Section>
+              </aside>
+            </div>
+          )}
+          <nav className="step-footer" aria-label="Continue recipe builder">
+            {prevStep ? (
+              <button
+                type="button"
+                className="button ghost"
+                onClick={() => goToStep(prevStep.id)}
+              >
+                <ArrowLeft size={16} /> {prevStep.label}
+              </button>
+            ) : (
+              <span />
+            )}
+            {nextStep ? (
+              <button
+                type="button"
+                className="button primary large"
+                onClick={() => {
+                  if (builderStep === "goals")
                     setRecipe({
                       ...recipe,
                       styleId: designTarget.styleId,
                       designTargets: designTarget,
                     });
-                    goToStep("malts");
-                  }}
-                >
-                  {designFromRecipe
-                    ? "Confirm goals & keep ingredients →"
-                    : "Keep current ingredients →"}
-                </button>
-              ) : builderStep !== "summary" ? (
-                <button
-                  type="button"
-                  className="button primary"
-                  onClick={() =>
-                    goToStep(
-                      builderSteps[
-                        builderSteps.findIndex(
-                          (step) => step.id === builderStep,
-                        ) + 1
-                      ].id,
-                    )
-                  }
-                >
-                  Next:{" "}
-                  {
-                    builderSteps[
-                      builderSteps.findIndex(
-                        (step) => step.id === builderStep,
-                      ) + 1
-                    ].label
-                  }{" "}
-                  →
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="button primary"
-                  disabled={saving}
-                  onClick={() => save()}
-                >
-                  <Save size={16} /> {saving ? "Saving…" : "Save recipe"}
-                </button>
-              )}
-            </nav>
-          )}
-          <footer>
-            <BrandMark size={30} />
-            <span>Good beer starts with curiosity.</span>
-            <span>BrewMaster / v0.1</span>
-          </footer>
+                  goToStep(nextStep.id);
+                }}
+              >
+                Next: {nextStep.label} <ArrowRight size={16} />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="button primary large"
+                disabled={saving}
+                onClick={() => save()}
+              >
+                <Save size={16} /> {saving ? "Saving…" : "Save recipe"}
+              </button>
+            )}
+          </nav>
         </div>
+        <div hidden={view !== "book"}>
+          <header className="page-header">
+            <div>
+              <h1>Recipe Book</h1>
+              <p className="lede">
+                Your saved recipes, plus a starter recipe for every beer style.
+                Open one to brew it as-is or make it your own.
+              </p>
+            </div>
+            <button className="button primary" onClick={startNewRecipe}>
+              <Plus size={16} /> New recipe
+            </button>
+          </header>
+          <RecipeBook
+            saved={saved}
+            drafts={drafts}
+            catalog={baseCatalog}
+            us={us}
+            onOpen={(r, startAtWater) =>
+              openRecipe(
+                recipeSchema.parse(r),
+                startAtWater ? "water" : "summary",
+              )
+            }
+            onNew={startNewRecipe}
+          />
+        </div>
+        <div hidden={view !== "library"}>
+          <header className="page-header">
+            <div>
+              <h1>Ingredients</h1>
+              <p className="lede">
+                Every malt, hop, yeast and extra, with what it tastes like and
+                how to use it.
+              </p>
+            </div>
+          </header>
+          <Library
+            catalog={libraryCatalog}
+            us={us}
+            batchL={recipe.batchL}
+            selectedYeastId={recipe.yeastId}
+            onChooseYeast={(yeastId) => {
+              setRecipe({ ...recipe, yeastId });
+              notify("Yeast updated in your current recipe.");
+            }}
+            onAddCustomAdditive={(addition) => {
+              setRecipe({
+                ...recipe,
+                additives: [...(recipe.additives ?? []), addition],
+              });
+              notify("Extra added to your current recipe.");
+            }}
+            onAddAdditive={(id) => {
+              setRecipe({
+                ...recipe,
+                additives: [
+                  ...(recipe.additives ?? []),
+                  createAdditiveAddition(
+                    id,
+                    recipe.batchL,
+                    crypto.randomUUID(),
+                  ),
+                ],
+              });
+              notify(
+                "Added to your current recipe. Adjust it under Build → Review → Extras.",
+              );
+            }}
+          />
+        </div>
+        <div hidden={view !== "log"}>
+          <header className="page-header">
+            <div>
+              <h1>Brew Log</h1>
+              <p className="lede">
+                Record what actually happened on brew day for{" "}
+                <b>{recipe.name}</b>, then compare it with the prediction.
+              </p>
+            </div>
+          </header>
+          {p && (
+            <BrewLog
+              recipe={recipe}
+              prediction={p}
+              flavor={flavorPredict(recipe, catalog, p, prefs.userWeight)}
+              catalog={catalog}
+              logs={logs}
+              onSaved={(l) => {
+                setLogs((a) => [l, ...a.filter((b) => b.id !== l.id)]);
+              }}
+              us={us}
+              prefs={prefs}
+              setPrefs={setPrefs}
+              onEfficiency={(efficiency) => {
+                setRecipe({ ...recipe, efficiency });
+                notify("Efficiency applied; ingredient amounts kept");
+              }}
+            />
+          )}
+        </div>
+        <footer className="app-footer">
+          <BrandMark size={26} />
+          <span>
+            {sharedWorkspace
+              ? "Recipes are private to this browser unless you share them."
+              : "Recipes are saved on this computer."}
+          </span>
+        </footer>
       </main>
+      <nav className="bottom-nav" aria-label="Main">
+        {views.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            aria-current={view === id ? "page" : undefined}
+            onClick={() => setView(id)}
+          >
+            <Icon size={21} />
+            <span>{label}</span>
+          </button>
+        ))}
+      </nav>
       <div className="print-footer">
         Brew sheet · {recipe.name} · Mash {recipe.mashC}°C for{" "}
         {recipe.mashMinutes} min · Ferment {recipe.fermentC}°C · Pitch{" "}

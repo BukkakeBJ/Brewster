@@ -1,41 +1,27 @@
-# BrewMaster visual design — field journal edition
+# BrewMaster design
 
-The second visual direction was developed in [Canva's mobile concept](https://canva.link/zqq6wfgvcf9vskh), design `DAHZIKkTWZE`, on October 26, 2026. It develops the earlier [craft workbench concept](https://canva.link/zzd73gq0khzrtc9) into a more distinctive illustrated brewer's journal. Both concepts were visually reviewed through Canva-provided thumbnails. The browser uses a separate Canva login; the editable designs belong to the connected Canva account. No account permissions were changed.
+BrewMaster helps homebrewers design a recipe, predict how it will turn out, and keep their recipes and brew days in one place. The interface is built around one idea: **water comes first**, because the amount of water sets the size of every malt, hop and yeast addition.
 
-## Identity and artwork
+## Navigation
 
-The logo is now a botanical illustration based on the user's supplied hop photograph: a full green cone with tightly overlapping pointed bracts, a curved stem, and a separate golden barley ear. It replaces the earlier simplified leaf glyph. The built-in image generation tool created the transparent PNG; the original photo is not included in the app. `data/branding.json` records the prompt and generation mode.
+Five destinations, the same on every screen size: **Home**, **Build**, **Recipes**, **Brew Log** and **Ingredients**. Desktop shows them in the top bar; phones show them in a bottom tab bar. The US/Metric switch is always at the top right (US by default).
 
-`public/brand/hop-barley-botanical.png` is the canonical logo image. `BrandMark.tsx` frames it inside an inline SVG so all existing header, card, illustration and footer placements use the same asset. `public/brewmaster-mark.svg` is a self-contained SVG **wrapper with an embedded bitmap**, retained for existing logo links; it is not vector artwork. The favicon uses the canonical PNG. The image retains its generated alpha, with no filters, background removal or pixel edits after generation. No external image host is required at runtime.
+- **Home** explains the four-step flow, offers "Start a new recipe" or "Start from a proven recipe", lets a returning brewer continue their draft, and lists saved recipes.
+- **Build** is the six-step recipe builder below.
+- **Recipes** (Recipe Book) opens on the brewer's own recipes when they have any, otherwise on the starter collection. Starter recipes open at the Water step so they are resized for the brewer's water.
+- **Brew Log** and **Ingredients** keep their existing features.
 
-`BrewArtwork.tsx` contains original botanical and brewing illustrations: an amber pint with foam and a circular stamp, the hop/barley study, and a brewer's recipe journal. `StudioHero.tsx` gives each screen its own editorial headline, illustration and caption. The recipe illustration's beer color responds to calculated SRM, but it remains decorative; use the explicitly labeled SRM swatch for the numeric color estimate.
+## Recipe builder
 
-Recipe Book cards have original beer-label compositions using the style name, brewery attribution and calculated ABV from the recipe data. These are BrewMaster illustrations, **not official brewery packaging**. Rotating label palettes are decorative, not indicators of style, flavor or measured beer color. The actual SRM color swatch remains separate. No brewery logos or marketing artwork are copied.
+1. **Water** — starting water with quick sizes, a water → kettle → finished beer → bottles flow, and equipment settings tucked under "Equipment & losses".
+2. **Goals** — style (choosing one sets its typical ABV, IBU and flavor), sliders for alcohol, bitterness and optional color with the style's range shaded, flavor sliders and hop-character presets. "Suggest recipes for me" designs three options; **Next** keeps the current ingredients. Ingredient limits and solver weights are under "Ingredient limits & fine-tuning".
+3. **Malts**, 4. **Hops**, 5. **Yeast** — each shows a plain-language tip when a number is off its goal. Malts and Hops offer one-click "Adjust malts to X% ABV" / "Adjust boil hops to X IBU" (`src/engine/guidance.ts`). A flavor estimate and style check sit beside the editor.
+6. **Review** — name, style, save/share, the full recipe with edit links, optional extras (additives), notes, brew-day numbers, print and export.
+
+From Malts onward a sticky **prediction bar** shows alcohol, bitterness, color, OG, FG and fermenter volume, each compared with the goal or style range. On phones it shows the first three.
 
 ## Visual system
 
-- Oat paper `#f2eddf`, cream cards `#fffcf3`, and a subtle repeating dot texture.
-- Forest navigation `#163a31`, dark green numeric instrument panel `#244b3c`.
-- Copper italic headlines `#a66035`, pale citron/ochre accents, fine botanical rules.
-- System sans-serif for controls, Georgia for editorial headings and recipe names.
-- Flat offset shadows, small corners on working forms, circular stamps on artwork.
+All styling lives in `src/app.css`: color tokens on `:root` (oat background, white cards, forest green `#1f4d3c` for actions, amber `#c47a2c` for accents, green/amber for on-target/off-target), Fraunces for headings and Inter for text, 16 px card radius and pill-shaped buttons. The botanical hop-and-barley logo (`public/brand/hop-barley-botanical.png`, framed by `BrandMark.tsx`) is unchanged.
 
-Calculated specifications and subjective flavor estimates retain their explicit text labels and separate green/amber treatments. Illustrative mock values from Canva are not used in production; recipe numbers continue to come from the deterministic engine.
-
-`src/styles.css` remains the structural foundation, `src/theme.css` supplies common control colors/readability, and `src/studio.css` supplies this edition's layout and artwork styling.
-
-`src/desktop.css` adds reading sizes only for screens at least 901 px wide: 16 px form values and reading text, 14 px labels and supporting text, and 12 px captions. Navigation is 15 px and recipe metrics are 38 px. These use rem units to respect the browser's text-size preference. The desktop sidebar is wider, dense ingredient columns have more room, and smaller desktop windows stack working panels and recipe/library cards to keep the text usable. Phone/tablet typography and printed brew sheets retain their existing sizes.
-
-`src/headings.css` strengthens the subjects of panels and cards: main section headings and ingredient names are 30 px on desktop, with bold 26 px ingredient names on smaller screens. Additive cards have a separate pale-green title band with category and name, followed by identity, usage and sensory details. Their add-to-recipe buttons use a solid green action treatment. This follow-up changes heading hierarchy across screen sizes while keeping ordinary mobile form text and brew-sheet printing intact.
-
-## Mobile and working layout
-
-The phone layout has a compact sticky brand header, top-right Metric/Imperial switch and a floating five-screen bottom navigation with safe-area spacing. Page content reserves bottom space so the navigation cannot cover the last controls. Active navigation uses `aria-current="page"`. The narrow layout was checked at a 409 px content viewport; desktop at 1265 px. All five screens fit without horizontal overflow at those widths.
-
-The recipe's working numbers now appear directly after its editable name, before notes and secondary tools. The water planner is a clearly labeled expandable row, **Start with your water**, retaining the default 5 US gallons and a preview before applying. Expanding it exposes all existing absorption, packaging, bottle and yeast planning controls. Recipe notes, exports and live calculations remain available. Decorative headers and label artwork are omitted from brew-sheet printing, and reduced-motion preferences remain respected.
-
-UI checks covered screen switching, correct active navigation, water planner expansion/defaults, and mobile recipe/specification visibility. Existing engine and data tests still cover actual brewing behavior. No recipe amounts, chosen ingredients, saved notes or database records are changed by this visual redesign.
-
-## Screenshot proof
-
-Actual running-app captures are saved under `.runtime/`: `mobile-studio-recipe.png`, `mobile-studio-numbers.png`, `mobile-studio-design.png`, `mobile-studio-book.png`, `mobile-studio-library.png`, `mobile-studio-log.png` and `studio-desktop.png`. They are UI screenshots, not Canva mockups.
+Calculated numbers still come only from the engine; flavor values are labeled as estimates. Printing the Review step produces a brew sheet without navigation or buttons.

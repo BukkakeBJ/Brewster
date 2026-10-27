@@ -10,7 +10,7 @@ import {
 import { waterSettings } from "../engine/waterPlan";
 import { ReadOnlyAdditives } from "./RecipeAdditives";
 import { IngredientInfo } from "./IngredientPicker";
-import { Section, Tag } from "./ui";
+import { Section } from "./ui";
 export default function RecipeSummary({
   recipe: r,
   catalog: c,
@@ -36,8 +36,7 @@ export default function RecipeSummary({
     (Math.max(0, p.fermenterL - plan.packagingLossL) * 1000) / plan.bottleMl,
   );
   return (
-    <Section title="Your complete recipe" eyebrow="READY FOR A FINAL CHECK">
-      <Tag tone="objective">RECIPE AMOUNTS & CALCULATED ESTIMATES</Tag>
+    <Section title="Full recipe">
       <div className="recipe-summary-part">
         <div className="summary-part-title">
           <h3>Water & yield</h3>
@@ -63,7 +62,7 @@ export default function RecipeSummary({
       </div>
       <div className="recipe-summary-part">
         <div className="summary-part-title">
-          <h3>Beer goals</h3>
+          <h3>Goals</h3>
           <button
             type="button"
             className="text-button"
@@ -80,7 +79,7 @@ export default function RecipeSummary({
       </div>
       <div className="recipe-summary-part">
         <div className="summary-part-title">
-          <h3>Malt build</h3>
+          <h3>Malts</h3>
           <button
             type="button"
             className="text-button"
@@ -116,7 +115,7 @@ export default function RecipeSummary({
       </div>
       <div className="recipe-summary-part">
         <div className="summary-part-title">
-          <h3>Hop schedule</h3>
+          <h3>Hops</h3>
           <button
             type="button"
             className="text-button"
@@ -182,24 +181,16 @@ export default function RecipeSummary({
             : `≈ ${Math.ceil(p.pitchBillion / plan.liquidCellsBillionPerPack)} packs at your cell-count assumption`}
           ).
         </p>
-        <p className="muted">
-          Attenuation changes final gravity and alcohol. Tolerance is a strain
-          limit, not an ABV guarantee. Review the supplier’s pitch guidance.
-        </p>
       </div>
       <div className="recipe-summary-part">
         <div className="summary-part-title">
-          <h3>Additives & timing</h3>
-          <button
-            type="button"
-            className="text-button"
-            onClick={() => onEdit("additives")}
-          >
-            Edit additives
-          </button>
+          <h3>Extras</h3>
+          <a className="text-button" href="#extras">
+            Edit extras
+          </a>
         </div>
         <ReadOnlyAdditives recipe={r} us={us} />
-        {!r.additives?.length && <p>No optional additives selected.</p>}
+        {!r.additives?.length && <p className="muted">None. Fruit, spices, oak and more are optional.</p>}
       </div>
     </Section>
   );

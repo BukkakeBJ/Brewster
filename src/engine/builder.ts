@@ -7,40 +7,44 @@ export const builderSteps = [
   {
     id: "water",
     label: "Water",
-    description: "Choose your starting water and equipment losses.",
+    title: "How much water are you brewing with?",
+    description:
+      "Everything else is sized from your water: malts, hops and yeast scale automatically.",
   },
   {
     id: "goals",
-    label: "Beer goals",
+    label: "Goals",
+    title: "What beer do you want to make?",
     description:
-      "Set flavor, alcohol, bitterness and an optional color target.",
+      "Pick a style, then set the alcohol, bitterness and flavors you're aiming for.",
   },
   {
     id: "malts",
-    label: "Malt build",
-    description: "Build the color, malt character and fermentable foundation.",
+    label: "Malts",
+    title: "Build your grain bill",
+    description:
+      "Malts give the beer its alcohol, color and body. Watch the numbers update as you go.",
   },
   {
     id: "hops",
     label: "Hops",
+    title: "Plan your hops",
     description:
-      "Choose bittering, flavor and aroma hops that fit your profile.",
+      "Early boil hops add bitterness. Late, whirlpool and dry hops add flavor and aroma.",
   },
   {
     id: "yeast",
     label: "Yeast",
+    title: "Choose your yeast",
     description:
-      "Choose fermentation character and review the resulting alcohol estimate.",
-  },
-  {
-    id: "additives",
-    label: "Additives",
-    description: "Plan optional additions and exactly when to use them.",
+      "Yeast decides how dry the beer finishes and adds its own fruity or clean character.",
   },
   {
     id: "summary",
-    label: "Recipe summary",
-    description: "Review the full recipe, add notes, name your beer and save.",
+    label: "Review",
+    title: "Review and save",
+    description:
+      "Name your beer, check the full recipe, add any extras and save it to your Recipe Book.",
   },
 ] as const;
 export type BuilderStep = (typeof builderSteps)[number]["id"];

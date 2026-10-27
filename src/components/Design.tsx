@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Sparkles, ArrowUpRight } from "lucide-react";
 import type { Catalog, Recipe, Target } from "../engine/types";
 import type { Candidate } from "../engine/solver";
 import { defaultTarget } from "../defaults";
-import { Field, Section, Tag, HelpLabel, InfoTip } from "./ui";
+import { Field, Section, HelpLabel, InfoTip, RangeField } from "./ui";
 import { Radar } from "./FlavorPanel";
-import { L_PER_GAL, lToGal, predict } from "../engine/calculations";
+import { predict } from "../engine/calculations";
 import designHelp from "../../data/design-help.json";
 import {
   closestStyles,
@@ -13,7 +13,6 @@ import {
   selectDesignStyle,
 } from "../engine/styleMatch";
 import IngredientMatches from "./IngredientMatches";
-import HopCharacterHelp from "./HopCharacterHelp";
 import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
@@ -224,6 +223,13 @@ export default function Design({
       if (e.data.error) setError(e.data.error);
       else {
         setResults(e.data.candidates);
+        setTimeout(
+          () =>
+            document
+              .getElementById("suggested-recipes")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+          50,
+        );
         if (continueToMalts && e.data.candidates.length)
           openCandidate(e.data.candidates[0].recipe);
         if (!e.data.candidates.length)
@@ -240,22 +246,48 @@ export default function Design({
     };
     worker.current.postMessage({ target: t, catalog: c, userWeight });
   }
-  const mainFlavors = new Set([
+  const chooseStyle = (id: string) => {
+    setAutoStyle(false);
+    const style = c.styles.find((s) => s.id === id);
+    const mid = (r: [number, number]) => +((r[0] + r[1]) / 2).toFixed(1);
+    update(
+      style
+        ? {
+            ...selectDesignStyle(t, id),
+            abv: mid(style.abv),
+            ibu: Math.round(mid(style.ibu)),
+            ...(t.srm === undefined ? {} : { srm: mid(style.srm) }),
+          }
+        : selectDesignStyle(t, id),
+      false,
+    );
+    if (style) applyStyleFlavor(id);
+  };
+  const mainFlavors = [
     "bready",
+    "caramel",
+    "roast",
     "citrus",
     "tropical",
-    "clean",
+    "pine",
+    "floral",
     "body",
-  ]);
+  ];
   const extraFlavors = c.vocabulary.filter(
-    (v) => v.axis && !mainFlavors.has(v.id),
+    (v) => v.axis && !mainFlavors.includes(v.id),
   );
+  const flavorLabels: Record<string, string> = {
+    bready: "Bready / malty",
+    caramel: "Caramel / toffee",
+    roast: "Roasty / coffee",
+    body: "Full body",
+  };
   const flavorControls = (items: Catalog["vocabulary"]) => (
     <div className="flavor-sliders">
-      {alphabetical(items, (v) => v.label).map((v) => (
+      {items.map((v) => (
         <div className="flavor-slider-row" key={v.id}>
           <HelpLabel
-            label={v.label}
+            label={flavorLabels[v.id] ?? v.label}
             help={flavorHelp(v.id, v.label)}
             htmlFor={`design-flavor-${v.id}`}
           />
@@ -267,476 +299,239 @@ export default function Design({
             max="5"
             step=".25"
             value={t.flavors[v.id] ?? 0}
+            style={
+              {
+                "--fill": `${((t.flavors[v.id] ?? 0) / 5) * 100}%`,
+              } as React.CSSProperties
+            }
             onChange={(e) =>
               update({
                 flavors: { ...t.flavors, [v.id]: Number(e.target.value) },
               })
             }
           />
-          <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
+          <b>{intensityWord(t.flavors[v.id] ?? 0)}</b>
         </div>
       ))}
     </div>
   );
+  const band = (k: "abv" | "ibu" | "srm") =>
+    selectedStyle?.[k] as [number, number] | undefined;
   return (
     <>
-      <div className="design-grid">
-        <div className="design-inputs">
-          <Section title="Define your beer" eyebrow="01 / MEASURABLE TARGETS">
-            <div className="help-option">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  aria-label="Automatic style matching"
-                  checked={autoStyle}
-                  onChange={(e) => {
-                    setAutoStyle(e.target.checked);
-                    if (e.target.checked)
-                      update({ styleId: bestStyle?.style.id ?? t.styleId });
-                  }}
-                />{" "}
-                Automatically match style to numeric targets
-              </label>
-              <InfoTip
-                label="Automatic style matching"
-                content={help["Automatic style matching"]}
-              />
-            </div>
+      <div className="goals-grid">
+        <div className="goals-inputs">
+          <Section title="Beer style">
             {fromRecipe && (
-              <p className="muted">
-                Starting from {fromRecipe.name}. Applying new suggestions keeps
-                your name and notes. Your current draft stays in the Recipe
-                Book. Style and goal edits take effect on ingredients when you
-                choose a generated recipe.
+              <p className="notice">
+                These goals come from <b>{fromRecipe.name}</b>. Change them
+                here; your ingredients only change if you pick a suggested
+                recipe below.
               </p>
             )}
-            <div className="field">
-              <HelpLabel
-                label="Base style · legacy numeric ranges"
-                help={help["Base style · legacy numeric ranges"]}
-                htmlFor="design-option-0"
-              />
+            <label className="field">
+              <span>Style</span>
               <select
                 id="design-option-0"
                 aria-label="Design beer style"
                 value={t.styleId}
-                onChange={(e) => {
-                  setAutoStyle(false);
-                  update(selectDesignStyle(t, e.target.value), false);
-                }}
+                onChange={(e) => chooseStyle(e.target.value)}
               >
-                <option value="">Freeform / no style penalty</option>
+                <option value="">No particular style</option>
                 {alphabetical(c.styles, (s) => s.name).map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="design-style-match">
-              <p role="status">
-                {autoStyle
-                  ? `Closest numeric match: ${bestStyle?.style.name ?? "No comparable style"}`
-                  : `Manual style: ${selectedStyle?.name ?? "Freeform"}`}
+            </label>
+            {selectedStyle ? (
+              <p className="style-summary" role="status">
+                <b>{selectedStyle.name}</b> usually runs{" "}
+                {selectedStyle.abv.join("–")}% ABV,{" "}
+                {selectedStyle.ibu.join("–")} IBU and{" "}
+                {selectedStyle.srm.join("–")} SRM.
+                {autoStyle && bestStyle && !bestStyle.withinRanges
+                  ? " Your targets are outside this range."
+                  : ""}
               </p>
-              {selectedStyle && (
-                <p>
-                  {selectedStyle.abv.join("–")}% ABV ·{" "}
-                  {selectedStyle.ibu.join("–")} IBU ·{" "}
-                  {selectedStyle.srm.join("–")} SRM
-                </p>
-              )}
+            ) : (
               <p className="muted">
-                {autoStyle
-                  ? bestStyle?.withinRanges
-                    ? "Targets fit the compared ranges. Flavor and process may differ."
-                    : "Closest available style; some targets fall outside its ranges. Flavor and process may differ."
-                  : "Style locked. Enable automatic matching to follow target edits."}
-              </p>
-              {selectedStyle && (
-                <a
-                  href={selectedStyle.source.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Legacy numeric reference ↗
-                </a>
-              )}
-            </div>
-            <div className="field-grid">
-              <Field
-                label="Target ABV"
-                help={help["Target ABV"]}
-                suffix="%"
-                value={t.abv}
-                min={0.5}
-                max={18}
-                onChange={(n) => update({ abv: n })}
-              />
-              <Field
-                label="Target bitterness"
-                help={help["Target bitterness"]}
-                suffix="IBU"
-                value={t.ibu}
-                min={0}
-                max={150}
-                step={1}
-                onChange={(n) => update({ ibu: n })}
-              />
-              <div className="optional-color">
-                <div className="field-label">
-                  Color (optional)
-                  <InfoTip
-                    label="Target color"
-                    content={help["Target color"]}
-                  />
-                </div>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={t.srm !== undefined}
-                    onChange={(e) =>
-                      update({
-                        srm: e.target.checked
-                          ? lastColorTarget.current
-                          : undefined,
-                      })
-                    }
-                  />
-                  Set a color target
-                </label>
-                {t.srm === undefined ? (
-                  <p className="muted">
-                    Any color · Predicted SRM is still shown. Color does not
-                    affect style matching or recipe scoring.
-                  </p>
-                ) : (
-                  <Field
-                    label="Target color"
-                    suffix="SRM"
-                    value={t.srm}
-                    min={1}
-                    max={60}
-                    onChange={(n) => update({ srm: n })}
-                  />
-                )}
-              </div>
-              {!waterRecipe && (
-                <Field
-                  label="Post-boil batch"
-                  help={help["Post-boil batch"]}
-                  suffix={us ? "gal" : "L"}
-                  value={us ? lToGal(t.batchL) : t.batchL}
-                  min={us ? 0.3 : 1}
-                  onChange={(n) => update({ batchL: us ? n * L_PER_GAL : n })}
-                />
-              )}
-              {!waterRecipe && (
-                <Field
-                  label="Efficiency"
-                  help={help["Efficiency"]}
-                  suffix="%"
-                  value={t.efficiency}
-                  min={1}
-                  max={100}
-                  step={1}
-                  onChange={(n) => update({ efficiency: n })}
-                />
-              )}
-            </div>
-            {waterRecipe && (
-              <p className="notice">
-                Starting water:{" "}
-                {(us
-                  ? lToGal(t.waterPlan?.startingWaterL ?? 0)
-                  : (t.waterPlan?.startingWaterL ?? 0)
-                ).toFixed(2)}{" "}
-                {us ? "gal" : "L"}. Yield is calculated from your malt build and
-                losses; change water and equipment in step 1.
+                No style limits. Set your own numbers below.
               </p>
             )}
-            <details className="advanced">
-              <summary>Gravity ranges & equipment</summary>
-              <div className="help-option">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={!!t.og}
-                    onChange={(e) =>
-                      update({
-                        og: e.target.checked ? [1.045, 1.06] : undefined,
-                        fg: e.target.checked ? [1.008, 1.015] : undefined,
-                      })
-                    }
-                  />{" "}
-                  Add OG / FG constraints
-                </label>
-                <InfoTip
-                  label="Add OG / FG constraints"
-                  content={help["Add OG / FG constraints"]}
-                />
-              </div>
-              {t.og && t.fg && (
-                <div className="field-grid">
-                  <Field
-                    label="OG minimum"
-                    help={help["OG minimum"]}
-                    value={t.og[0]}
-                    min={1.001}
-                    max={t.og[1]}
-                    step={0.001}
-                    onChange={(n) => update({ og: [n, t.og![1]] })}
-                  />
-                  <Field
-                    label="OG maximum"
-                    help={help["OG maximum"]}
-                    value={t.og[1]}
-                    min={t.og[0]}
-                    max={1.2}
-                    step={0.001}
-                    onChange={(n) => update({ og: [t.og![0], n] })}
-                  />
-                  <Field
-                    label="FG minimum"
-                    help={help["FG minimum"]}
-                    value={t.fg[0]}
-                    min={1}
-                    max={t.fg[1]}
-                    step={0.001}
-                    onChange={(n) => update({ fg: [n, t.fg![1]] })}
-                  />
-                  <Field
-                    label="FG maximum"
-                    help={help["FG maximum"]}
-                    value={t.fg[1]}
-                    min={t.fg[0]}
-                    max={1.08}
-                    step={0.001}
-                    onChange={(n) => update({ fg: [t.fg![0], n] })}
-                  />
-                </div>
-              )}
-              <div className="field-grid" hidden={!!waterRecipe}>
-                <Field
-                  label="Boil time"
-                  help={help["Boil time"]}
-                  suffix="min"
-                  value={t.equipment.boilMinutes}
-                  min={0}
-                  max={180}
-                  step={1}
-                  onChange={(n) =>
-                    update({ equipment: { ...t.equipment, boilMinutes: n } })
-                  }
-                />
-                <Field
-                  label="Boil-off"
-                  help={help["Boil-off"]}
-                  suffix={us ? "gal/h" : "L/h"}
-                  value={
-                    us
-                      ? lToGal(t.equipment.boilOffLPerHour)
-                      : t.equipment.boilOffLPerHour
-                  }
-                  min={0}
-                  onChange={(n) =>
-                    update({
-                      equipment: {
-                        ...t.equipment,
-                        boilOffLPerHour: us ? n * L_PER_GAL : n,
-                      },
-                    })
-                  }
-                />
-                <Field
-                  label="Transfer loss"
-                  help={help["Transfer loss"]}
-                  suffix={us ? "gal" : "L"}
-                  value={us ? lToGal(t.equipment.lossL) : t.equipment.lossL}
-                  min={0}
-                  onChange={(n) =>
-                    update({
-                      equipment: {
-                        ...t.equipment,
-                        lossL: us ? n * L_PER_GAL : n,
-                      },
-                    })
-                  }
-                />
-              </div>
-            </details>
-          </Section>
-          <Section
-            title="Find your flavor"
-            eyebrow="02 / SUBJECTIVE TARGETS"
-            action={
-              <InfoTip
-                label="Flavor intensity"
-                content={help["Flavor intensity"]}
-              />
-            }
-          >
-            <Tag>ESTIMATED SENSORY INTENSITY · 0–5</Tag>
-            <p className="muted">
-              Choose a hop direction or set individual flavors below. Automatic
-              style matching keeps your numeric and flavor targets. Choose the
-              style starting-point button only when you want to replace flavor
-              targets.
-            </p>
-            <div className="help-action">
-              <InfoTip
-                label="Use style flavor starting point"
-                content={help["Use style flavor starting point"]}
-              />
-              <button
-                className="button secondary"
-                disabled={!starterRecipes.some((r) => r.styleId === t.styleId)}
-                onClick={() => applyStyleFlavor()}
-              >
-                Use style flavor starting point
-              </button>
-            </div>
-            <div className="field">
-              <HelpLabel
-                label="Hop flavor direction"
-                help={help["Hop flavor direction"]}
-                htmlFor="design-option-1"
-              />
-              <select
-                id="design-option-1"
-                aria-label="Hop flavor direction"
-                value=""
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                aria-label="Automatic style matching"
+                checked={autoStyle}
                 onChange={(e) => {
-                  const direction = hopDirections.find(
-                    (d) => d.id === e.target.value,
-                  );
-                  if (direction) {
-                    const hopIds = c.vocabulary
-                      .filter((v) => v.parent === "hops")
-                      .map((v) => v.id);
-                    update({
-                      flavors: {
-                        ...t.flavors,
-                        ...Object.fromEntries(hopIds.map((id) => [id, 0])),
-                        ...Object.fromEntries(
-                          Object.entries(direction.flavors).filter(
-                            ([, value]) => typeof value === "number",
-                          ),
-                        ),
-                      },
-                      matchHopFlavor: true,
-                      hopChoices: [],
-                    });
-                  }
+                  setAutoStyle(e.target.checked);
+                  if (e.target.checked)
+                    update({ styleId: bestStyle?.style.id ?? t.styleId });
                 }}
-              >
-                <option value="">Choose a direction or customize below…</option>
-                {hopDirections.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field">
-              <HelpLabel
-                label="Evaluate hop character for"
-                help={help["Evaluate hop character for"]}
-                htmlFor="design-option-2"
               />
-              <select
-                id="design-option-2"
-                aria-label="Hop recommendation use"
-                aria-describedby="hop-character-explanation"
-                value={t.hopFocus ?? "aroma"}
-                onChange={(e) =>
-                  update({
-                    hopFocus: e.target.value as Target["hopFocus"],
-                    hopChoices: [],
-                  })
+              Suggest the closest style as I change the numbers
+            </label>
+          </Section>
+          <Section title="Targets">
+            <RangeField
+              label="Alcohol"
+              help={help["Target ABV"]}
+              unit="% ABV"
+              value={t.abv}
+              min={2}
+              max={14}
+              step={0.1}
+              band={band("abv")}
+              onChange={(n) => update({ abv: n })}
+            />
+            <RangeField
+              label="Bitterness"
+              help={help["Target bitterness"]}
+              unit="IBU"
+              value={t.ibu}
+              min={0}
+              max={120}
+              step={1}
+              band={band("ibu")}
+              onChange={(n) => update({ ibu: n })}
+            />
+            {t.srm === undefined ? (
+              <div className="range-field">
+                <div className="range-field-head">
+                  <span className="field-label">
+                    Color
+                    <InfoTip
+                      label="Target color"
+                      content={help["Target color"]}
+                    />
+                  </span>
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => update({ srm: lastColorTarget.current })}
+                  >
+                    Set a color goal
+                  </button>
+                </div>
+                <p className="muted">Any color is fine.</p>
+              </div>
+            ) : (
+              <RangeField
+                label="Color"
+                help={help["Target color"]}
+                unit="SRM"
+                value={t.srm}
+                min={1}
+                max={40}
+                step={0.5}
+                band={band("srm")}
+                colorTrack
+                onChange={(n) => update({ srm: n })}
+                action={
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => update({ srm: undefined })}
+                  >
+                    Any color
+                  </button>
                 }
-              >
-                <option value="bittering">Kettle bittering</option>
-                <option value="flavor">Late-boil flavor</option>
-                <option value="aroma">Whirlpool aroma</option>
-                <option value="dry hop">Dry hopping</option>
-              </select>
-            </div>
-            <details className="advanced">
-              <summary>Learn about hop timing & aroma</summary>
-              <HopCharacterHelp focus={t.hopFocus ?? "aroma"} />
-            </details>
-            <div className="help-option">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={t.matchHopFlavor ?? false}
-                  onChange={(e) =>
-                    update({ matchHopFlavor: e.target.checked, hopChoices: [] })
-                  }
-                />{" "}
-                Only suggest hops with evidence for at least one positive
-                hop-flavor target
-              </label>
-              <InfoTip
-                label="Hop evidence filter"
-                content={help["Hop evidence filter"]}
               />
+            )}
+          </Section>
+          <Section title="Flavor">
+            <div className="field">
+              <span>Hop character</span>
+              <div className="chip-row" role="group" aria-label="Hop flavor direction">
+                {hopDirections.map((d) => (
+                  <button
+                    type="button"
+                    key={d.id}
+                    className="chip"
+                    onClick={() => {
+                      const hopIds = c.vocabulary
+                        .filter((v) => v.parent === "hops")
+                        .map((v) => v.id);
+                      update({
+                        flavors: {
+                          ...t.flavors,
+                          ...Object.fromEntries(hopIds.map((id) => [id, 0])),
+                          ...Object.fromEntries(
+                            Object.entries(d.flavors).filter(
+                              ([, value]) => typeof value === "number",
+                            ),
+                          ),
+                        },
+                        matchHopFlavor: true,
+                        hopChoices: [],
+                      });
+                    }}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
             </div>
             {flavorControls(
-              c.vocabulary.filter((v) => v.axis && mainFlavors.has(v.id)),
+              mainFlavors
+                .map((id) => c.vocabulary.find((v) => v.id === id)!)
+                .filter(Boolean),
             )}
             <details className="advanced">
               <summary>
-                More flavor controls · {extraFlavors.length}
+                More flavors
                 {extraFlavors.some((v) => (t.flavors[v.id] ?? 0) > 0)
                   ? ` · ${extraFlavors.filter((v) => (t.flavors[v.id] ?? 0) > 0).length} set`
                   : ""}
               </summary>
-              {flavorControls(extraFlavors)}
+              {flavorControls(alphabetical(extraFlavors, (v) => v.label))}
+              <h4>Specific hop flavors</h4>
+              {flavorControls(
+                c.vocabulary.filter((v) => v.parent === "hops" && !v.axis),
+              )}
             </details>
-            <div className="descriptor-constraints">
-              <div className="field">
-                <HelpLabel
-                  label="Must include descriptor"
-                  help={help["Must include descriptor"]}
-                  htmlFor="design-option-3"
-                />
-                <select
-                  id="design-option-3"
-                  aria-label="Must include descriptor"
-                  value=""
-                  onChange={(e) => toggle("must", e.target.value)}
-                >
-                  <option value="">Choose a descriptor…</option>
-                  {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.label}
-                    </option>
-                  ))}
-                </select>
+            <details className="advanced">
+              <summary>
+                Must have / must avoid
+                {t.must.length + t.avoid.length
+                  ? ` · ${t.must.length + t.avoid.length} set`
+                  : ""}
+              </summary>
+              <div className="field-grid">
+                <label className="field">
+                  <span>Must taste of</span>
+                  <select
+                    aria-label="Must include descriptor"
+                    value=""
+                    onChange={(e) => toggle("must", e.target.value)}
+                  >
+                    <option value="">Choose a flavor…</option>
+                    {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  <span>Must not taste of</span>
+                  <select
+                    aria-label="Avoid descriptor"
+                    value=""
+                    onChange={(e) => toggle("avoid", e.target.value)}
+                  >
+                    <option value="">Choose a flavor…</option>
+                    {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
-              <div className="field">
-                <HelpLabel
-                  label="Avoid descriptor"
-                  help={help["Avoid descriptor"]}
-                  htmlFor="design-option-4"
-                />
-                <select
-                  id="design-option-4"
-                  aria-label="Avoid descriptor"
-                  value=""
-                  onChange={(e) => toggle("avoid", e.target.value)}
-                >
-                  <option value="">Choose a descriptor…</option>
-                  {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            </details>
             <div className="filter-chips">
               {t.must.map((a) => (
                 <button onClick={() => toggle("must", a)} key={"must" + a}>
@@ -750,230 +545,213 @@ export default function Design({
               ))}
             </div>
           </Section>
-          <details className="advanced hop-flavor-detail">
-            <summary>Fine-tune individual hop flavors</summary>
-            <div className="flavor-sliders">
-              {c.vocabulary
-                .filter((v) => v.parent === "hops" && !v.axis)
-                .map((v) => (
-                  <div className="flavor-slider-row" key={v.id}>
-                    <HelpLabel
-                      label={v.label}
-                      help={flavorHelp(v.id, v.label)}
-                      htmlFor={`design-flavor-${v.id}`}
-                    />
-                    <input
-                      id={`design-flavor-${v.id}`}
-                      aria-label={`Target hop flavor ${v.label}`}
-                      type="range"
-                      min="0"
-                      max="5"
-                      step=".25"
-                      value={t.flavors[v.id] ?? 0}
-                      onChange={(e) =>
-                        update({
-                          flavors: {
-                            ...t.flavors,
-                            [v.id]: Number(e.target.value),
-                          },
-                        })
-                      }
-                    />
-                    <b>{(t.flavors[v.id] ?? 0).toFixed(1)}</b>
-                  </div>
-                ))}
-            </div>
-          </details>
-          <details className="builder-optional">
-            <summary>Browse suggested ingredients (optional)</summary>
-            <IngredientMatches
-              target={t}
-              catalog={c}
-              us={us}
-              update={update}
-              userWeight={userWeight}
-            />
-          </details>
-          <details className="builder-optional">
+          <details className="panel advanced-panel">
             <summary>
-              Ingredient limits & advanced settings
+              Ingredient limits & fine-tuning
               {t.onHand.length + t.exclude.length
-                ? ` · ${t.onHand.length + t.exclude.length} inventory limits`
+                ? ` · ${t.onHand.length + t.exclude.length} set`
                 : ""}
             </summary>
-            <Section
-              title="Your constraints"
-              eyebrow="03 / WHAT YOU HAVE"
-              action={
-                <InfoTip
-                  label="On hand & excluded ingredients"
-                  content={help["On hand & excluded ingredients"]}
-                />
-              }
-            >
+            <p className="muted">
+              Only used when you ask for suggested recipes.
+            </p>
+            <div className="field-grid">
+              <label className="field">
+                <span>Yeast form</span>
+                <select
+                  aria-label="Yeast form"
+                  value={t.yeastForm}
+                  onChange={(e) =>
+                    update({
+                      yeastForm: e.target.value as Target["yeastForm"],
+                    })
+                  }
+                >
+                  <option value="any">Dry or liquid</option>
+                  <option value="dry">Dry only</option>
+                  <option value="liquid">Liquid only</option>
+                </select>
+              </label>
+              <label className="field">
+                <span>Budget</span>
+                <select
+                  aria-label="Budget approach"
+                  value={t.budget}
+                  onChange={(e) =>
+                    update({ budget: e.target.value as Target["budget"] })
+                  }
+                >
+                  <option value="any">No limit</option>
+                  <option value="economy">Economy · dry yeast, fewer hops</option>
+                </select>
+              </label>
+            </div>
+            <h4>Ingredients you have or want to avoid</h4>
+            <p className="muted">
+              Marking anything "I have it" limits suggestions to those
+              ingredients, so include a base malt, a hop and a yeast.
+            </p>
+            <input
+              className="ingredient-search"
+              placeholder="Search ingredients…"
+              value={ingredientQuery}
+              onChange={(e) => setIngredientQuery(e.target.value)}
+            />
+            {searchByName(
+              [...c.malts, ...c.hops, ...c.yeasts],
+              ingredientQuery,
+              (i) => i.name,
+              (i) => i.kind,
+            )
+              .filter(() => !!ingredientQuery.trim())
+              .slice(0, 12)
+              .map((i) => (
+                <div className="constraint-row" key={i.id}>
+                  <span>
+                    {i.name} <small>{i.kind}</small>
+                  </span>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={t.onHand.includes(i.id)}
+                      onChange={() => toggle("onHand", i.id)}
+                    />{" "}
+                    I have it
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={t.exclude.includes(i.id)}
+                      onChange={() => toggle("exclude", i.id)}
+                    />{" "}
+                    Avoid
+                  </label>
+                </div>
+              ))}
+            <div className="filter-chips">
+              {(["onHand", "exclude"] as const).flatMap((k) =>
+                t[k].map((id) => (
+                  <button key={k + id} onClick={() => toggle(k, id)}>
+                    {k === "onHand" ? "Have" : "Avoid"}:{" "}
+                    {
+                      [...c.malts, ...c.hops, ...c.yeasts].find(
+                        (i) => i.id === id,
+                      )?.name
+                    }{" "}
+                    ×
+                  </button>
+                )),
+              )}
+            </div>
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={t.matchHopFlavor ?? false}
+                onChange={(e) =>
+                  update({ matchHopFlavor: e.target.checked, hopChoices: [] })
+                }
+              />
+              Only suggest hops known for the hop flavors I chose
+            </label>
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={!!t.og}
+                onChange={(e) =>
+                  update({
+                    og: e.target.checked ? [1.045, 1.06] : undefined,
+                    fg: e.target.checked ? [1.008, 1.015] : undefined,
+                  })
+                }
+              />
+              Set gravity limits
+            </label>
+            {t.og && t.fg && (
               <div className="field-grid">
-                <div className="field">
-                  <HelpLabel
-                    label="Yeast form"
-                    help={help["Yeast form"]}
-                    htmlFor="design-option-5"
-                  />
-                  <select
-                    id="design-option-5"
-                    aria-label="Yeast form"
-                    value={t.yeastForm}
-                    onChange={(e) =>
-                      update({
-                        yeastForm: e.target.value as Target["yeastForm"],
-                      })
-                    }
-                  >
-                    <option value="any">Dry or liquid</option>
-                    <option value="dry">Dry only</option>
-                    <option value="liquid">Liquid only</option>
-                  </select>
-                </div>
-                <div className="field">
-                  <HelpLabel
-                    label="Budget approach"
-                    help={help["Budget approach"]}
-                    htmlFor="design-option-6"
-                  />
-                  <select
-                    id="design-option-6"
-                    aria-label="Budget approach"
-                    value={t.budget}
-                    onChange={(e) =>
-                      update({ budget: e.target.value as Target["budget"] })
-                    }
-                  >
-                    <option value="any">Unrestricted</option>
-                    <option value="economy">
-                      Economy · dry yeast, hop cap
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <details className="advanced">
-                <summary>On hand & excluded ingredients</summary>
-                <p className="muted">
-                  An empty on-hand list permits all ingredients. Once selected,
-                  it becomes a strict allowlist: include a base malt, hops and
-                  yeast. Quantities on hand are not tracked.
-                </p>
-                <input
-                  className="ingredient-search"
-                  placeholder="Search ingredients for constraints…"
-                  value={ingredientQuery}
-                  onChange={(e) => setIngredientQuery(e.target.value)}
+                <Field
+                  label="OG minimum"
+                  help={help["OG minimum"]}
+                  value={t.og[0]}
+                  min={1.001}
+                  max={t.og[1]}
+                  step={0.001}
+                  onChange={(n) => update({ og: [n, t.og![1]] })}
                 />
-                {searchByName(
-                  [...c.malts, ...c.hops, ...c.yeasts],
-                  ingredientQuery,
-                  (i) => i.name,
-                  (i) => i.kind,
-                )
-                  .filter(() => !!ingredientQuery.trim())
-                  .slice(0, 12)
-                  .map((i) => (
-                    <div className="constraint-row" key={i.id}>
-                      <span>
-                        {i.name} <small>{i.kind}</small>
-                      </span>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={t.onHand.includes(i.id)}
-                          onChange={() => toggle("onHand", i.id)}
-                        />{" "}
-                        On hand
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={t.exclude.includes(i.id)}
-                          onChange={() => toggle("exclude", i.id)}
-                        />{" "}
-                        Exclude
-                      </label>
-                    </div>
-                  ))}
-                <div className="filter-chips">
-                  {(["onHand", "exclude"] as const).flatMap((k) =>
-                    t[k].map((id) => (
-                      <button key={k + id} onClick={() => toggle(k, id)}>
-                        {k === "onHand" ? "On hand" : "Exclude"}:{" "}
-                        {
-                          [...c.malts, ...c.hops, ...c.yeasts].find(
-                            (i) => i.id === id,
-                          )?.name
-                        }{" "}
-                        ×
-                      </button>
-                    )),
-                  )}
-                </div>
-              </details>
-              <details className="advanced">
-                <summary>Optimization weights</summary>
-                <div className="field-grid">
-                  {(["flavor", "numbers", "style"] as const).map((k) => (
-                    <Field
-                      key={k}
-                      label={k + " weight"}
-                      help={help[k + " weight"]}
-                      value={t.weights[k]}
-                      min={0}
-                      max={10}
-                      onChange={(n) =>
-                        update({ weights: { ...t.weights, [k]: n } })
-                      }
-                    />
-                  ))}
-                </div>
-              </details>
-            </Section>
+                <Field
+                  label="OG maximum"
+                  help={help["OG maximum"]}
+                  value={t.og[1]}
+                  min={t.og[0]}
+                  max={1.2}
+                  step={0.001}
+                  onChange={(n) => update({ og: [t.og![0], n] })}
+                />
+                <Field
+                  label="FG minimum"
+                  help={help["FG minimum"]}
+                  value={t.fg[0]}
+                  min={1}
+                  max={t.fg[1]}
+                  step={0.001}
+                  onChange={(n) => update({ fg: [n, t.fg![1]] })}
+                />
+                <Field
+                  label="FG maximum"
+                  help={help["FG maximum"]}
+                  value={t.fg[1]}
+                  min={t.fg[0]}
+                  max={1.08}
+                  step={0.001}
+                  onChange={(n) => update({ fg: [t.fg![0], n] })}
+                />
+              </div>
+            )}
+            <details className="advanced">
+              <summary>What matters most when suggesting</summary>
+              <div className="field-grid">
+                {(["flavor", "numbers", "style"] as const).map((k) => (
+                  <Field
+                    key={k}
+                    label={k + " weight"}
+                    help={help[k + " weight"]}
+                    value={t.weights[k]}
+                    min={0}
+                    max={10}
+                    onChange={(n) =>
+                      update({ weights: { ...t.weights, [k]: n } })
+                    }
+                  />
+                ))}
+              </div>
+            </details>
+            <details className="advanced">
+              <summary>Browse ingredients that fit these goals</summary>
+              <IngredientMatches
+                target={t}
+                catalog={c}
+                us={us}
+                update={update}
+                userWeight={userWeight}
+              />
+            </details>
           </details>
         </div>
-        <aside className="design-preview">
-          <Section
-            title="Your flavor brief"
-            eyebrow="THE BEER YOU IMAGINE"
-            action={
-              <InfoTip
-                label="Find my recipes"
-                content={help["Find my recipes"]}
-              />
-            }
-          >
+        <aside className="goals-aside">
+          <Section title="Your flavor goal">
             <Radar scores={t.flavors} />
             <p className="muted">
-              Numeric targets are calculated with brewing formulas. Flavor
-              targets are compared against a transparent consensus model.
+              Want a head start? We'll design three recipes that hit these
+              goals with your water. Or press <b>Next</b> to choose
+              ingredients yourself.
             </p>
             <button
-              className={`button ${fromRecipe ? "secondary" : "primary"} solve-button`}
+              className="button primary wide"
               disabled={busy}
               onClick={() => run()}
             >
               <Sparkles size={16} />
-              {busy ? "Exploring recipes…" : "Generate recipe options"}
+              {busy ? "Designing recipes…" : "Suggest recipes for me"}
             </button>
-            {waterRecipe && (
-              <button
-                className="button primary guided-goal-continue"
-                disabled={busy}
-                onClick={() =>
-                  fromRecipe && onConfirm ? onConfirm(t) : run(true)
-                }
-              >
-                {busy
-                  ? "Building your recipe…"
-                  : fromRecipe && onConfirm
-                    ? "Confirm goals & continue →"
-                    : "Build malt bill & continue →"}
-              </button>
-            )}
             {busy && (
               <button
                 className="text-button"
@@ -982,92 +760,79 @@ export default function Design({
                   setBusy(false);
                 }}
               >
-                Cancel search
+                Cancel
               </button>
             )}
+            {error && (
+              <p className="alert" role="alert">
+                {error}
+              </p>
+            )}
           </Section>
-          {error && (
-            <div className="alert" role="alert">
-              {error}
-            </div>
-          )}
-          <div className="design-tip">
-            <span>THE BREWER’S NOTE</span>
-            <h3>Balance is a conversation.</h3>
-            <p>
-              A bigger aroma doesn’t have to mean a bigger bitterness. Whirlpool
-              and dry-hop additions can help you find both.
-            </p>
-          </div>
         </aside>
       </div>
       {results.length > 0 && (
-        <div className="solver-results">
-          <div className="results-heading">
-            <div className="eyebrow">EXPLORE YOUR POSSIBILITIES</div>
-            <h2>Three starting points.</h2>
-            <p className="muted">
-              Ranked by weighted distance. Lower scores are closer, not
-              guaranteed perfect matches.
-              {stale
-                ? " Targets changed — run the solver again to refresh these results."
-                : ""}
-            </p>
-          </div>
+        <section className="solver-results" id="suggested-recipes">
+          <h2>Suggested recipes</h2>
+          <p className="muted">
+            Ordered by how closely each one matches your goals.
+            {stale ? " Your goals changed — suggest again to refresh." : ""}
+          </p>
           <div className="candidate-grid">
             {results.map((b, i) => (
               <article className="candidate panel" key={b.recipe.id}>
-                <div className="eyebrow">
-                  0{i + 1} / {i === 0 ? "CLOSEST MATCH" : "ANOTHER APPROACH"}
-                </div>
+                <p className="eyebrow">
+                  {i === 0 ? "Closest match" : `Option ${i + 1}`}
+                </p>
                 <h3>{b.recipe.name}</h3>
                 <div className="candidate-numbers">
-                  <b>
-                    {b.prediction.abv.toFixed(1)}
-                    <small>% ABV</small>
-                  </b>
-                  <b>
-                    {b.prediction.ibu.toFixed(0)}
-                    <small>IBU</small>
-                  </b>
-                  <b>
-                    {b.prediction.srm.toFixed(1)}
-                    <small>SRM</small>
-                  </b>
+                  <span>
+                    <b>{b.prediction.abv.toFixed(1)}%</b> ABV
+                  </span>
+                  <span>
+                    <b>{b.prediction.ibu.toFixed(0)}</b> IBU
+                  </span>
+                  <span>
+                    <b>{b.prediction.srm.toFixed(1)}</b> SRM
+                  </span>
                 </div>
-                <Tag tone="objective">CALCULATED</Tag>
                 <Radar scores={b.flavor.scores} target={t.flavors} />
-                <Tag>SUBJECTIVE ESTIMATE</Tag>
-                <div className="candidate-reasons">
-                  {b.explanations.map((x) => (
-                    <p key={x}>{x}</p>
+                <ul className="candidate-reasons">
+                  {b.explanations.slice(0, 3).map((x) => (
+                    <li key={x}>{x}</li>
                   ))}
-                </div>
-                <details className="advanced">
-                  <summary>
-                    Tradeoffs & target conflicts ({b.tradeoffs.length})
-                  </summary>
-                  {b.tradeoffs.length ? (
-                    b.tradeoffs.map((x) => <p key={x}>{x}</p>)
-                  ) : (
-                    <p>
-                      No numeric target conflicts within planning tolerances.
-                      Sensory results remain estimates.
-                    </p>
-                  )}
-                  <p>Objective score: {b.score.toFixed(3)}</p>
-                </details>
+                </ul>
+                {b.tradeoffs.length > 0 && (
+                  <details className="advanced">
+                    <summary>Trade-offs ({b.tradeoffs.length})</summary>
+                    {b.tradeoffs.map((x) => (
+                      <p key={x}>{x}</p>
+                    ))}
+                  </details>
+                )}
                 <button
-                  className="button primary"
+                  className="button primary wide"
                   onClick={() => openCandidate(b.recipe)}
                 >
-                  Use recipe & continue to malts <ArrowUpRight size={14} />
+                  Use this recipe <ArrowUpRight size={14} />
                 </button>
               </article>
             ))}
           </div>
-        </div>
+        </section>
       )}
     </>
   );
+}
+
+function intensityWord(n: number) {
+  return n === 0
+    ? "None"
+    : n <= 1
+      ? "Hint"
+      : n <= 2.25
+        ? "Light"
+        : n <= 3.5
+          ? "Medium"
+          : "Strong";
 }
