@@ -628,6 +628,9 @@ export default function App() {
               <RecipeNotes recipe={recipe} onChange={setRecipe} us={us} />
             </div>
             <div hidden={builderStep !== "water"}>
+              <p className="muted">
+                Recipe: <strong>{recipe.name}</strong>
+              </p>
               <WaterPlanner
                 recipe={recipe}
                 catalog={catalog}
@@ -903,10 +906,11 @@ export default function App() {
               drafts={drafts}
               catalog={baseCatalog}
               us={us}
-              onOpen={(r) => {
+              onOpen={(r, startAtWater) => {
                 setRecipe(recipeSchema.parse(r));
                 setDesignFromRecipe(recipeSchema.parse(r));
-                goToStep("summary");
+                if (startAtWater) scrollPositions.current["builder:water"] = 0;
+                goToStep(startAtWater ? "water" : "summary");
               }}
               onNew={startNewRecipe}
             />
@@ -951,6 +955,14 @@ export default function App() {
               fromRecipe={designFromRecipe}
               waterRecipe={recipe}
               onTargetChange={setDesignTarget}
+              onConfirm={(target) => {
+                setRecipe({
+                  ...recipe,
+                  styleId: target.styleId,
+                  designTargets: target,
+                });
+                goToStep("malts");
+              }}
               resetKey={goalResetKey}
               catalog={catalog}
               userWeight={prefs.userWeight}
@@ -1030,7 +1042,9 @@ export default function App() {
                     goToStep("malts");
                   }}
                 >
-                  Keep current ingredients →
+                  {designFromRecipe
+                    ? "Confirm goals & keep ingredients →"
+                    : "Keep current ingredients →"}
                 </button>
               ) : builderStep !== "summary" ? (
                 <button

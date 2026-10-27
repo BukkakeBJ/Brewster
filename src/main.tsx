@@ -11,6 +11,7 @@ import "./headings.css";
 import "./readability.css";
 import "./workflow.css";
 import "./guided.css";
+import "./recipe-book.css";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

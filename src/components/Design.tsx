@@ -29,6 +29,7 @@ export default function Design({
   fromRecipe,
   waterRecipe,
   onTargetChange,
+  onConfirm,
   resetKey = 0,
 }: {
   catalog: Catalog;
@@ -38,6 +39,7 @@ export default function Design({
   fromRecipe?: Recipe;
   waterRecipe?: Recipe;
   onTargetChange?: (target: Target) => void;
+  onConfirm?: (target: Target) => void;
   resetKey?: number;
 }) {
   const [autoStyle, setAutoStyle] = useState(true);
@@ -153,15 +155,12 @@ export default function Design({
     setBusy(false);
     setResults([]);
     setError("");
-    setAutoStyle(true);
+    setAutoStyle(false);
     setT(
-      matchStyleToTargets(
-        fromRecipe.designTargets ?? {
-          ...recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight),
-          waterPlan: waterSettings(fromRecipe, c),
-        },
-        c,
-      ),
+      fromRecipe.designTargets ?? {
+        ...recipeDesignBrief(fromRecipe, c, defaultTarget, userWeight),
+        waterPlan: waterSettings(fromRecipe, c),
+      },
     );
     setStale(true);
   }, [fromRecipe]);
@@ -953,7 +952,7 @@ export default function Design({
               targets are compared against a transparent consensus model.
             </p>
             <button
-              className="button primary solve-button"
+              className={`button ${fromRecipe ? "secondary" : "primary"} solve-button`}
               disabled={busy}
               onClick={() => run()}
             >
@@ -964,11 +963,15 @@ export default function Design({
               <button
                 className="button primary guided-goal-continue"
                 disabled={busy}
-                onClick={() => run(true)}
+                onClick={() =>
+                  fromRecipe && onConfirm ? onConfirm(t) : run(true)
+                }
               >
                 {busy
                   ? "Building your recipe…"
-                  : "Build malt bill & continue →"}
+                  : fromRecipe && onConfirm
+                    ? "Confirm goals & continue →"
+                    : "Build malt bill & continue →"}
               </button>
             )}
             {busy && (

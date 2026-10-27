@@ -100,21 +100,17 @@ export default function FlavorPanel({
   flavor: f,
   catalog: c,
   target,
+  readOnly = false,
 }: {
   flavor: Flavor;
   catalog: Catalog;
   target?: Record<string, number>;
+  readOnly?: boolean;
 }) {
   const [axis, setAxis] = useState("citrus");
   const rows = f.contributions[axis] ?? [];
-  return (
-    <Section title="In the glass" eyebrow="SUBJECTIVE / FLAVOR ESTIMATE">
-      <Tag>BREWER-CONSENSUS MODEL</Tag>
-      <Radar scores={f.scores} target={target} />
-      <div className="radar-legend">
-        <span>● Predicted</span>
-        {target && <span>◌ Target</span>}
-      </div>
+  const explanation = (
+    <>
       <p className="muted">
         A sensory estimate, not a measurement. Select any axis to see what’s
         behind it.
@@ -166,6 +162,23 @@ export default function FlavorPanel({
           ))
         )}
       </div>
+    </>
+  );
+  return (
+    <Section title="In the glass" eyebrow="SUBJECTIVE / FLAVOR ESTIMATE">
+      <Tag>BREWER-CONSENSUS MODEL</Tag>
+      <Radar scores={f.scores} target={target} />
+      <div className="radar-legend">
+        <span>● Predicted</span>
+        {target && <span>◌ Target</span>}
+      </div>
+      {readOnly ? (
+        <p className="muted">
+          Estimated sensory profile from this recipe’s ingredients and process.
+        </p>
+      ) : (
+        explanation
+      )}
     </Section>
   );
 }

@@ -45,7 +45,7 @@ export default function RecipeBook({
   drafts: Record<string, Recipe>;
   catalog: Catalog;
   us: boolean;
-  onOpen: (r: Recipe) => void;
+  onOpen: (r: Recipe, startAtWater?: boolean) => void;
   onNew: () => void;
 }) {
   const [query, setQuery] = useState(""),
@@ -100,12 +100,13 @@ export default function RecipeBook({
     setOriginKind("");
     setQuery("");
   };
-  const open = (e: BookEntry, copy = false) =>
+  const open = (e: BookEntry, copy = false) => {
+    const makeCopy = copy || e.collection === "community";
     onOpen(
-      copy || e.collection === "community"
-        ? copyBookRecipe(e.recipe, crypto.randomUUID())
-        : e.recipe,
+      makeCopy ? copyBookRecipe(e.recipe, crypto.randomUUID()) : e.recipe,
+      makeCopy,
     );
+  };
   return (
     <>
       <div className="book-intro">
@@ -164,8 +165,10 @@ export default function RecipeBook({
               key={style.id}
               onClick={() => browseStyle(style.id)}
             >
-              {style.name} · {recipes.length} recipe
-              {recipes.length === 1 ? "" : "s"}
+              <span className="book-style-name">{style.name}</span>
+              <span className="book-style-count">
+                {recipes.length} recipe{recipes.length === 1 ? "" : "s"}
+              </span>
             </button>
           ))}
         </div>
@@ -322,23 +325,25 @@ export default function RecipeBook({
                 {r.description ||
                   "Your own recipe. Open it in the editor to add a description and brewing notes."}
               </p>
-              {entry.collection !== "starter" &&
-                r.origin &&
-                r.origin.kind !== "original-starter" && (
-                  <Tag>{recipeOriginLabel(r)}</Tag>
+              <div className="book-card-notices">
+                {entry.collection !== "starter" &&
+                  r.origin &&
+                  r.origin.kind !== "original-starter" && (
+                    <Tag>{recipeOriginLabel(r)}</Tag>
+                  )}
+                {r.tags?.includes("special process") && (
+                  <p className="muted" role="note">
+                    Base beer estimates only. Follow the brewing notes for
+                    additions, souring, aging, blending or concentration; those
+                    effects are outside the calculations.
+                  </p>
                 )}
-              {r.tags?.includes("special process") && (
-                <p className="muted" role="note">
-                  Base beer estimates only. Follow the brewing notes for
-                  additions, souring, aging, blending or concentration; those
-                  effects are outside the calculations.
-                </p>
-              )}
-              {!!r.additives?.length && (
-                <p className="additive-model-note" role="note">
-                  {additiveModelNote}
-                </p>
-              )}
+                {!!r.additives?.length && (
+                  <p className="additive-model-note" role="note">
+                    {additiveModelNote}
+                  </p>
+                )}
+              </div>
               <div className="book-stats">
                 <div>
                   <strong>
@@ -404,7 +409,8 @@ export default function RecipeBook({
                 </p>
                 <small>
                   Brewer-consensus estimate, not a measurement or a verified
-                  commercial beer profile. View recipe for the radar, ingredient
+                  commercial beer profile. View recipe for the full schedule and
+                  radar. Use a copy in the builder to explore ingredient
                   contributions and descriptor sources.
                 </small>
               </div>
@@ -450,67 +456,81 @@ export default function RecipeBook({
               </div>
               {expanded && (
                 <div className="book-recipe-details">
-                  <FlavorPanel flavor={profile.flavor} catalog={c} />
-                  <div className="book-detail-columns">
-                    <div>
-                      <h3>Grain bill</h3>
-                      {r.grains.map((g, i) => (
-                        <p key={i}>
-                          <b>
-                            {c.malts.find((m) => m.id === g.ingredientId)!.name}
-                          </b>
-                          <span>
-                            {(us ? kgToLb(g.kg) : g.kg).toFixed(2)}{" "}
-                            {us ? "lb" : "kg"} ·{" "}
-                            {total ? ((100 * g.kg) / total).toFixed(1) : "0"}%
-                          </span>
+                  <div className="book-details-overview">
+                    <div className="book-detail-columns">
+                      <div>
+                        <h3>Grain bill</h3>
+                        {r.grains.map((g, i) => (
+                          <p key={i}>
+                            <b>
+                              {
+                                c.malts.find((m) => m.id === g.ingredientId)!
+                                  .name
+                              }
+                            </b>
+                            <span>
+                              {(us ? kgToLb(g.kg) : g.kg).toFixed(2)}{" "}
+                              {us ? "lb" : "kg"} ·{" "}
+                              {total ? ((100 * g.kg) / total).toFixed(1) : "0"}%
+                            </span>
+                          </p>
+                        ))}
+                        <h3>Hop schedule</h3>
+                        {r.hops.map((h, i) => (
+                          <p key={i}>
+                            <b>
+                              {
+                                c.hops.find((x) => x.id === h.ingredientId)!
+                                  .name
+                              }
+                            </b>
+                            <span>
+                              {(us ? h.grams / G_PER_OZ : h.grams).toFixed(
+                                us ? 2 : 0,
+                              )}{" "}
+                              {us ? "oz" : "g"} · {h.use} ·{" "}
+                              {h.use === "dry hop"
+                                ? (h.minutes / 1440).toFixed(1) + " days"
+                                : h.minutes + " min"}
+                            </span>
+                          </p>
+                        ))}
+                      </div>
+                      <div>
+                        <h3>Yeast & process</h3>
+                        <p>
+                          {y.lab} {y.code} · {y.name}
                         </p>
-                      ))}
-                      <h3>Hop schedule</h3>
-                      {r.hops.map((h, i) => (
-                        <p key={i}>
-                          <b>
-                            {c.hops.find((x) => x.id === h.ingredientId)!.name}
-                          </b>
-                          <span>
-                            {(us ? h.grams / G_PER_OZ : h.grams).toFixed(
-                              us ? 2 : 0,
-                            )}{" "}
-                            {us ? "oz" : "g"} · {h.use} ·{" "}
-                            {h.use === "dry hop"
-                              ? (h.minutes / 1440).toFixed(1) + " days"
-                              : h.minutes + " min"}
-                          </span>
+                        <p>
+                          Mash {(us ? cToF(r.mashC) : r.mashC).toFixed(1)}{" "}
+                          {us ? "°F" : "°C"} for {r.mashMinutes} min
                         </p>
-                      ))}
+                        <p>
+                          Ferment{" "}
+                          {(us ? cToF(r.fermentC) : r.fermentC).toFixed(1)}{" "}
+                          {us ? "°F" : "°C"}
+                        </p>
+                        <p>
+                          Boil {r.boilMinutes} min · Efficiency {r.efficiency}%
+                        </p>
+                        <p>
+                          OG {prediction.og.toFixed(3)} · FG{" "}
+                          {prediction.fg.toFixed(3)}
+                        </p>
+                        {prediction.warnings.map((w) => (
+                          <p className="book-warning" key={w}>
+                            {w}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      <h3>Yeast & process</h3>
-                      <p>
-                        {y.lab} {y.code} · {y.name}
-                      </p>
-                      <p>
-                        Mash {(us ? cToF(r.mashC) : r.mashC).toFixed(1)}{" "}
-                        {us ? "°F" : "°C"} for {r.mashMinutes} min
-                      </p>
-                      <p>
-                        Ferment{" "}
-                        {(us ? cToF(r.fermentC) : r.fermentC).toFixed(1)}{" "}
-                        {us ? "°F" : "°C"}
-                      </p>
-                      <p>
-                        Boil {r.boilMinutes} min · Efficiency {r.efficiency}%
-                      </p>
-                      <p>
-                        OG {prediction.og.toFixed(3)} · FG{" "}
-                        {prediction.fg.toFixed(3)}
-                      </p>
-                      {prediction.warnings.map((w) => (
-                        <p className="book-warning" key={w}>
-                          {w}
-                        </p>
-                      ))}
-                    </div>
+                    <aside className="book-flavor-aside">
+                      <FlavorPanel
+                        flavor={profile.flavor}
+                        catalog={c}
+                        readOnly
+                      />
+                    </aside>
                   </div>
                   {r.notes && (
                     <>
