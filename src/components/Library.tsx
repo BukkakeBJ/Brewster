@@ -21,6 +21,8 @@ import { yeastGroups, yeastFamilies, yeastGuide } from "../engine/yeast";
 import { startingPoints } from "../engine/suggestions";
 import { defaultRecipe } from "../defaults";
 import { alphabetical, searchByName } from "../engine/search";
+import { hopFlavors, hopHasFlavor, searchHops } from "../engine/hopFlavor";
+import HopFlavorChips from "./HopFlavorChips";
 import { Field, HelpTerm, Tag } from "./ui";
 export default function Library({
   catalog: c,
@@ -43,6 +45,7 @@ export default function Library({
     [q, setQ] = useState(""),
     [role, setRole] = useState("All"),
     [descriptor, setDescriptor] = useState(""),
+    [flavors, setFlavors] = useState<string[]>([]),
     [minTolerance, setMinTolerance] = useState(0),
     [minAbv, setMinAbv] = useState(0),
     [maxAbv, setMaxAbv] = useState(20),
@@ -85,6 +88,11 @@ export default function Library({
     if (popularOnly && kind !== "yeast" && !popularIds.has(i.id)) return false;
     if (descriptor && !byDescriptor.has(i.id)) return false;
     if (
+      kind === "hop" &&
+      !flavors.every((flavor) => hopHasFlavor(i.id, flavor, c))
+    )
+      return false;
+    if (
       role !== "All" &&
       (kind === "hop"
         ? !hopRoles(i as Hop).includes(role)
@@ -110,25 +118,29 @@ export default function Library({
     }
     return true;
   });
-  const filtered = searchByName<Ingredient>(
-    eligible,
-    q,
-    (i) => i.name,
-    (i) =>
-      JSON.stringify({ ...i, source: undefined }) +
-      (i.kind === "yeast"
-        ? " " +
-          yeastGroups(i as Yeast)
-            .map((f) => f.label)
-            .join(" ") +
-          " " +
-          JSON.stringify(yeastGuide(i as Yeast) ?? {})
-        : ""),
-    (i) =>
-      i.kind === "yeast"
-        ? [(i as Yeast).code, `${(i as Yeast).lab} ${(i as Yeast).code}`]
-        : [],
-  );
+  const ingredientText = (i: Ingredient) =>
+    JSON.stringify({ ...i, source: undefined }) +
+    (i.kind === "yeast"
+      ? " " +
+        yeastGroups(i as Yeast)
+          .map((f) => f.label)
+          .join(" ") +
+        " " +
+        JSON.stringify(yeastGuide(i as Yeast) ?? {})
+      : "");
+  const filtered: Ingredient[] =
+    kind === "hop"
+      ? searchHops(eligible as Hop[], q, c, ingredientText)
+      : searchByName<Ingredient>(
+          eligible,
+          q,
+          (i) => i.name,
+          ingredientText,
+          (i) =>
+            i.kind === "yeast"
+              ? [(i as Yeast).code, `${(i as Yeast).lab} ${(i as Yeast).code}`]
+              : [],
+        );
   return (
     <>
       <div className="library-types">
@@ -145,6 +157,7 @@ export default function Library({
               setKind(String(k));
               setQ("");
               setDescriptor("");
+              setFlavors([]);
               setRole("All");
               setLimit(24);
               setExpanded("");
@@ -186,7 +199,11 @@ export default function Library({
           <div className="library-search">
             <Search size={17} />
             <input
-              placeholder="Search names, origin, manufacturer, product code…"
+              placeholder={
+                kind === "hop"
+                  ? "Search names, origin or flavor…"
+                  : "Search names, origin, manufacturer, product code…"
+              }
               aria-label="Search ingredient library"
               value={q}
               onChange={(e) => {
@@ -194,22 +211,35 @@ export default function Library({
                 setLimit(24);
               }}
             />
-            <select
-              aria-label="Filter by flavor descriptor"
-              value={descriptor}
-              onChange={(e) => {
-                setDescriptor(e.target.value);
+            {kind !== "hop" && (
+              <select
+                aria-label="Filter by flavor descriptor"
+                value={descriptor}
+                onChange={(e) => {
+                  setDescriptor(e.target.value);
+                  setLimit(24);
+                }}
+              >
+                <option value="">Any flavor descriptor</option>
+                {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+          {kind === "hop" && (
+            <HopFlavorChips
+              catalog={c}
+              hops={c.hops}
+              selected={flavors}
+              onChange={(next) => {
+                setFlavors(next);
                 setLimit(24);
               }}
-            >
-              <option value="">Any flavor descriptor</option>
-              {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
-                <option key={v.id} value={v.id}>
-                  {v.label}
-                </option>
-              ))}
-            </select>
-          </div>
+            />
+          )}
           {kind === "yeast" ? (
             <label className="field library-yeast-type">
               <span>Yeast type</span>
@@ -470,6 +500,12 @@ export default function Library({
                     </div>
                     <div className="sensory-side">
                       <Tag>SUBJECTIVE ESTIMATE</Tag>
+                      {kind === "hop" && (
+                        <p className="library-hop-flavors">
+                          {hopFlavors(i.id, c).join(" · ") ||
+                            "No flavor notes in our data"}
+                        </p>
+                      )}
                       {kind === "yeast" && (
                         <div className="yeast-flavor-summary">
                           <h4>Flavor profile</h4>

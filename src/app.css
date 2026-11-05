@@ -2079,6 +2079,36 @@ input[type="range"]::-moz-range-thumb {
 .picker-search input {
   padding-left: 2.5rem !important;
 }
+.hop-flavor-filter {
+  margin: 0.5rem 0;
+}
+.ingredient-picker-dialog .hop-flavor-filter {
+  margin: 0.5rem 1rem;
+}
+.hop-flavor-chips {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  scrollbar-width: thin;
+}
+.hop-flavor-chips .chip {
+  flex: none;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+.hop-flavor-filter .muted {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+}
+.picker-flavors {
+  color: var(--ink-2);
+}
+.library-hop-flavors {
+  margin: 0.35rem 0;
+  font-size: 0.88rem;
+  font-weight: 550;
+}
 .picker-group {
   margin: 0.6rem 0.75rem 0.25rem;
   font-size: 0.82rem;
@@ -2831,6 +2861,9 @@ input[type="range"]::-moz-range-thumb {
     height: 100dvh;
     max-height: 100dvh;
     border-radius: 0;
+  }
+  .ingredient-picker-dialog:has(.hop-flavor-filter) .picker-instruction {
+    display: none;
   }
   .ingredient-picker-body {
     grid-template-columns: 1fr;

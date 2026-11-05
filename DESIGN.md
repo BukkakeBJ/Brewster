@@ -30,6 +30,10 @@ Edits are never overwritten by accident: the build runs only for a new draft or 
 
 The malt picker opens with suggestions ahead of the full list (`suggestedMalts` in `src/engine/ingredientFit.ts`): the style's own malts in the same role and similar malts when swapping, and the style's malts or popular choices when adding. Nothing offered would raise the question below.
 
+### Searching hops by flavor
+
+The hop picker and the Ingredients page search hops by flavor as well as name and origin (`searchHops` in `src/engine/hopFlavor.ts`), and both offer flavor chips (`HopFlavorChips.tsx`). Every word or chip has to match, so "citrus pine" finds hops with both. A whole flavor word means that flavor exactly ("pine" isn't "pineapple"), a partial one matches as you type, and everyday words work too ("piney", "fruity", "peach"). "Citrus" also finds grapefruit, lemon and orange, and "tropical" also finds mango, passionfruit and pineapple. Flavor notes come from `data/descriptors.json`; hops without notes can't match a flavor search, and the chips say how many that leaves out.
+
 ### Unusual picks
 
 A malt, hop or yeast pick that looks strange for the style opens a pop-up (`IngredientQuestion.tsx`) that says why it may be unusual and offers three answers: keep the style with the ingredient in the recipe, change the style (three close matches that suit the ingredient, or any style), or undo the change. Pressing Esc counts as keeping the style, and an answered ingredient isn't asked about again for that style. It runs when an ingredient is newly picked or a hop moves from a long boil to a late addition (`unusualPick` in `src/engine/ingredientFit.ts`), never for a change of amount. The "When" menu checks right away; the time field checks when the brewer leaves it, since it saves on every keystroke and 60 → 45 passes through 4.
