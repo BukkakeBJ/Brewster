@@ -1,7 +1,7 @@
 import { IngredientInfo } from "./IngredientPicker";
 import AdditiveLibrary from "./AdditiveLibrary";
 import { additives, type AdditiveAddition } from "../engine/additives";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Search, ArrowUpRight, BookOpen } from "lucide-react";
 import type { Catalog, Ingredient, Malt, Hop, Yeast } from "../engine/types";
 import { alcohol, midpoint, cToF } from "../engine/calculations";
@@ -20,9 +20,14 @@ import {
 import { yeastGroups, yeastFamilies, yeastGuide } from "../engine/yeast";
 import { startingPoints } from "../engine/suggestions";
 import { defaultRecipe } from "../defaults";
-import { alphabetical, searchByName } from "../engine/search";
-import { hopFlavors, hopHasFlavor, searchHops } from "../engine/hopFlavor";
-import HopFlavorChips from "./HopFlavorChips";
+import { alphabetical } from "../engine/search";
+import {
+  flavorsOf,
+  hasFlavor,
+  searchIngredients,
+  styleMatchNote,
+} from "../engine/ingredientSearch";
+import FlavorChips from "./FlavorChips";
 import { Field, HelpTerm, Tag } from "./ui";
 export default function Library({
   catalog: c,
@@ -44,7 +49,6 @@ export default function Library({
   const [kind, setKind] = useState("hop"),
     [q, setQ] = useState(""),
     [role, setRole] = useState("All"),
-    [descriptor, setDescriptor] = useState(""),
     [flavors, setFlavors] = useState<string[]>([]),
     [minTolerance, setMinTolerance] = useState(0),
     [minAbv, setMinAbv] = useState(0),
@@ -65,15 +69,6 @@ export default function Library({
               c.yeasts.flatMap((y) => yeastGroups(y).map((f) => f.label)),
             ),
           );
-  const byDescriptor = useMemo(
-    () =>
-      new Set(
-        c.descriptors
-          .filter((d) => d.descriptor === descriptor)
-          .map((d) => d.ingredientId),
-      ),
-    [c, descriptor],
-  );
   const popularIds = new Set(
     kind === "yeast"
       ? []
@@ -86,12 +81,7 @@ export default function Library({
   );
   const eligible = all.filter((i) => {
     if (popularOnly && kind !== "yeast" && !popularIds.has(i.id)) return false;
-    if (descriptor && !byDescriptor.has(i.id)) return false;
-    if (
-      kind === "hop" &&
-      !flavors.every((flavor) => hopHasFlavor(i.id, flavor, c))
-    )
-      return false;
+    if (!flavors.every((flavor) => hasFlavor(i.id, flavor, c))) return false;
     if (
       role !== "All" &&
       (kind === "hop"
@@ -128,19 +118,16 @@ export default function Library({
         " " +
         JSON.stringify(yeastGuide(i as Yeast) ?? {})
       : "");
-  const filtered: Ingredient[] =
-    kind === "hop"
-      ? searchHops(eligible as Hop[], q, c, ingredientText)
-      : searchByName<Ingredient>(
-          eligible,
-          q,
-          (i) => i.name,
-          ingredientText,
-          (i) =>
-            i.kind === "yeast"
-              ? [(i as Yeast).code, `${(i as Yeast).lab} ${(i as Yeast).code}`]
-              : [],
-        );
+  const filtered = searchIngredients<Ingredient>(
+    eligible,
+    q,
+    c,
+    ingredientText,
+    (i) =>
+      i.kind === "yeast"
+        ? [(i as Yeast).code, `${(i as Yeast).lab} ${(i as Yeast).code}`]
+        : [],
+  );
   return (
     <>
       <div className="library-types">
@@ -156,7 +143,6 @@ export default function Library({
             onClick={() => {
               setKind(String(k));
               setQ("");
-              setDescriptor("");
               setFlavors([]);
               setRole("All");
               setLimit(24);
@@ -202,7 +188,9 @@ export default function Library({
               placeholder={
                 kind === "hop"
                   ? "Search names, origin or flavor…"
-                  : "Search names, origin, manufacturer, product code…"
+                  : kind === "malt"
+                    ? "Search names, flavor, color or beer style…"
+                    : "Search names, code, flavor or beer style…"
               }
               aria-label="Search ingredient library"
               value={q}
@@ -211,35 +199,17 @@ export default function Library({
                 setLimit(24);
               }}
             />
-            {kind !== "hop" && (
-              <select
-                aria-label="Filter by flavor descriptor"
-                value={descriptor}
-                onChange={(e) => {
-                  setDescriptor(e.target.value);
-                  setLimit(24);
-                }}
-              >
-                <option value="">Any flavor descriptor</option>
-                {alphabetical(c.vocabulary, (v) => v.label).map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.label}
-                  </option>
-                ))}
-              </select>
-            )}
           </div>
-          {kind === "hop" && (
-            <HopFlavorChips
-              catalog={c}
-              hops={c.hops}
-              selected={flavors}
-              onChange={(next) => {
-                setFlavors(next);
-                setLimit(24);
-              }}
-            />
-          )}
+          <FlavorChips
+            catalog={c}
+            kind={kind as Ingredient["kind"]}
+            items={all}
+            selected={flavors}
+            onChange={(next) => {
+              setFlavors(next);
+              setLimit(24);
+            }}
+          />
           {kind === "yeast" ? (
             <label className="field library-yeast-type">
               <span>Yeast type</span>
@@ -500,12 +470,12 @@ export default function Library({
                     </div>
                     <div className="sensory-side">
                       <Tag>SUBJECTIVE ESTIMATE</Tag>
-                      {kind === "hop" && (
-                        <p className="library-hop-flavors">
-                          {hopFlavors(i.id, c).join(" · ") ||
-                            "No flavor notes in our data"}
-                        </p>
-                      )}
+                      <p className="library-flavors">
+                        {styleMatchNote(i, q, c) &&
+                          `${styleMatchNote(i, q, c)}. `}
+                        {flavorsOf(i.id, c).join(" · ") ||
+                          "No flavor notes in our data"}
+                      </p>
                       {kind === "yeast" && (
                         <div className="yeast-flavor-summary">
                           <h4>Flavor profile</h4>

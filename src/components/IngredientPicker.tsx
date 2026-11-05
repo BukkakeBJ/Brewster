@@ -6,9 +6,13 @@ import {
   ingredientBrief,
   type SelectableIngredient,
 } from "../engine/ingredientBrief";
-import { searchByName } from "../engine/search";
-import { hopFlavors, hopHasFlavor, searchHops } from "../engine/hopFlavor";
-import HopFlavorChips from "./HopFlavorChips";
+import {
+  flavorsOf,
+  hasFlavor,
+  searchIngredients,
+  styleMatchNote,
+} from "../engine/ingredientSearch";
+import FlavorChips from "./FlavorChips";
 import { InfoTip, Tag } from "./ui";
 
 export function IngredientInfo({
@@ -62,36 +66,20 @@ export default function IngredientPicker({
   const [query, setQuery] = useState("");
   const [highlighted, setHighlighted] = useState(selectedId);
   const selected = items.find((item) => item.id === selectedId);
-  const hops = useMemo(
-    () => items.filter((item) => item.kind === "hop"),
-    [items],
-  );
-  const hopPicker = hops.length > 0 && hops.length === items.length;
+  const kind = items[0]?.kind ?? "malt";
   const [flavors, setFlavors] = useState<string[]>([]);
   const filtered = useMemo<SelectableIngredient[]>(
     () =>
-      hopPicker
-        ? searchHops(
-            hops,
-            query,
-            catalog,
-            (h) => `${h.origin} ${h.purpose}`,
-          ).filter((h) =>
-            flavors.every((flavor) => hopHasFlavor(h.id, flavor, catalog)),
-          )
-        : searchByName(
-            items,
-            query,
-            (i) => i.name,
-            (i) =>
-              i.kind === "hop"
-                ? `${i.origin} ${i.purpose}`
-                : i.kind === "malt"
-                  ? `${i.maltster} ${i.type}`
-                  : `${i.lab} ${i.code} ${i.type}`,
-            (i) => (i.kind === "yeast" ? [i.code] : []),
-          ),
-    [items, hops, hopPicker, query, flavors, catalog],
+      searchIngredients(
+        items,
+        query,
+        catalog,
+        (i) => (i.kind === "hop" ? `${i.origin} ${i.purpose}` : ""),
+        (i) => (i.kind === "yeast" ? [i.code] : []),
+      ).filter((i) =>
+        flavors.every((flavor) => hasFlavor(i.id, flavor, catalog)),
+      ),
+    [items, query, flavors, catalog],
   );
   const offers = useMemo(
     () =>
@@ -204,9 +192,11 @@ export default function IngredientPicker({
               autoFocus={window.matchMedia("(pointer: fine)").matches}
               aria-label="Search ingredient choices"
               placeholder={
-                hopPicker
+                kind === "hop"
                   ? "Search by name, origin or flavor…"
-                  : "Search by name or product code…"
+                  : kind === "malt"
+                    ? "Search by name, flavor, color or beer style…"
+                    : "Search by name, code, flavor or beer style…"
               }
               value={query}
               onChange={(e) => {
@@ -214,14 +204,13 @@ export default function IngredientPicker({
               }}
             />
           </label>
-          {hopPicker && (
-            <HopFlavorChips
-              catalog={catalog}
-              hops={hops}
-              selected={flavors}
-              onChange={setFlavors}
-            />
-          )}
+          <FlavorChips
+            catalog={catalog}
+            kind={kind}
+            items={items}
+            selected={flavors}
+            onChange={setFlavors}
+          />
           <p className="muted picker-instruction">
             Tap a name to choose it, or the ⓘ button to read about it first.
           </p>
@@ -281,12 +270,16 @@ export default function IngredientPicker({
                             ? `${item.purpose} · ${item.alpha.join("–")}% alpha`
                             : `${item.type} · ${+item.lovibond.toFixed(1)} °L`}
                       </small>
-                      {item.kind === "hop" &&
-                        hopFlavors(item.id, catalog).length > 0 && (
-                          <small className="picker-flavors">
-                            {hopFlavors(item.id, catalog).join(" · ")}
-                          </small>
-                        )}
+                      {styleMatchNote(item, query, catalog) && (
+                        <small className="picker-note">
+                          {styleMatchNote(item, query, catalog)}
+                        </small>
+                      )}
+                      {flavorsOf(item.id, catalog).length > 0 && (
+                        <small className="picker-flavors">
+                          {flavorsOf(item.id, catalog).join(" · ")}
+                        </small>
+                      )}
                     </button>
                     <button
                       type="button"
@@ -302,9 +295,7 @@ export default function IngredientPicker({
               ))}
               {!choices.length && (
                 <p className="muted">
-                  {hopPicker
-                    ? "No hops match. Try fewer flavors or a shorter search."
-                    : "No matching ingredients. Try a shorter name."}
+                  No matches. Try fewer flavors or a shorter search.
                 </p>
               )}
             </div>

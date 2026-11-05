@@ -19,7 +19,8 @@ import hopDirections from "../../data/hop-flavor-directions.json";
 import { starterRecipes } from "../engine/recipeBook";
 import { flavorPredict } from "../engine/flavor";
 import { recipeDesignBrief, styleFlavorBrief } from "../engine/recommendations";
-import { alphabetical, searchByName } from "../engine/search";
+import { alphabetical } from "../engine/search";
+import { searchIngredients } from "../engine/ingredientSearch";
 import { targetSchema } from "../validation";
 import { waterSettings } from "../engine/waterPlan";
 import { styleGoals } from "../engine/goalBuild";
@@ -605,10 +606,10 @@ export default function Design({
               value={ingredientQuery}
               onChange={(e) => setIngredientQuery(e.target.value)}
             />
-            {searchByName(
+            {searchIngredients(
               [...c.malts, ...c.hops, ...c.yeasts],
               ingredientQuery,
-              (i) => i.name,
+              c,
               (i) => i.kind,
             )
               .filter(() => !!ingredientQuery.trim())

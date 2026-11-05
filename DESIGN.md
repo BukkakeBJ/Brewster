@@ -30,9 +30,16 @@ Edits are never overwritten by accident: the build runs only for a new draft or 
 
 The malt picker opens with suggestions ahead of the full list (`suggestedMalts` in `src/engine/ingredientFit.ts`): the style's own malts in the same role and similar malts when swapping, and the style's malts or popular choices when adding. Nothing offered would raise the question below.
 
-### Searching hops by flavor
+### Searching by what relates
 
-The hop picker and the Ingredients page search hops by flavor as well as name and origin (`searchHops` in `src/engine/hopFlavor.ts`), and both offer flavor chips (`HopFlavorChips.tsx`). Every word or chip has to match, so "citrus pine" finds hops with both. A whole flavor word means that flavor exactly ("pine" isn't "pineapple"), a partial one matches as you type, and everyday words work too ("piney", "fruity", "peach"). "Citrus" also finds grapefruit, lemon and orange, and "tropical" also finds mango, passionfruit and pineapple. Flavor notes come from `data/descriptors.json`; hops without notes can't match a flavor search, and the chips say how many that leaves out.
+The ingredient pickers, the Ingredients page and the ingredient limits on Goals search malts, hops and yeast by name and by what relates to them (`searchIngredients` in `src/engine/ingredientSearch.ts`), and the pickers and Ingredients page offer flavor chips (`FlavorChips.tsx`).
+
+- **Flavor:** "caramel" or "coffee" for malts, "banana" or "tart" for yeast, "grapefruit" for hops. Everyday words work too ("nutty", "espresso", "sour", "phenolic", "piney"). "Citrus" also finds grapefruit, lemon and orange hops, and "tropical" also finds mango, passionfruit and pineapple.
+- **Role and color for malts:** "base", "adjunct", "pale", "amber", "dark" or "black".
+- **Family and form for yeast:** "lager", "belgian", "kveik", "dry" or "liquid".
+- **Beer style for malts and yeast:** "stout", "IPA" or "dry stout" find what that style's Recipe Book recipes use, with a "Used in Dry Stout" note when the name doesn't explain the match. Nicknames work ("hefeweizen", "pils"). General style words such as "ale" or "american" don't count, because they'd match nearly everything. Hops don't relate to styles this way: most styles list only Hallertau Mittelfrüh or East Kent Goldings as a placeholder.
+
+Every word or chip has to match. A whole flavor word means that flavor exactly ("pine" isn't "pineapple"), and a partial one matches as you type. Flavor notes come from `data/descriptors.json`; anything without notes can't match a flavor search, and the chips say how many that leaves out.
 
 ### Unusual picks
 

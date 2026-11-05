@@ -1,27 +1,35 @@
-import type { Catalog, Hop } from "../engine/types";
-import { hopFlavorOptions, hopsWithoutFlavorNotes } from "../engine/hopFlavor";
+import type { Catalog, Ingredient } from "../engine/types";
+import { flavorOptions, withoutFlavorNotes } from "../engine/ingredientSearch";
 
-/** Tap flavors to narrow a hop list. Choosing several finds hops with all of them. */
-export default function HopFlavorChips({
+const NOUNS: Record<Ingredient["kind"], string> = {
+  hop: "hops",
+  malt: "malts",
+  yeast: "yeasts",
+};
+
+/** Tap flavors to narrow an ingredient list. Choosing several finds items with all of them. */
+export default function FlavorChips({
   catalog: c,
-  hops,
+  kind,
+  items,
   selected,
   onChange,
 }: {
   catalog: Catalog;
-  hops: readonly Hop[];
+  kind: Ingredient["kind"];
+  items: readonly Pick<Ingredient, "id">[];
   selected: string[];
   onChange: (flavors: string[]) => void;
 }) {
-  const missing = hopsWithoutFlavorNotes(hops, c);
+  const missing = withoutFlavorNotes(items, c);
   return (
-    <div className="hop-flavor-filter">
+    <div className="flavor-filter">
       <div
-        className="hop-flavor-chips"
+        className="flavor-chips"
         role="group"
-        aria-label="Filter hops by flavor"
+        aria-label={`Filter ${NOUNS[kind]} by flavor`}
       >
-        {hopFlavorOptions(c).map((flavor) => {
+        {flavorOptions(kind, c).map((flavor) => {
           const on = selected.includes(flavor.id);
           return (
             <button
@@ -45,7 +53,7 @@ export default function HopFlavorChips({
       {selected.length > 0 && (
         <p className="muted">
           {missing > 0 &&
-            `${missing} hops have no flavor notes, so they're left out. `}
+            `${missing} ${NOUNS[kind]} have no flavor notes, so they're left out. `}
           <button
             type="button"
             className="text-button"
