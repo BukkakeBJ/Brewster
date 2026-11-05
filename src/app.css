@@ -1659,6 +1659,13 @@ input[type="range"]::-moz-range-thumb {
 .yeast-estimate {
   font-size: 0.9rem;
 }
+.yeast-temp {
+  font-size: 0.88rem;
+  color: var(--brand);
+}
+.yeast-temp.off {
+  color: var(--warn);
+}
 
 /* Style check */
 .style-row {

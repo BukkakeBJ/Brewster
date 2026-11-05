@@ -21,7 +21,11 @@ import { yeastFamilies, yeastGroups, yeastGuide } from "../engine/yeast";
 import { consensus } from "../engine/flavor";
 import { ingredientMatches } from "../engine/recommendations";
 import { waterSettings } from "../engine/waterPlan";
-import { suggestedMalts, unusualYeast } from "../engine/ingredientFit";
+import {
+  suggestedMalts,
+  yeastSuggestions,
+  yeastTempGap,
+} from "../engine/ingredientFit";
 
 const GRIST_COLORS = ["#c99a55", "#e2c27f", "#8a6a3c", "#d48558", "#55705a"];
 
@@ -80,16 +84,9 @@ export default function Editor({
   const dry = yeast.form === "dry";
   const styleName = c.styles.find((s) => s.id === r.styleId)?.name;
   const suggestedTitle = styleName ? `Suggested for ${styleName}` : "Suggested";
-  /** Strains to offer, leaving out any that would raise the "unusual yeast" question. */
-  const yeastMatches = () =>
-    ingredientMatches(target, c, userWeight)
-      .yeasts.filter(
-        (match, i) =>
-          i < 20 &&
-          (match.id === r.yeastId ||
-            !unusualYeast(r, { ...r, yeastId: match.id }, match.id, c).length),
-      )
-      .slice(0, 3);
+  const yeastOffers =
+    section === "yeast" ? yeastSuggestions(r, target, c, userWeight) : [];
+  const shownTemp = `${temp(r.fermentC).toFixed(0)} ${tempUnit}`;
   const withHopTime = (row: number, shown: number) => ({
     ...r,
     hops: r.hops.map((h, j) =>
@@ -515,9 +512,29 @@ export default function Editor({
             </div>
           </Section>
           <Section title="Good matches for your goals">
+            {yeastOffers.length > 0 && (
+              <p className="muted">
+                {yeastOffers.some(
+                  (match) =>
+                    yeastTempGap(
+                      c.yeasts.find((y) => y.id === match.id)!,
+                      r.fermentC,
+                    ) === 0,
+                )
+                  ? `Strains that suit fermenting at ${shownTemp} come first.`
+                  : `None of the closest strains for your goals suit ${shownTemp}, so these are the nearest.`}
+              </p>
+            )}
             <div className="yeast-suggestion-list">
-              {yeastMatches().map((match) => {
+              {yeastOffers.map((match) => {
                 const option = c.yeasts.find((y) => y.id === match.id)!;
+                const gap = yeastTempGap(option, r.fermentC);
+                const nearest = option.tempC
+                  ? Math.min(
+                      option.tempC[1],
+                      Math.max(option.tempC[0], r.fermentC),
+                    )
+                  : r.fermentC;
                 const estimate = predict({ ...r, yeastId: option.id }, c);
                 const chosen = r.yeastId === option.id;
                 return (
@@ -539,6 +556,17 @@ export default function Editor({
                       <strong>{estimate.abv.toFixed(1)}% ABV</strong> · FG{" "}
                       {estimate.fg.toFixed(3)}
                     </p>
+                    <p className={`yeast-temp ${gap ? "off" : ""}`}>
+                      {gap === undefined
+                        ? "No published temperature range"
+                        : gap === 0
+                          ? `Suits ${shownTemp}`
+                          : `Best at ${option.tempC!.map((t) => temp(t).toFixed(0)).join("–")} ${tempUnit}. ${
+                              chosen
+                                ? `You're at ${shownTemp}.`
+                                : `Using it moves fermentation to ${temp(nearest).toFixed(0)} ${tempUnit}.`
+                            }`}
+                    </p>
                     <button
                       className={`button ${chosen ? "ghost" : "secondary"}`}
                       type="button"
@@ -547,12 +575,7 @@ export default function Editor({
                         set({
                           ...r,
                           yeastId: option.id,
-                          fermentC: option.tempC
-                            ? Math.min(
-                                option.tempC[1],
-                                Math.max(option.tempC[0], r.fermentC),
-                              )
-                            : r.fermentC,
+                          fermentC: nearest,
                         })
                       }
                     >
@@ -561,7 +584,7 @@ export default function Editor({
                   </article>
                 );
               })}
-              {!yeastMatches().length && (
+              {!yeastOffers.length && (
                 <p className="muted">
                   No other strains in our list are a close match for this style.
                   You can still choose any strain above.

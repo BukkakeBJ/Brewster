@@ -41,6 +41,10 @@ The ingredient pickers, the Ingredients page and the ingredient limits on Goals 
 
 Every word or chip has to match. A whole flavor word means that flavor exactly ("pine" isn't "pineapple"), and a partial one matches as you type. Flavor notes come from `data/descriptors.json`; anything without notes can't match a flavor search, and the chips say how many that leaves out.
 
+### Yeast suggestions and temperature
+
+"Good matches for your goals" on the Yeast page (`yeastSuggestions` in `src/engine/ingredientFit.ts`) puts strains that suit the recipe's fermentation temperature first, then those with no published range, then the nearest misses; goals and style decide the order within each group. A style's own strains are always considered, including specialist cultures the general ranking leaves out, such as the blends for sour styles. Each card says whether it suits the temperature, or gives its best range and the temperature using it would move to. Strains that would raise the unusual-yeast question stay out, whatever the temperature, so a 10 °C IPA is offered the closest ale strains rather than lagers.
+
 ### Unusual picks
 
 A malt, hop or yeast pick that looks strange for the style opens a pop-up (`IngredientQuestion.tsx`) that says why it may be unusual and offers three answers: keep the style with the ingredient in the recipe, change the style (three close matches that suit the ingredient, or any style), or undo the change. Pressing Esc counts as keeping the style, and an answered ingredient isn't asked about again for that style. It runs when an ingredient is newly picked or a hop moves from a long boil to a late addition (`unusualPick` in `src/engine/ingredientFit.ts`), never for a change of amount. The "When" menu checks right away; the time field checks when the brewer leaves it, since it saves on every keystroke and 60 → 45 passes through 4.

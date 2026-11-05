@@ -17,6 +17,8 @@ import {
   unusualPick,
   unusualYeast,
   yeastClashes,
+  yeastSuggestions,
+  yeastTempGap,
 } from "../src/engine/ingredientFit";
 import { suggestedHopGroups } from "../src/engine/builder";
 import { styleIngredientProfile } from "../src/engine/recommendations";
@@ -912,5 +914,86 @@ describe("moving a hop to a late addition", () => {
         answered.has(key),
       ),
     ).toBeUndefined();
+  });
+});
+
+describe("yeast suggestions follow the fermentation temperature", () => {
+  const offers = (styleId: string, fermentC: number) =>
+    yeastSuggestions(
+      { ...builtFor(styleId), fermentC },
+      goalsFor(styleId),
+      c,
+    ).map((match) => c.yeasts.find((y) => y.id === match.id)!);
+
+  it("leads with strains that suit the temperature", () => {
+    for (const [styleId, fermentC] of [
+      ["american-ipa", 19],
+      ["german-pilsner-pils", 11],
+      ["german-pilsner-pils", 17],
+      ["belgian-tripel", 24],
+    ] as const) {
+      const strains = offers(styleId, fermentC);
+      expect(strains.length, styleId).toBeGreaterThan(0);
+      expect(yeastTempGap(strains[0], fermentC), `${styleId} ${fermentC}`).toBe(
+        0,
+      );
+    }
+  });
+
+  it("changes when the temperature does", () => {
+    const cool = offers("german-pilsner-pils", 9).map((y) => y.id);
+    const warm = offers("german-pilsner-pils", 18).map((y) => y.id);
+    expect(cool).not.toEqual(warm);
+    const fits = (temp: number) =>
+      offers("german-pilsner-pils", temp).filter(
+        (y) => yeastTempGap(y, temp) === 0,
+      );
+    expect(fits(18).length).toBeGreaterThan(0);
+  });
+
+  it("doesn't let temperature bring in a strain that doesn't belong", () => {
+    for (const styleId of ["american-ipa", "german-pilsner-pils"]) {
+      const recipe = builtFor(styleId);
+      for (const temp of [8, 12, 18, 24, 30])
+        for (const y of offers(styleId, temp))
+          if (y.id !== recipe.yeastId)
+            expect(yeastClashes(y.id, styleId, c), `${y.name} at ${temp}`).toBe(
+              false,
+            );
+    }
+  });
+
+  it("offers the nearest strains when none suit it", () => {
+    const strains = offers("american-ipa", 5);
+    expect(strains.length).toBeGreaterThan(0);
+    const gaps = strains.map((y) => yeastTempGap(y, 5) ?? -1);
+    for (const gap of gaps) expect(gap).not.toBe(0);
+    const known = gaps.filter((gap) => gap >= 0);
+    expect(known).toEqual([...known].sort((a, b) => a - b));
+  });
+
+  it("always offers a style's own strain at a temperature it suits", () => {
+    for (const style of beerStyles) {
+      const recipe = builtFor(style.id);
+      const own = c.yeasts.find((y) => y.id === recipe.yeastId)!;
+      if (yeastTempGap(own, recipe.fermentC) !== 0) continue;
+      expect(
+        offers(style.id, recipe.fermentC).map((y) => y.id),
+        style.id,
+      ).toContain(own.id);
+    }
+  });
+
+  it("has something to offer for every style, including sour ones", () => {
+    for (const style of beerStyles) {
+      const recipe = builtFor(style.id);
+      expect(
+        offers(style.id, recipe.fermentC).length,
+        style.id,
+      ).toBeGreaterThan(0);
+    }
+    expect(offers("flanders-red-ale", 20).map((y) => y.name)).toContain(
+      "Roeselare Ale Blend",
+    );
   });
 });

@@ -8,9 +8,10 @@ import type {
 } from "./types";
 import { predict } from "./calculations";
 import { colorName } from "./glassware";
-import { styleIngredientProfile } from "./recommendations";
+import { ingredientMatches, styleIngredientProfile } from "./recommendations";
 import { closestStyles, hasComparableStyleRanges } from "./styleMatch";
 import { startingPoints, styleMalts } from "./suggestions";
+import { flavorsOf } from "./ingredientSearch";
 import { yeastGroups } from "./yeast";
 
 type Malt = Catalog["malts"][number];
@@ -331,6 +332,58 @@ export function unusualYeast(
       `It would finish at ${now.fg.toFixed(3)}, ${now.fg > style.fg[1] ? "sweeter" : "drier"} than the ${style.fg.map((n) => n.toFixed(3)).join("–")} usual for ${style.name}.`,
     );
   return reasons;
+}
+
+/** How far a fermentation temperature is outside a strain's range: 0 fits, undefined isn't known. */
+export function yeastTempGap(y: Yeast, tempC: number) {
+  if (!y.tempC) return undefined;
+  return Math.max(0, y.tempC[0] - tempC, tempC - y.tempC[1]);
+}
+
+/**
+ * Strains to offer for a recipe. They leave out anything that would raise the "unusual yeast"
+ * question, and strains that suit its fermentation temperature come first, then those with no
+ * published range, then the nearest misses. Goals and style decide the order within each group.
+ */
+export function yeastSuggestions(
+  r: Recipe,
+  target: Target,
+  c: Catalog,
+  userWeight = 1,
+  limit = 3,
+) {
+  const gap = (id: string) =>
+    yeastTempGap(
+      c.yeasts.find((y) => y.id === id)!,
+      r.fermentC,
+    );
+  const order = (id: string) => {
+    const g = gap(id);
+    return g === 0 ? 0 : g === undefined ? 1 : 2 + g;
+  };
+  const ranked = ingredientMatches(target, c, userWeight).yeasts.filter(
+    (match, i) =>
+      i < 40 &&
+      (match.id === r.yeastId ||
+        !unusualYeast(r, { ...r, yeastId: match.id }, match.id, c).length),
+  );
+  // The ranking leaves out specialist cultures, but a style's own strains always belong.
+  const own = (styleIngredientProfile(r.styleId)?.yeastIds ?? [])
+    .filter(
+      (id) =>
+        !ranked.some((match) => match.id === id) &&
+        !target.exclude.includes(id) &&
+        (!target.onHand.length || target.onHand.includes(id)),
+    )
+    .map((id) => ({
+      id,
+      descriptors: flavorsOf(id, c).map((label) => ({ label })),
+    }));
+  return [...own, ...ranked]
+    .map((match, i) => ({ match, i }))
+    .sort((a, b) => order(a.match.id) - order(b.match.id) || a.i - b.i)
+    .slice(0, limit)
+    .map(({ match }) => match);
 }
 
 export type PickKind = "malt" | "hop" | "yeast";
