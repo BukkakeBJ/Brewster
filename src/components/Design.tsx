@@ -3,7 +3,7 @@ import { Sparkles, ArrowUpRight } from "lucide-react";
 import type { Catalog, Recipe, Target } from "../engine/types";
 import type { Candidate } from "../engine/solver";
 import { defaultTarget } from "../defaults";
-import { Field, Section, HelpLabel, InfoTip, RangeField } from "./ui";
+import { Field, Section, HelpLabel, RangeField } from "./ui";
 import { Radar } from "./FlavorPanel";
 import { predict } from "../engine/calculations";
 import designHelp from "../../data/design-help.json";
@@ -22,6 +22,7 @@ import { recipeDesignBrief, styleFlavorBrief } from "../engine/recommendations";
 import { alphabetical, searchByName } from "../engine/search";
 import { targetSchema } from "../validation";
 import { waterSettings } from "../engine/waterPlan";
+import { styleGoals } from "../engine/goalBuild";
 export default function Design({
   catalog: c,
   onOpen,
@@ -32,6 +33,8 @@ export default function Design({
   onTargetChange,
   onConfirm,
   resetKey = 0,
+  goalOverride,
+  plannedMalts,
 }: {
   catalog: Catalog;
   onOpen: (r: Recipe) => void;
@@ -42,6 +45,12 @@ export default function Design({
   onTargetChange?: (target: Target) => void;
   onConfirm?: (target: Target) => void;
   resetKey?: number;
+  /** Goals changed from outside this page, such as a new style chosen on the Malts page. */
+  goalOverride?: { target: Target };
+  plannedMalts?: {
+    malts: { id: string; name: string; percent: number }[];
+    fromGoals: boolean;
+  };
 }) {
   const [autoStyle, setAutoStyle] = useState(true);
   const help = designHelp.fields as Record<string, string>;
@@ -67,10 +76,6 @@ export default function Design({
     [error, setError] = useState(""),
     [stale, setStale] = useState(false),
     [ingredientQuery, setIngredientQuery] = useState("");
-  const lastColorTarget = useRef(defaultTarget.srm ?? 6);
-  useEffect(() => {
-    if (t.srm !== undefined) lastColorTarget.current = t.srm;
-  }, [t.srm]);
   const applyStyleFlavor = (id = t.styleId) => {
     const recipe = starterRecipes.find((r) => r.styleId === id);
     if (recipe)
@@ -106,6 +111,14 @@ export default function Design({
   useEffect(() => {
     onTargetChange?.(t);
   }, [t, onTargetChange]);
+  useEffect(() => {
+    if (!goalOverride) return;
+    worker.current?.terminate();
+    setBusy(false);
+    setAutoStyle(false);
+    setStale(true);
+    setT(goalOverride.target);
+  }, [goalOverride]);
   useEffect(() => {
     if (!waterRecipe) return;
     worker.current?.terminate();
@@ -251,14 +264,16 @@ export default function Design({
   const chooseStyle = (id: string) => {
     setAutoStyle(false);
     const style = c.styles.find((s) => s.id === id);
-    const mid = (r: [number, number]) => +((r[0] + r[1]) / 2).toFixed(1);
+    const goals =
+      style &&
+      styleGoals(style, c, { abv: t.abv, ibu: t.ibu, srm: t.srm ?? 6 });
     update(
-      style
+      goals
         ? {
             ...selectDesignStyle(t, id),
-            abv: mid(style.abv),
-            ibu: Math.round(mid(style.ibu)),
-            ...(t.srm === undefined ? {} : { srm: mid(style.srm) }),
+            abv: goals.abv,
+            ibu: goals.ibu,
+            ...(t.srm === undefined ? {} : { srm: goals.srm }),
           }
         : selectDesignStyle(t, id),
       false,
@@ -321,7 +336,9 @@ export default function Design({
     selectedStyle?.[k] as [number, number] | undefined;
   const goalSrm =
     t.srm ??
-    (selectedStyle ? (selectedStyle.srm[0] + selectedStyle.srm[1]) / 2 : 6);
+    (selectedStyle
+      ? styleGoals(selectedStyle, c, { abv: t.abv, ibu: t.ibu, srm: 6 }).srm
+      : 6);
   return (
     <>
       <div className="goals-grid">
@@ -402,49 +419,29 @@ export default function Design({
               band={band("ibu")}
               onChange={(n) => update({ ibu: n })}
             />
-            {t.srm === undefined ? (
-              <div className="range-field">
-                <div className="range-field-head">
-                  <span className="field-label">
-                    Color
-                    <InfoTip
-                      label="Target color"
-                      content={help["Target color"]}
-                    />
-                  </span>
-                  <button
-                    type="button"
-                    className="text-button"
-                    onClick={() => update({ srm: lastColorTarget.current })}
-                  >
-                    Set a color goal
-                  </button>
-                </div>
-                <p className="muted">Any color is fine.</p>
-              </div>
-            ) : (
-              <RangeField
-                label="Color"
-                help={help["Target color"]}
-                unit="SRM"
-                value={t.srm}
-                min={1}
-                max={40}
-                step={0.5}
-                band={band("srm")}
-                colorTrack
-                onChange={(n) => update({ srm: n })}
-                action={
+            <RangeField
+              label="Color"
+              help={help["Target color"]}
+              unit="SRM"
+              value={goalSrm}
+              min={1}
+              max={40}
+              step={0.5}
+              band={band("srm")}
+              colorTrack
+              onChange={(n) => update({ srm: n })}
+              action={
+                t.srm !== undefined && (
                   <button
                     type="button"
                     className="text-button"
                     onClick={() => update({ srm: undefined })}
                   >
-                    Any color
+                    {selectedStyle ? "Typical color" : "Any color"}
                   </button>
-                }
-              />
-            )}
+                )
+              }
+            />
           </Section>
           <Section title="Flavor">
             <div className="field">
@@ -562,7 +559,7 @@ export default function Design({
                 : ""}
             </summary>
             <p className="muted">
-              Only used when you ask for suggested recipes.
+              Followed whenever we pick ingredients for you.
             </p>
             <div className="field-grid">
               <label className="field">
@@ -763,18 +760,40 @@ export default function Design({
               </div>
             </div>
             <Radar scores={t.flavors} />
-            <p className="muted">
-              Want a head start? We'll design three recipes that hit these goals
-              with your water. Or press <b>Next</b> to choose ingredients
-              yourself.
-            </p>
+            {plannedMalts && plannedMalts.malts.length > 0 ? (
+              <div className="planned-malts">
+                <h4>
+                  {plannedMalts.fromGoals
+                    ? "Malts for this beer"
+                    : "Your current malts"}
+                </h4>
+                <ul>
+                  {plannedMalts.malts.map((m) => (
+                    <li key={m.id}>
+                      <span>{m.name}</span>
+                      <b>{m.percent.toFixed(0)}%</b>
+                    </li>
+                  ))}
+                </ul>
+                <p className="muted">
+                  {plannedMalts.fromGoals
+                    ? "Picked for your style and color, and they update as you change them. Press Next to use them, then swap any you like."
+                    : "They stay as they are unless you change these goals."}
+                </p>
+              </div>
+            ) : (
+              <p className="muted">
+                Press <b>Next</b> to choose your ingredients, sized to your
+                water.
+              </p>
+            )}
             <button
-              className="button primary wide"
+              className="button secondary wide"
               disabled={busy}
               onClick={() => run()}
             >
               <Sparkles size={16} />
-              {busy ? "Designing recipes…" : "Suggest recipes for me"}
+              {busy ? "Designing recipes…" : "Compare 3 recipe options first"}
             </button>
             {busy && (
               <button

@@ -1,8 +1,8 @@
-import profiles from "../../data/style-ingredient-profiles.json";
 import guide from "../../data/suggestions.json";
 import type { Catalog, Target, Ingredient, Recipe } from "./types";
 import { consensus } from "./flavor";
-import { recipeFamily } from "./suggestions";
+import { recipeFamily, styleIngredientProfile } from "./suggestions";
+export { styleIngredientProfile };
 import { midpoint, predict } from "./calculations";
 import { flavorPredict } from "./flavor";
 import { hasBrewingSpecs } from "./yeast";
@@ -18,20 +18,6 @@ export interface IngredientMatch {
     intensity: number;
     descriptorIds: string[];
   }[];
-}
-export function styleIngredientProfile(styleId: string) {
-  return (
-    profiles as Record<
-      string,
-      {
-        referenceRecipe: string;
-        maltIds: string[];
-        hopIds: string[];
-        yeastIds: string[];
-        grist: { ingredientId: string; percent: number }[];
-      }
-    >
-  )[styleId];
 }
 export function hopUsage(focus: HopFocus = "aroma") {
   return {

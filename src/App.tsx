@@ -15,6 +15,7 @@ import {
   Wand2,
   ArrowLeft,
   ArrowRight,
+  X,
 } from "lucide-react";
 import { ensureWorkspace, getJson } from "./api";
 import RecipeSharing from "./components/RecipeSharing";
@@ -24,6 +25,20 @@ import BrandMark from "./components/BrandMark";
 import BuilderHeader from "./components/BuilderHeader";
 import BrewLog, { type Preferences } from "./components/BrewLog";
 import { calibrate } from "./engine/feedback";
+import {
+  buildFromGoals,
+  goalsSignature,
+  restyleKeeping,
+  styleTemplate,
+} from "./engine/goalBuild";
+import {
+  restyleWords,
+  unusualPick,
+  type PickKind,
+  type UnusualPick,
+} from "./engine/ingredientFit";
+import IngredientQuestion from "./components/IngredientQuestion";
+import { recipeDesignBrief } from "./engine/recommendations";
 import { recipeSchema } from "./validation";
 import RecipeBook from "./components/RecipeBook";
 import { createAdditiveAddition } from "./engine/additives";
@@ -80,6 +95,21 @@ const views: { id: View; label: string; icon: typeof HomeIcon }[] = [
   { id: "library", label: "Ingredients", icon: BookOpen },
 ];
 const isView = (v: string | null): v is View => views.some((x) => x.id === v);
+
+const FRESH_RECIPE = "brew-fresh-recipe";
+/** A brand-new draft gets built from its goals even if they were left at their defaults. */
+function markFreshRecipe(id: string) {
+  try {
+    localStorage.setItem(FRESH_RECIPE, id);
+  } catch {}
+}
+function isFreshRecipe(id: string) {
+  try {
+    return localStorage.getItem(FRESH_RECIPE) === id;
+  } catch {
+    return false;
+  }
+}
 
 function printBrewSheet() {
   const panels = [
@@ -195,6 +225,20 @@ export default function App() {
     [logs],
   );
   const [designFromRecipe, setDesignFromRecipe] = useState<Recipe>();
+  const [autoBuilt, setAutoBuilt] = useState<{
+    before: Recipe;
+    pattern: string;
+    /** Set when a pick moved the style, so restoring moves the goals back too. */
+    beforeTarget?: Target;
+    keptKind?: PickKind;
+  }>();
+  const [question, setQuestion] = useState<{
+    before: Recipe;
+    after: Recipe;
+    pick: UnusualPick;
+  }>();
+  const [goalOverride, setGoalOverride] = useState<{ target: Target }>();
+  const answeredPicks = useRef(new Set<string>());
   const [returning, setReturning] = useState(
     () => localStorage.getItem("brew-draft") !== null,
   );
@@ -256,6 +300,9 @@ export default function App() {
     setActiveView("build");
   };
   useEffect(() => {
+    if (!returning) markFreshRecipe(recipe.id);
+  }, []);
+  useEffect(() => {
     localStorage.setItem("brew-builder-step", builderStep);
   }, [builderStep]);
   useEffect(() => {
@@ -264,6 +311,12 @@ export default function App() {
   useLayoutEffect(() => {
     window.scrollTo(0, scrollPositions.current[scrollKey] ?? 0);
   }, [scrollKey]);
+  const askAboutPick = (before: Recipe, after: Recipe) => {
+    const pick = unusualPick(before, after, catalog, designTarget, (key) =>
+      answeredPicks.current.has(key),
+    );
+    if (pick) setQuestion({ before, after, pick });
+  };
   const changeIngredients = (next: Recipe) => {
     try {
       const settings = waterSettings(recipe, catalog);
@@ -278,23 +331,117 @@ export default function App() {
               settings.absorptionLPerKg,
             )
           : next;
-      setRecipe({ ...adjusted, waterPlan: settings });
+      const after = { ...adjusted, waterPlan: settings };
+      setRecipe(after);
       setError("");
+      askAboutPick(recipe, after);
     } catch (e) {
       setError((e as Error).message);
     }
   };
   const startNewRecipe = () => {
-    setRecipe({ ...defaultRecipeForWater(), name: "Untitled recipe" });
+    const draft = { ...defaultRecipeForWater(), name: "Untitled recipe" };
+    markFreshRecipe(draft.id);
+    setRecipe(draft);
+    setAutoBuilt(undefined);
     setDesignFromRecipe(undefined);
     setGoalResetKey((key) => key + 1);
     scrollPositions.current = {};
     goToStep("water");
   };
   const openRecipe = (r: Recipe, step: BuilderStep = "summary") => {
+    setAutoBuilt(undefined);
     setRecipe(r);
     setDesignFromRecipe(r);
     scrollPositions.current[`build:${step}`] = 0;
+    goToStep(step);
+  };
+  /** Moving on from Goals builds the recipe, but only for a new draft or goals that changed. */
+  const goalsChanged = () => {
+    const opened =
+      designFromRecipe?.id === recipe.id ? designFromRecipe : undefined;
+    const baseline =
+      recipe.designTargets ??
+      opened?.designTargets ??
+      (opened &&
+        recipeDesignBrief(opened, catalog, defaultTarget, prefs.userWeight));
+    return baseline
+      ? goalsSignature(baseline) !== goalsSignature(designTarget)
+      : isFreshRecipe(recipe.id);
+  };
+  const applyGoals = () => {
+    const withGoals = {
+      ...recipe,
+      styleId: designTarget.styleId,
+      designTargets: designTarget,
+    };
+    if (!goalsChanged()) {
+      if (!recipe.designTargets) setRecipe(withGoals);
+      return;
+    }
+    try {
+      const built = buildFromGoals(
+        recipe,
+        catalog,
+        designTarget,
+        prefs.userWeight,
+      );
+      setRecipe(built ?? withGoals);
+      setAutoBuilt(
+        built && {
+          before: recipe,
+          pattern: styleTemplate(designTarget, catalog)!.name,
+        },
+      );
+      setError("");
+    } catch (e) {
+      setRecipe(withGoals);
+      setError((e as Error).message);
+    }
+  };
+  /** What pressing Next would give, shown beside the goals as they change. */
+  const plannedMalts = useMemo(() => {
+    if (view !== "build" || builderStep !== "goals") return undefined;
+    const describe = (grains: Recipe["grains"]) => {
+      const total = grains.reduce((sum, g) => sum + g.kg, 0);
+      return [...grains]
+        .sort((a, b) => b.kg - a.kg)
+        .map((g) => ({
+          id: g.ingredientId,
+          name:
+            catalog.malts.find((m) => m.id === g.ingredientId)?.name ??
+            g.ingredientId,
+          percent: total ? (100 * g.kg) / total : 0,
+        }));
+    };
+    if (!goalsChanged())
+      return { malts: describe(recipe.grains), fromGoals: false };
+    try {
+      const built = buildFromGoals(
+        recipe,
+        catalog,
+        designTarget,
+        prefs.userWeight,
+      );
+      return built
+        ? { malts: describe(built.grains), fromGoals: true }
+        : undefined;
+    } catch {
+      return undefined;
+    }
+  }, [
+    view,
+    builderStep,
+    recipe,
+    designTarget,
+    designFromRecipe,
+    catalog,
+    prefs.userWeight,
+  ]);
+  const moveToStep = (step: BuilderStep) => {
+    const order = (id: BuilderStep) =>
+      builderSteps.findIndex((s) => s.id === id);
+    if (builderStep === "goals" && order(step) > order("goals")) applyGoals();
     goToStep(step);
   };
   useLayoutEffect(() => {
@@ -399,6 +546,7 @@ export default function App() {
         } catch {}
       }
       setRecipe(recipeSchema.parse(stored));
+      setAutoBuilt(undefined);
       notify(
         visibility === "public"
           ? "Recipe shared publicly"
@@ -522,9 +670,53 @@ export default function App() {
         <div hidden={view !== "build"} className="builder">
           <BuilderHeader
             stage={builderStep}
-            onStage={goToStep}
+            onStage={moveToStep}
             recipeName={recipe.name}
           />
+          {autoBuilt && builderStep !== "water" && builderStep !== "goals" && (
+            <div className="built-notice" role="status">
+              <Wand2 size={18} />
+              <p>
+                {autoBuilt.beforeTarget ? (
+                  <>
+                    <b>Style changed to {style?.name ?? "your new style"}.</b>{" "}
+                    {restyleWords[autoBuilt.keptKind ?? "malt"]} Everything is
+                    yours to change.
+                  </>
+                ) : (
+                  <>
+                    <b>Built from your goals</b>, using {autoBuilt.pattern} as
+                    the pattern and sized to your water. Everything is yours to
+                    change.
+                  </>
+                )}
+              </p>
+              <button
+                className="text-button"
+                onClick={() => {
+                  if (autoBuilt.beforeTarget) {
+                    setRecipe(autoBuilt.before);
+                    setGoalOverride({ target: autoBuilt.beforeTarget });
+                  } else
+                    setRecipe({
+                      ...autoBuilt.before,
+                      styleId: designTarget.styleId,
+                      designTargets: designTarget,
+                    });
+                  setAutoBuilt(undefined);
+                }}
+              >
+                Restore my previous recipe
+              </button>
+              <button
+                className="icon-button"
+                aria-label="Dismiss"
+                onClick={() => setAutoBuilt(undefined)}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
           {p && builderStep !== "water" && builderStep !== "goals" && (
             <PredictionBar
               p={p}
@@ -548,10 +740,13 @@ export default function App() {
               waterRecipe={recipe}
               onTargetChange={setDesignTarget}
               resetKey={goalResetKey}
+              goalOverride={goalOverride}
+              plannedMalts={plannedMalts}
               catalog={catalog}
               userWeight={prefs.userWeight}
               us={us}
               onOpen={(r) => {
+                setAutoBuilt(undefined);
                 setRecipe({
                   ...r,
                   name:
@@ -611,6 +806,7 @@ export default function App() {
                     recipe={recipe}
                     onChange={changeIngredients}
                     onSettings={setRecipe}
+                    onEdited={askAboutPick}
                     catalog={catalog}
                     us={us}
                     section={builderStep}
@@ -899,15 +1095,7 @@ export default function App() {
               <button
                 type="button"
                 className="button primary large"
-                onClick={() => {
-                  if (builderStep === "goals")
-                    setRecipe({
-                      ...recipe,
-                      styleId: designTarget.styleId,
-                      designTargets: designTarget,
-                    });
-                  goToStep(nextStep.id);
-                }}
+                onClick={() => moveToStep(nextStep.id)}
               >
                 Next: {nextStep.label} <ArrowRight size={16} />
               </button>
@@ -966,7 +1154,7 @@ export default function App() {
             batchL={recipe.batchL}
             selectedYeastId={recipe.yeastId}
             onChooseYeast={(yeastId) => {
-              setRecipe({ ...recipe, yeastId });
+              changeIngredients({ ...recipe, yeastId });
               notify("Yeast updated in your current recipe.");
             }}
             onAddCustomAdditive={(addition) => {
@@ -1045,6 +1233,40 @@ export default function App() {
           </button>
         ))}
       </nav>
+      {question && (
+        <IngredientQuestion
+          recipe={question.after}
+          pick={question.pick}
+          catalog={catalog}
+          onKeep={() => {
+            answeredPicks.current.add(question.pick.answerKey);
+            setQuestion(undefined);
+          }}
+          onUndo={() => {
+            setRecipe(question.before);
+            setQuestion(undefined);
+          }}
+          onChangeStyle={(styleId) => {
+            const moved = restyleKeeping(
+              question.after,
+              catalog,
+              designTarget,
+              styleId,
+              question.pick.kind,
+              prefs.userWeight,
+            );
+            setRecipe(moved.recipe);
+            setGoalOverride({ target: moved.target });
+            setAutoBuilt({
+              before: question.after,
+              beforeTarget: designTarget,
+              keptKind: question.pick.kind,
+              pattern: "",
+            });
+            setQuestion(undefined);
+          }}
+        />
+      )}
       <div className="print-footer">
         Brew sheet · {recipe.name} · Mash {recipe.mashC}°C for{" "}
         {recipe.mashMinutes} min · Ferment {recipe.fermentC}°C · Pitch{" "}

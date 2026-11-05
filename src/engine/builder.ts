@@ -2,6 +2,7 @@ import type { Catalog, Recipe, Target } from "./types";
 import { midpoint, predict, hopIbu } from "./calculations";
 import { ingredientMatches, type HopFocus } from "./recommendations";
 import { hopRoles } from "./library";
+import { hopClashes } from "./ingredientFit";
 
 export const builderSteps = [
   {
@@ -16,7 +17,7 @@ export const builderSteps = [
     label: "Goals",
     title: "What beer do you want to make?",
     description:
-      "Pick a style, then set the alcohol, bitterness and flavors you're aiming for.",
+      "Pick a style and the alcohol, bitterness and flavors you want. We'll build the malts, hops and yeast from these goals, and you can change anything.",
   },
   {
     id: "malts",
@@ -100,14 +101,17 @@ export function suggestedHopGroups(
       catalog,
       userWeight,
     )
-      .hops.filter((match) =>
-        hopRoles(catalog.hops.find((h) => h.id === match.id)!).includes(
-          role === "flavor"
-            ? "Flavor"
-            : role === "aroma"
-              ? "Aroma"
-              : "Bittering",
-        ),
+      .hops.filter(
+        (match) =>
+          hopRoles(catalog.hops.find((h) => h.id === match.id)!).includes(
+            role === "flavor"
+              ? "Flavor"
+              : role === "aroma"
+                ? "Aroma"
+                : "Bittering",
+          ) &&
+          (role === "bittering" ||
+            !hopClashes(match.id, target.styleId, catalog, target.flavors)),
       )
       .slice(0, 3)
       .sort((a, b) => a.name.localeCompare(b.name)),

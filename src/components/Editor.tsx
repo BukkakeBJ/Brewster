@@ -21,6 +21,7 @@ import { yeastFamilies, yeastGroups, yeastGuide } from "../engine/yeast";
 import { consensus } from "../engine/flavor";
 import { ingredientMatches } from "../engine/recommendations";
 import { waterSettings } from "../engine/waterPlan";
+import { suggestedMalts, unusualYeast } from "../engine/ingredientFit";
 
 const GRIST_COLORS = ["#c99a55", "#e2c27f", "#8a6a3c", "#d48558", "#55705a"];
 
@@ -28,6 +29,7 @@ export default function Editor({
   recipe: r,
   onChange: set,
   onSettings,
+  onEdited,
   catalog: c,
   us,
   section = "malts",
@@ -38,6 +40,8 @@ export default function Editor({
   onChange: (r: Recipe) => void;
   /** Saves edits to the recipe's water/pitching assumptions without rescaling ingredients. */
   onSettings: (r: Recipe) => void;
+  /** A typed edit is finished, so it can be reviewed from where it started to where it ended. */
+  onEdited: (before: Recipe, after: Recipe) => void;
   catalog: Catalog;
   us: boolean;
   section?: BuilderStep;
@@ -74,6 +78,26 @@ export default function Editor({
   const settings = waterSettings(r, c);
   const p = predict(r, c);
   const dry = yeast.form === "dry";
+  const styleName = c.styles.find((s) => s.id === r.styleId)?.name;
+  const suggestedTitle = styleName ? `Suggested for ${styleName}` : "Suggested";
+  /** Strains to offer, leaving out any that would raise the "unusual yeast" question. */
+  const yeastMatches = () =>
+    ingredientMatches(target, c, userWeight)
+      .yeasts.filter(
+        (match, i) =>
+          i < 20 &&
+          (match.id === r.yeastId ||
+            !unusualYeast(r, { ...r, yeastId: match.id }, match.id, c).length),
+      )
+      .slice(0, 3);
+  const withHopTime = (row: number, shown: number) => ({
+    ...r,
+    hops: r.hops.map((h, j) =>
+      j === row
+        ? { ...h, minutes: shown * (h.use === "dry hop" ? 1440 : 1) }
+        : h,
+    ),
+  });
   const useLabel = (use: string) =>
     use === "dry hop" ? "Dry hop" : use === "whirlpool" ? "Whirlpool" : "Boil";
   return (
@@ -119,6 +143,10 @@ export default function Editor({
                         catalog={c}
                         us={us}
                         usage={{ percent: total ? (100 * g.kg) / total : 0 }}
+                        suggested={() =>
+                          suggestedMalts(r, c, g.ingredientId, target.srm)
+                        }
+                        suggestedTitle={suggestedTitle}
                         onChange={(id) =>
                           update({
                             grains: r.grains.map((row, j) =>
@@ -176,6 +204,8 @@ export default function Editor({
               selectedId=""
               catalog={c}
               us={us}
+              suggested={() => suggestedMalts(r, c, undefined, target.srm)}
+              suggestedTitle={suggestedTitle}
               onChange={(id) =>
                 update({
                   grains: [
@@ -186,6 +216,13 @@ export default function Editor({
               }
             />
           </Section>
+          <Suggestions
+            kind="malt"
+            recipe={r}
+            catalog={c}
+            onChange={set}
+            us={us}
+          />
           <Section title="Mash">
             <p className="muted">
               Mash cooler ({us ? "148–150 °F" : "64–65 °C"}) for a drier,
@@ -213,13 +250,6 @@ export default function Editor({
               />
             </div>
           </Section>
-          <Suggestions
-            kind="malt"
-            recipe={r}
-            catalog={c}
-            onChange={set}
-            us={us}
-          />
         </>
       )}
       {section === "hops" && (
@@ -332,18 +362,9 @@ export default function Editor({
                         decimals={1}
                         min={0}
                         step={1}
-                        onChange={(n) =>
-                          update({
-                            hops: r.hops.map((h, j) =>
-                              j === i
-                                ? {
-                                    ...h,
-                                    minutes:
-                                      n * (h.use === "dry hop" ? 1440 : 1),
-                                  }
-                                : h,
-                            ),
-                          })
+                        onChange={(n) => onSettings(withHopTime(i, n))}
+                        onCommit={(start, end) =>
+                          onEdited(withHopTime(i, start), withHopTime(i, end))
                         }
                       />
                       <Field
@@ -495,56 +516,57 @@ export default function Editor({
           </Section>
           <Section title="Good matches for your goals">
             <div className="yeast-suggestion-list">
-              {ingredientMatches(target, c, userWeight)
-                .yeasts.slice(0, 3)
-                .map((match) => {
-                  const option = c.yeasts.find((y) => y.id === match.id)!;
-                  const estimate = predict({ ...r, yeastId: option.id }, c);
-                  const chosen = r.yeastId === option.id;
-                  return (
-                    <article
-                      key={option.id}
-                      className={chosen ? "selected" : ""}
+              {yeastMatches().map((match) => {
+                const option = c.yeasts.find((y) => y.id === match.id)!;
+                const estimate = predict({ ...r, yeastId: option.id }, c);
+                const chosen = r.yeastId === option.id;
+                return (
+                  <article key={option.id} className={chosen ? "selected" : ""}>
+                    <div className="ingredient-name-with-info">
+                      <h3>{option.name}</h3>
+                      <IngredientInfo item={option} catalog={c} us={us} />
+                    </div>
+                    <p className="muted">
+                      {option.lab} {option.code}
+                    </p>
+                    <p>
+                      {match.descriptors
+                        .slice(0, 3)
+                        .map((d) => d.label)
+                        .join(" · ") || "Neutral character"}
+                    </p>
+                    <p className="yeast-estimate">
+                      <strong>{estimate.abv.toFixed(1)}% ABV</strong> · FG{" "}
+                      {estimate.fg.toFixed(3)}
+                    </p>
+                    <button
+                      className={`button ${chosen ? "ghost" : "secondary"}`}
+                      type="button"
+                      disabled={chosen}
+                      onClick={() =>
+                        set({
+                          ...r,
+                          yeastId: option.id,
+                          fermentC: option.tempC
+                            ? Math.min(
+                                option.tempC[1],
+                                Math.max(option.tempC[0], r.fermentC),
+                              )
+                            : r.fermentC,
+                        })
+                      }
                     >
-                      <div className="ingredient-name-with-info">
-                        <h3>{option.name}</h3>
-                        <IngredientInfo item={option} catalog={c} us={us} />
-                      </div>
-                      <p className="muted">
-                        {option.lab} {option.code}
-                      </p>
-                      <p>
-                        {match.descriptors
-                          .slice(0, 3)
-                          .map((d) => d.label)
-                          .join(" · ") || "Neutral character"}
-                      </p>
-                      <p className="yeast-estimate">
-                        <strong>{estimate.abv.toFixed(1)}% ABV</strong> · FG{" "}
-                        {estimate.fg.toFixed(3)}
-                      </p>
-                      <button
-                        className={`button ${chosen ? "ghost" : "secondary"}`}
-                        type="button"
-                        disabled={chosen}
-                        onClick={() =>
-                          set({
-                            ...r,
-                            yeastId: option.id,
-                            fermentC: option.tempC
-                              ? Math.min(
-                                  option.tempC[1],
-                                  Math.max(option.tempC[0], r.fermentC),
-                                )
-                              : r.fermentC,
-                          })
-                        }
-                      >
-                        {chosen ? "In your recipe" : "Use this yeast"}
-                      </button>
-                    </article>
-                  );
-                })}
+                      {chosen ? "In your recipe" : "Use this yeast"}
+                    </button>
+                  </article>
+                );
+              })}
+              {!yeastMatches().length && (
+                <p className="muted">
+                  No other strains in our list are a close match for this style.
+                  You can still choose any strain above.
+                </p>
+              )}
             </div>
           </Section>
           <Section title="Fermentation">

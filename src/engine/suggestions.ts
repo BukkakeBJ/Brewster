@@ -1,4 +1,5 @@
 import guide from "../../data/suggestions.json";
+import profiles from "../../data/style-ingredient-profiles.json";
 import type { Catalog, HopAddition, Prediction, Recipe } from "./types";
 import { predict } from "./calculations";
 export type SuggestionKind = "hop" | "malt";
@@ -11,6 +12,10 @@ export interface StartingPoint {
   roles?: string[];
   percent?: number;
   source?: { title: string; url: string };
+  /** Comes from the Recipe Book recipes for the recipe's own style. */
+  fromStyle?: boolean;
+  /** A second base malt: blended in rather than replacing the main one. */
+  blend?: boolean;
 }
 export interface Suggestion {
   item: StartingPoint;
@@ -18,6 +23,60 @@ export interface Suggestion {
   reason: string;
   matchesStyle: boolean;
   alreadyUsed: boolean;
+}
+export function styleIngredientProfile(styleId: string) {
+  return (
+    profiles as Record<
+      string,
+      {
+        referenceRecipe: string;
+        maltIds: string[];
+        hopIds: string[];
+        yeastIds: string[];
+        grist: { ingredientId: string; percent: number }[];
+      }
+    >
+  )[styleId];
+}
+const MALT_GROUPS: Record<string, string> = {
+  base: "base",
+  "crystal-caramel": "caramel",
+  roasted: "roast",
+  adjunct: "body",
+  specialty: "malt character",
+  sugar: "sugar",
+};
+/** Starting share for malts a style's recipes use without a figure in its reference grain bill. */
+const TYPICAL_SHARE: Record<string, number> = { base: 15, roasted: 3 };
+/** The malts this style's Recipe Book recipes use, biggest share of the grain bill first. */
+export function styleMalts(styleId: string, c: Catalog): StartingPoint[] {
+  const profile = styleIngredientProfile(styleId);
+  if (!profile) return [];
+  const styleName =
+    c.styles.find((s) => s.id === styleId)?.name ?? "this style";
+  const share = (id: string) =>
+    profile.grist.find((g) => g.ingredientId === id)?.percent;
+  const malts = profile.maltIds
+    .map((id) => c.malts.find((m) => m.id === id))
+    .filter((m) => m !== undefined)
+    .sort((a, b) => (share(b.id) ?? 0) - (share(a.id) ?? 0));
+  const mainBase = malts.find((m) => m.type === "base");
+  return malts.map((m) => {
+    const percent = share(m.id);
+    return {
+      ingredientId: m.id,
+      families: [],
+      group: MALT_GROUPS[m.type] ?? "body",
+      percent: Math.round(
+        Math.min(percent ?? TYPICAL_SHARE[m.type] ?? 5, m.maxPercent, 95),
+      ),
+      fromStyle: true,
+      blend: m.type === "base" && m !== mainBase,
+      reason: percent
+        ? `About ${Math.round(percent)}% of the grain bill in the Recipe Book's ${profile.referenceRecipe}.`
+        : `Also used in Recipe Book recipes for ${styleName}.`,
+    };
+  });
 }
 export function recipeFamily(styleId: string) {
   if (/stout|porter|schwarz|dunkel|black|brown|dark/.test(styleId))
@@ -39,7 +98,17 @@ export function startingPoints(
   group = "all",
 ): Suggestion[] {
   const family = recipeFamily(r.styleId);
-  const list = (kind === "hop" ? guide.hops : guide.malts) as StartingPoint[];
+  const curated = (
+    kind === "hop" ? guide.hops : guide.malts
+  ) as StartingPoint[];
+  const fromStyle =
+    kind === "malt" && mode === "match" ? styleMalts(r.styleId, c) : [];
+  const list = [
+    ...fromStyle,
+    ...curated.filter(
+      (i) => !fromStyle.some((s) => s.ingredientId === i.ingredientId),
+    ),
+  ];
   const ingredients = kind === "hop" ? c.hops : c.malts;
   const rows = list
     .filter(
@@ -52,10 +121,11 @@ export function startingPoints(
       const alreadyUsed = (kind === "hop" ? r.hops : r.grains).some(
         (g) => g.ingredientId === item.ingredientId,
       );
-      const matchesStyle = item.families.includes(family);
-      const match = matchesStyle
-        ? `Suggested for this ${family === "general" ? "freeform" : family} direction. `
-        : "";
+      const matchesStyle = !!item.fromStyle || item.families.includes(family);
+      const match =
+        matchesStyle && !item.fromStyle
+          ? `Suggested for this ${family === "general" ? "freeform" : family} direction. `
+          : "";
       return {
         item,
         name: ingredients.find((x) => x.id === item.ingredientId)!.name,
@@ -64,13 +134,17 @@ export function startingPoints(
         alreadyUsed,
       };
     });
-  if (mode === "match")
-    rows.sort(
-      (a, b) =>
-        Number(b.matchesStyle) - Number(a.matchesStyle) ||
-        Number(a.alreadyUsed) - Number(b.alreadyUsed),
-    );
-  return rows;
+  if (mode !== "match") return rows;
+  // A style with its own recipes only hears about malts that belong in it.
+  const relevant = fromStyle.length
+    ? rows.filter((row) => row.matchesStyle)
+    : rows;
+  return relevant.sort(
+    (a, b) =>
+      Number(!!b.item.fromStyle) - Number(!!a.item.fromStyle) ||
+      Number(a.alreadyUsed) - Number(b.alreadyUsed) ||
+      Number(b.matchesStyle) - Number(a.matchesStyle),
+  );
 }
 export function applyStartingPoint(
   r: Recipe,
@@ -78,10 +152,13 @@ export function applyStartingPoint(
   kind: SuggestionKind,
   id: string,
   role: HopRole = "aroma",
+  suggestion?: StartingPoint,
 ): Recipe {
-  const entry = (
-    (kind === "hop" ? guide.hops : guide.malts) as StartingPoint[]
-  ).find((i) => i.ingredientId === id);
+  const entry =
+    suggestion ??
+    ((kind === "hop" ? guide.hops : guide.malts) as StartingPoint[]).find(
+      (i) => i.ingredientId === id,
+    );
   if (!entry) throw new Error("Unknown starting point.");
   if (kind === "hop") {
     if (!c.hops.some((h) => h.id === id) || !entry.roles?.includes(role))
@@ -116,10 +193,16 @@ export function applyStartingPoint(
   if (!m) throw new Error("Malt is unavailable.");
   if (r.grains.some((g) => g.ingredientId === id))
     throw new Error("Already in the grain bill; edit its amount directly.");
+  // A style's own malts stay put, so its base malts can be blended instead of swapped in turn.
+  const keep = entry.fromStyle
+    ? (styleIngredientProfile(r.styleId)?.maltIds ?? [])
+    : [];
   const base = r.grains.findIndex(
-    (g) => c.malts.find((m) => m.id === g.ingredientId)?.type === "base",
+    (g) =>
+      c.malts.find((m) => m.id === g.ingredientId)?.type === "base" &&
+      !keep.includes(g.ingredientId),
   );
-  if (entry.group === "base" && base >= 0) {
+  if (entry.group === "base" && !entry.blend && base >= 0) {
     const old = c.malts.find((m) => m.id === r.grains[base].ingredientId)!;
     return {
       ...r,

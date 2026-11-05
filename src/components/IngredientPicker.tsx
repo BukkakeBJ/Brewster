@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
 import { ChevronDown, Info, Plus, Search, X } from "lucide-react";
 import type { Catalog } from "../engine/types";
 import type { Usage } from "../engine/flavor";
@@ -37,6 +37,8 @@ export default function IngredientPicker({
   us,
   onChange,
   addLabel,
+  suggested,
+  suggestedTitle = "Suggested",
 }: {
   label: string;
   items: SelectableIngredient[];
@@ -47,6 +49,9 @@ export default function IngredientPicker({
   onChange: (id: string) => void;
   /** Render the trigger as an "add" button instead of the current choice. */
   addLabel?: string;
+  /** Offered ahead of the full list, worked out when the picker opens. */
+  suggested?: () => { id: string; note: string }[];
+  suggestedTitle?: string;
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -71,8 +76,19 @@ export default function IngredientPicker({
       ),
     [items, query],
   );
-  const preview =
-    filtered.find((item) => item.id === highlighted) ?? filtered[0];
+  const offers = useMemo(
+    () => (open && !query.trim() ? (suggested?.() ?? []) : []),
+    [open, query],
+  );
+  const notes = new Map(offers.map((offer) => [offer.id, offer.note]));
+  const offered = offers.flatMap((offer) =>
+    items.filter((item) => item.id === offer.id),
+  );
+  const choices = [
+    ...offered,
+    ...filtered.filter((item) => !notes.has(item.id)),
+  ];
+  const preview = choices.find((item) => item.id === highlighted) ?? choices[0];
   const brief = preview
     ? ingredientBrief(preview, catalog, usage, us)
     : undefined;
@@ -184,57 +200,70 @@ export default function IngredientPicker({
               role="group"
               aria-label="Ingredient choices"
             >
-              {filtered.map((item, index) => (
-                <div
-                  className={`ingredient-picker-option ${preview?.id === item.id ? "highlighted" : ""}`}
-                  key={item.id}
-                  onMouseEnter={() => setHighlighted(item.id)}
-                >
-                  <button
-                    type="button"
-                    className="ingredient-choice"
-                    aria-pressed={selectedId === item.id}
-                    onFocus={() => setHighlighted(item.id)}
-                    onKeyDown={(e) => {
-                      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
-                      e.preventDefault();
-                      const nextIndex = Math.max(
-                        0,
-                        Math.min(
-                          filtered.length - 1,
-                          index + (e.key === "ArrowDown" ? 1 : -1),
-                        ),
-                      );
-                      e.currentTarget
-                        .closest(".ingredient-picker-list")
-                        ?.querySelectorAll<HTMLButtonElement>(
-                          ".ingredient-choice",
-                        )
-                        [nextIndex]?.focus();
-                    }}
-                    onClick={() => choose(item)}
+              {choices.map((item, index) => (
+                <Fragment key={item.id}>
+                  {offered.length > 0 && index === 0 && (
+                    <h3 className="picker-group">{suggestedTitle}</h3>
+                  )}
+                  {offered.length > 0 && index === offered.length && (
+                    <h3 className="picker-group">Everything else</h3>
+                  )}
+                  <div
+                    className={`ingredient-picker-option ${preview?.id === item.id ? "highlighted" : ""}`}
+                    onMouseEnter={() => setHighlighted(item.id)}
                   >
-                    <strong>{item.name}</strong>
-                    <small>
-                      {item.kind === "yeast"
-                        ? `${item.lab} · ${item.code} · ${item.form}`
-                        : item.kind === "hop"
-                          ? `${item.purpose} · ${item.alpha.join("–")}% alpha`
-                          : `${item.type} · ${item.lovibond} °L`}
-                    </small>
-                  </button>
-                  <button
-                    type="button"
-                    className="icon-button"
-                    aria-label={`Preview ${item.name}`}
-                    onFocus={() => setHighlighted(item.id)}
-                    onClick={() => setHighlighted(item.id)}
-                  >
-                    <Info size={18} />
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      className="ingredient-choice"
+                      aria-pressed={selectedId === item.id}
+                      onFocus={() => setHighlighted(item.id)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "ArrowDown" && e.key !== "ArrowUp")
+                          return;
+                        e.preventDefault();
+                        const nextIndex = Math.max(
+                          0,
+                          Math.min(
+                            choices.length - 1,
+                            index + (e.key === "ArrowDown" ? 1 : -1),
+                          ),
+                        );
+                        e.currentTarget
+                          .closest(".ingredient-picker-list")
+                          ?.querySelectorAll<HTMLButtonElement>(
+                            ".ingredient-choice",
+                          )
+                          [nextIndex]?.focus();
+                      }}
+                      onClick={() => choose(item)}
+                    >
+                      <strong>{item.name}</strong>
+                      {notes.has(item.id) && (
+                        <small className="picker-note">
+                          {notes.get(item.id)}
+                        </small>
+                      )}
+                      <small>
+                        {item.kind === "yeast"
+                          ? `${item.lab} · ${item.code} · ${item.form}`
+                          : item.kind === "hop"
+                            ? `${item.purpose} · ${item.alpha.join("–")}% alpha`
+                            : `${item.type} · ${+item.lovibond.toFixed(1)} °L`}
+                      </small>
+                    </button>
+                    <button
+                      type="button"
+                      className="icon-button"
+                      aria-label={`Preview ${item.name}`}
+                      onFocus={() => setHighlighted(item.id)}
+                      onClick={() => setHighlighted(item.id)}
+                    >
+                      <Info size={18} />
+                    </button>
+                  </div>
+                </Fragment>
               ))}
-              {!filtered.length && (
+              {!choices.length && (
                 <p className="muted">
                   No matching ingredients. Try a shorter name.
                 </p>

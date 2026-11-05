@@ -24,11 +24,20 @@ export function matchTargetAbv(
       settings.startingWaterL,
       settings.absorptionLPerKg,
     );
-  let factor = 1;
-  for (let i = 0; i < 8; i++) {
+  // Step toward the goal, backing off whenever the grain would need more water than there is.
+  let factor = 1,
+    limit = Infinity;
+  for (let i = 0; i < 12; i++) {
     const abv = predict(at(factor), catalog).abv;
     if (Math.abs(abv - targetAbv) < 0.01) break;
-    factor *= targetAbv / abv;
+    let next = (factor * targetAbv) / abv;
+    if (next >= limit) next = (factor + limit) / 2;
+    try {
+      predict(at(next), catalog);
+      factor = next;
+    } catch {
+      limit = next;
+    }
   }
   return { ...at(factor), waterPlan: settings };
 }

@@ -1158,9 +1158,49 @@ input[type="range"]::-moz-range-thumb {
   gap: 1.25rem;
   align-items: start;
 }
+.planned-malts h4 {
+  margin: 0.75rem 0 0.4rem;
+}
+.planned-malts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.planned-malts li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+.planned-malts .muted {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.86rem;
+}
 .goals-aside {
   position: sticky;
   top: calc(var(--header-h) + 16px);
+}
+.built-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.7rem 0.75rem 0.7rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, transparent);
+  color: var(--brand);
+}
+.built-notice p {
+  flex: 1 1 280px;
+  margin: 0;
+  font-size: 0.93rem;
+}
+.built-notice svg {
+  flex-shrink: 0;
 }
 .guide {
   display: flex;
@@ -1816,6 +1856,46 @@ input[type="range"]::-moz-range-thumb {
 .share-dialog::backdrop {
   background: rgba(20, 28, 24, 0.45);
 }
+.malt-question h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.malt-question h3 {
+  margin: 1.1rem 0 0.5rem;
+  font-size: 1rem;
+}
+.malt-question .eyebrow {
+  margin: 0 0 0.2rem;
+}
+.malt-question-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.malt-question-reasons {
+  margin: 0.85rem 0 1rem;
+  padding-left: 1.1rem;
+}
+.malt-question-reasons li + li {
+  margin-top: 0.35rem;
+}
+.malt-question .muted {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+}
+.malt-question-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.malt-question-styles .button {
+  flex: 1 1 150px;
+}
+.malt-question > .text-button {
+  display: block;
+  margin: 0.85rem auto 0;
+}
 .recipe-note-editor {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -1998,6 +2078,15 @@ input[type="range"]::-moz-range-thumb {
 }
 .picker-search input {
   padding-left: 2.5rem !important;
+}
+.picker-group {
+  margin: 0.6rem 0.75rem 0.25rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+.picker-note {
+  color: var(--brand);
+  font-weight: 600;
 }
 .picker-instruction {
   margin: 0.4rem 1.25rem 0.75rem;
@@ -2824,4 +2913,8 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-.descriptor-meter > span:last-child { grid-column: 2 / -1; color: var(--ink-2); font-size: 0.85rem; }
+.descriptor-meter > span:last-child {
+  grid-column: 2 / -1;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}

@@ -14,6 +14,7 @@ export function Field({
   suffix,
   help: explicitHelp,
   decimals = 3,
+  onCommit,
 }: {
   label: string;
   inputLabel?: string;
@@ -26,6 +27,8 @@ export function Field({
   help?: string;
   /** Digits shown when the field is not being edited. */
   decimals?: number;
+  /** Runs when the brewer leaves the field having changed it, unlike onChange on every keystroke. */
+  onCommit?: (startedAt: number, value: number) => void;
 }) {
   const id = useId();
   const help = explicitHelp ?? brewingHelp(label);
@@ -33,6 +36,7 @@ export function Field({
   const fmt = (v: number) => String(Number(v.toFixed(decimals)));
   const [draft, setDraft] = useState(() => fmt(value));
   const focused = useRef(false);
+  const startedAt = useRef(value);
   useEffect(() => {
     if (!focused.current) setDraft(fmt(value));
   }, [value]);
@@ -57,6 +61,7 @@ export function Field({
           step={step}
           onFocus={() => {
             focused.current = true;
+            startedAt.current = value;
           }}
           onBlur={() => {
             focused.current = false;
@@ -64,6 +69,7 @@ export function Field({
             const v = Number.isFinite(n) ? bounded(n) : value;
             setDraft(fmt(v));
             if (v !== value) onChange(v);
+            if (v !== startedAt.current) onCommit?.(startedAt.current, v);
           }}
           onChange={(e) => {
             setDraft(e.target.value);

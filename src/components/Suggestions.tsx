@@ -4,6 +4,7 @@ import { Sparkles, Plus, ArrowRight } from "lucide-react";
 import type { Catalog, Recipe } from "../engine/types";
 import {
   startingPoints,
+  styleMalts,
   applyStartingPoint,
   suggestionImpact,
   type SuggestionKind,
@@ -24,7 +25,7 @@ export default function Suggestions({
   onChange: (r: Recipe) => void;
   us: boolean;
 }) {
-  const [open, setOpen] = useState(false),
+  const [open, setOpen] = useState(kind === "malt"),
     [mode, setMode] = useState<"match" | "popular">("match"),
     [role, setRole] = useState<HopRole>("aroma"),
     [group, setGroup] = useState("all"),
@@ -45,6 +46,11 @@ export default function Suggestions({
     kind === "hop" ? role : undefined,
     group,
   );
+  const styleName = styleMalts(r.styleId, c).length
+    ? c.styles.find((s) => s.id === r.styleId)?.name
+    : undefined;
+  const forStyle = options.filter((s) => s.item.fromStyle).length;
+  const shown = Math.max(limit, Math.min(forStyle, 6));
   const signed = (n: number, digits = 1) =>
     (n >= 0 ? "+" : "") + n.toFixed(digits);
   return (
@@ -56,8 +62,14 @@ export default function Suggestions({
       >
         <Sparkles size={15} />
         <span>
-          {kind === "hop" ? "Suggested hops" : "Suggested malts"}
-          <small>Popular starting points & ideas for this recipe</small>
+          {kind === "hop"
+            ? "Suggested hops"
+            : `Suggested malts${styleName ? ` for ${styleName}` : ""}`}
+          <small>
+            {styleName
+              ? "From the Recipe Book's recipes for this style"
+              : "Popular starting points & ideas for this recipe"}
+          </small>
         </span>
         <b>{open ? "−" : "+"}</b>
       </button>
@@ -75,7 +87,7 @@ export default function Suggestions({
                 setLimit(3);
               }}
             >
-              For this recipe
+              {kind === "malt" ? "For this style" : "For this recipe"}
             </button>
             <button
               aria-pressed={mode === "popular"}
@@ -88,9 +100,9 @@ export default function Suggestions({
             </button>
           </div>
           <p className="suggestion-disclaimer">
-            Editorial guidance, not measured popularity or flavor. “For this
-            recipe” prioritizes its style family; the amount preview shows the
-            calculated change.
+            {kind === "malt"
+              ? "Malts used in recipes for your beer style come first; the amount preview shows the calculated change."
+              : "Editorial guidance, not measured popularity or flavor. “For this recipe” prioritizes its style family; the amount preview shows the calculated change."}
           </p>
           <label className="field">
             <span>
@@ -127,6 +139,7 @@ export default function Suggestions({
                   ["caramel", "Caramel"],
                   ["body", "Body / texture"],
                   ["roast", "Roast / color"],
+                  ["sugar", "Sugars"],
                 ].map(([v, l]) => (
                   <option key={v} value={v}>
                     {l}
@@ -136,7 +149,7 @@ export default function Suggestions({
             )}
           </label>
           <div className="suggestion-cards">
-            {options.slice(0, limit).map((s) => {
+            {options.slice(0, shown).map((s) => {
               let next: Recipe | undefined,
                 problem = "";
               try {
@@ -146,6 +159,7 @@ export default function Suggestions({
                   kind,
                   s.item.ingredientId,
                   role,
+                  s.item,
                 );
               } catch (e) {
                 problem = e instanceof Error ? e.message : "Unavailable";
@@ -168,13 +182,7 @@ export default function Suggestions({
                 (g) => g.ingredientId === s.item.ingredientId,
               );
               const replaces =
-                kind === "malt" &&
-                s.item.group === "base" &&
-                r.grains.some(
-                  (g) =>
-                    c.malts.find((m) => m.id === g.ingredientId)?.type ===
-                    "base",
-                );
+                kind === "malt" && next?.grains.length === r.grains.length;
               const source =
                 s.item.source ??
                 (kind === "hop"
@@ -197,7 +205,11 @@ export default function Suggestions({
                     </div>
                     {s.alreadyUsed && <Tag tone="neutral">IN RECIPE</Tag>}
                   </div>
-                  <Tag>EDITORIAL SUGGESTION</Tag>
+                  <Tag>
+                    {s.item.fromStyle
+                      ? "USED IN THIS STYLE"
+                      : "EDITORIAL SUGGESTION"}
+                  </Tag>
                   <p>{s.reason}</p>
                   <small className="suggestion-spec">
                     {kind === "hop"
@@ -252,7 +264,13 @@ export default function Suggestions({
               );
             })}
           </div>
-          {options.length > limit && (
+          {!options.length && (
+            <p className="muted">
+              No malts of this kind are typical for this style. Try another
+              role, or see the popular starting points.
+            </p>
+          )}
+          {options.length > shown && (
             <button
               className="text-button"
               onClick={() => setLimit(options.length)}
